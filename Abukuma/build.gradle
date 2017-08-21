@@ -1,0 +1,17 @@
+dependencies {
+    compile(
+            'com.twitter:finagle-http_2.11:7.0.0',
+
+            'com.google.guava:guava:22.0',
+            'org.slf4j:slf4j-api:1.7.25',
+
+            // TODO Followings are for testing
+            'org.slf4j:jul-to-slf4j:1.7.25', // Guava uses java.util.logging
+            'ch.qos.logback:logback-classic:1.2.3'
+    )
+    compileOnly 'org.projectlombok:lombok:1.16.18'
+    testCompile(
+            'junit:junit:4.12',
+            'org.mockito:mockito-core:2.8.47',
+    )
+}

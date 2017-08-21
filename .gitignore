@@ -1,0 +1,8 @@
+.gradle/
+.idea/
+Abukuma/out/
+Abukuma/.classpath
+Abukuma/.project
+.project
+.settings/
+Abukuma/build/
