@@ -8,10 +8,15 @@ import com.twitter.finagle.http.Response;
 import com.twitter.util.Await;
 import com.twitter.util.Future;
 import com.twitter.util.TimeoutException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.config.Config;
 import rip.deadcode.abukuma3.route.Router;
+import rip.deadcode.abukuma3.service.ContextImpl;
 
 final class AbukumaServer {
+
+    private static final Logger logger = LoggerFactory.getLogger(AbukumaServer.class);
 
     private final Config config;
     private final Router router;
@@ -24,9 +29,9 @@ final class AbukumaServer {
         service = new Service<Request, Response>() {
             @Override
             public Future<Response> apply(Request request) {
-                return router.proceed(null)
+                return router.proceed(new ContextImpl(request))
                              .result()
-                             .orElseThrow(() -> new RuntimeException("Could not find matching router"))
+                             .orElseThrow(() -> new RuntimeException("Could not find matching router: " + request.path() + ";"))
                              .getResponse();
             }
         };
@@ -35,6 +40,7 @@ final class AbukumaServer {
 
     void run() throws TimeoutException, InterruptedException {
         ListeningServer server = Http.server().serve(config.getAddress(), service);
+        logger.info("Abukuma starts to listening...");  // Does it work correctly??
         Await.ready(server);
     }
 

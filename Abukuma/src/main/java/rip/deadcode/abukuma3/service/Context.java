@@ -13,6 +13,10 @@ public interface Context {
 
     public Future<Response> getResponse();
 
+    public default Context response(Future<Response> response) {
+        return new ContextImpl(this.getRequest(), response);
+    }
+
     public default Map<String, String> getPathParam() {
         return Collections.emptyMap();
     }
