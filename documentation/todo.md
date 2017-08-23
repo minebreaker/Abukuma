@@ -4,6 +4,7 @@
 * Builder -> 不変コピーを返すように変更 (パフォーマンス? 気にしない?)
 * Async Wrapper
 * Context-path aware routing
+* ビルダーを独立したクラスへ
 
 * RxJava Integration
 * Guice Integration

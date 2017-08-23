@@ -15,7 +15,7 @@
 
 * [Finatra](https://twitter.github.io/finatra)
 * [Vert.x](http://vertx.io)
-* [Ratpack]()
+* [Ratpack](https://ratpack.io)
 
 
 ## 2. Design Goal
