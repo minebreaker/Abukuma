@@ -5,6 +5,7 @@
 * Async Wrapper
 * Context-path aware routing
 * ビルダーを独立したクラスへ
+* Write tests
 
 * RxJava Integration
 * Guice Integration

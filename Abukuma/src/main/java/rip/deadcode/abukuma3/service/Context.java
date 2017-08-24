@@ -6,39 +6,33 @@ import com.twitter.util.Future;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 public interface Context {
 
     public Request getRequest();
 
+    public Context response(Future<Response> response);
+
     public Future<Response> getResponse();
 
-    public default Context response(Future<Response> response) {
-        return new ContextImpl(this.getRequest(), response);
-    }
-
-    /**
-     * Response is not copied.
-     *
-     * @param pathParam Path parameters
-     * @return Copy with given pathParam.
-     */
-    public default Context pathParam(Map<String, String> pathParam) {
-        return new ContextImpl(this.getRequest(), null, pathParam);
-    }
+    public Context pathParam(Map<String, String> pathParam);
 
     public default Map<String, String> getPathParam() {
         return Collections.emptyMap();
     }
 
-    public default Context put(String key, Object value) {
-        // TODO
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+    public Context contextualPath(String contextualPath);
 
-    public default Object get(String key) {
-        // TODO
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+    /**
+     * Path used to route matching, which can differ from real request path.
+     *
+     * @return Contextual path.
+     */
+    public String getContextualPath();
+
+    public Context put(String key, Object value);
+
+    public Optional<Object> get(String key);
 
 }

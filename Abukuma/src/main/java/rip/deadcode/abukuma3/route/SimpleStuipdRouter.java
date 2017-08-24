@@ -15,7 +15,7 @@ public final class SimpleStuipdRouter implements Router {
 
     @Override
     public RoutingResult proceed(Context context) {
-        if (context.getRequest().path().equals(pattern)) {
+        if (context.getContextualPath().equals(pattern)) {
             return new RoutingResultImpl(service.run(context));
         } else {
             return RoutingResult.notMatched();

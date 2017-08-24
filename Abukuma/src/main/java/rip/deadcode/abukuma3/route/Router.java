@@ -27,6 +27,14 @@ public interface Router {
             return this;
         }
 
+        public Builder context(String context, Router... children) {
+            routes.add(new ContextualRouter(
+                    context,
+                    new BindingRouter(ImmutableList.copyOf(children))
+            ));
+            return this;
+        }
+
         public Builder notFound(Service service) {
             checkNotNull(service);
             routes.add(new AlwaysMatchRouter(service));

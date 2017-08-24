@@ -11,7 +11,9 @@ import com.twitter.util.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.config.Config;
+import rip.deadcode.abukuma3.route.ContextualRouter;
 import rip.deadcode.abukuma3.route.Router;
+import rip.deadcode.abukuma3.service.Context;
 import rip.deadcode.abukuma3.service.ContextImpl;
 
 final class AbukumaServer {
@@ -24,15 +26,19 @@ final class AbukumaServer {
 
     AbukumaServer(Config config, Router router) {
         this.config = config;
-        this.router = router;
+        this.router = new ContextualRouter(config.getContextPath(), router, true);
+        this.config.validate();
 
+        Router lexicalRouter = this.router;
         service = new Service<Request, Response>() {
             @Override
             public Future<Response> apply(Request request) {
-                return router.proceed(new ContextImpl(request))
-                             .result()
-                             .orElseThrow(() -> new RuntimeException("Could not find matching router: " + request.path() + ";"))
-                             .getResponse();
+                Context context = new ContextImpl(request)
+                        .contextualPath(request.path());
+                return lexicalRouter.proceed(context)
+                                    .result()
+                                    .orElseThrow(() -> new RuntimeException("Could not find matching router: " + request.path()))
+                                    .getResponse();
             }
         };
 
