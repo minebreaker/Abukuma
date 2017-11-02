@@ -3,6 +3,7 @@ package rip.deadcode.abukuma3.service;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.http.Status;
 import com.twitter.util.Future;
+import rip.deadcode.abukuma3.future.AbukumaFutures;
 import rip.deadcode.abukuma3.route.RoutingResult;
 import rip.deadcode.abukuma3.route.RoutingResultImpl;
 import rip.deadcode.abukuma3.service.contenttype.ContentTypeResolver;
@@ -19,25 +20,28 @@ public final class FileContentService implements ContentService<Path> {
 
     @Override
     public RoutingResult feed(Context context, Path target) {
-
         if (Files.notExists(target)) {
             return RoutingResult.notMatched();
         }
 
-        // TODO 別スレッド
-        // TODO キャッシュ
-        String content;
-        try {
-            content = new String(Files.readAllBytes(target), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        Future<Response> f = AbukumaFutures.getInstance().io().apply(() -> {
+            // TODO 別スレッド
+            // TODO キャッシュ
+            String content;
+            try {
+                content = new String(Files.readAllBytes(target), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
 
-        Response response = Response.apply(Status.Ok());
-        response.setContentType(resolver.getContentType(target.getFileName().toString()), "UTF-8");
-        // TODO ストリームはどうすんだ
-        response.setContentString(content);
-        return new RoutingResultImpl(context.response(Future.value(response)));
+            Response response = Response.apply(Status.Ok());
+            response.setContentType(resolver.getContentType(target.getFileName().toString()), "UTF-8");
+            // TODO ストリームはどうすんだ
+            response.setContentString(content);
+            return response;
+        });
+
+        return new RoutingResultImpl(context.response(f));
     }
 
 }
