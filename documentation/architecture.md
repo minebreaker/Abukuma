@@ -8,7 +8,7 @@
 
 ### Motivation
 
-アブクマはFinagleの小さなラッパーであり、ルーティング機能を提供することと、簡潔なHTTPリクエスト/レスポンスの操作を可能とすることに注力します。  
+アブクマはNettyの小さなラッパーであり、ルーティング機能を提供することと、簡潔なHTTPリクエスト/レスポンスの操作を可能とすることに注力します。  
 (もし`com.twitter.finagle.http.service.RoutingService`を気に入っているのなら、ただのFinagleを使うことをお勧めします)  
 
 もし信頼できる高性能なライブラリーを探しているのであれば、以下を検討してみてください。
@@ -26,8 +26,7 @@
 
 ### Explicitness over implicitness
 
-* No implicit 404
-* No implicit 
+* Explicit over implicit
 
 ### Good old Java
 
