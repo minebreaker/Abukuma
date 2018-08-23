@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public final class InputStreamRenderer implements ARenderer {
+public final class InputStreamRenderer implements AbuRenderer {
     @Override public boolean render( OutputStream os, Object body ) throws IOException {
         if ( body instanceof InputStream ) {
             ByteStreams.copy( (InputStream) body, os );

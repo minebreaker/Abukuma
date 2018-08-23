@@ -12,10 +12,10 @@ import java.util.List;
 
 public final class HandlerImpl extends AbstractHandler {
 
-    private final ARouter router;
-    private final AExceptionHandler exceptionHandler;
+    private final AbuRouter router;
+    private final AbuExceptionHandler exceptionHandler;
 
-    HandlerImpl( ARouter router, AExceptionHandler exceptionHandler ) {
+    HandlerImpl( AbuRouter router, AbuExceptionHandler exceptionHandler ) {
         this.router = router;
         this.exceptionHandler = exceptionHandler;
     }
@@ -27,19 +27,19 @@ public final class HandlerImpl extends AbstractHandler {
             HttpServletRequest servletRequest,
             HttpServletResponse servletResponse ) throws IOException, ServletException {
 
-        AResponse response;
+        AbuResponse response;
         try {
-            ARequestHeader header = new ARequestHeader( baseRequest, servletRequest );
-            AHandler handler = router.route( header );
-            ARequest request = new ARequest( header, baseRequest, servletRequest, servletResponse );
+            AbuRequestHeader header = new AbuRequestHeader( baseRequest, servletRequest );
+            AbuHandler handler = router.route( header );
+            AbuRequest request = new AbuRequest( header, baseRequest, servletRequest, servletResponse );
             response = handler.handle( request );
 
         } catch ( Exception e ) {
             response = exceptionHandler.handleException( e );
         }
 
-        List<ARenderer> renderers = ImmutableList.of( new StringRenderer(), new InputStreamRenderer() );
-        ARenderer renderer = renderers.stream().reduce( ( r, then ) -> r.ifFailed( then ) ).get();
+        List<AbuRenderer> renderers = ImmutableList.of( new StringRenderer(), new InputStreamRenderer() );
+        AbuRenderer renderer = renderers.stream().reduce( ( r, then ) -> r.ifFailed( then ) ).get();
         renderer.render( servletResponse.getOutputStream(), response.getBody() );
 
         baseRequest.setHandled( true );

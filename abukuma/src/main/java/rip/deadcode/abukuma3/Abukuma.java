@@ -4,33 +4,33 @@ public final class Abukuma {
 
     public static final class AbukumaConfigSpec {
 
-        private final AConfig config;
+        private final AbuConfig config;
 
-        private AbukumaConfigSpec( AConfig config ) {
+        private AbukumaConfigSpec( AbuConfig config ) {
             this.config = config;
         }
 
-        public AbukumaRouterSpec router( ARouter router ) {
+        public AbukumaRouterSpec router( AbuRouter router ) {
             return new AbukumaRouterSpec( config, router );
         }
     }
 
     public static final class AbukumaRouterSpec {
 
-        private final AConfig config;
-        private final ARouter router;
+        private final AbuConfig config;
+        private final AbuRouter router;
 
-        private AbukumaRouterSpec( AConfig config, ARouter router ) {
+        private AbukumaRouterSpec( AbuConfig config, AbuRouter router ) {
             this.config = config;
             this.router = router;
         }
 
-        public AbukumaServer build() {
-            return new AbukumaServerImpl( config, router );
+        public AbuServer build() {
+            return new AbuServerImpl( config, router );
         }
     }
 
-    public static AbukumaConfigSpec config( AConfig config ) {
+    public static AbukumaConfigSpec config( AbuConfig config ) {
         return new AbukumaConfigSpec( config );
     }
 

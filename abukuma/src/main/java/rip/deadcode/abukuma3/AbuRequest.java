@@ -9,16 +9,16 @@ import java.util.Map;
 
 import static rip.deadcode.akashi.util.Uncheck.tryUncheck;
 
-public final class ARequest {
+public final class AbuRequest {
 
-    private final Map<Class<?>, AParser<?>> converters = ImmutableMap.of();  // FIXME
-    private final ARequestHeader header;
+    private final Map<Class<?>, AbuParser<?>> converters = ImmutableMap.of();  // FIXME
+    private final AbuRequestHeader header;
     private final Request jettyRequest;
     private final HttpServletRequest servletRequest;
     private final HttpServletResponse servletResponse;
 
-    ARequest(
-            ARequestHeader header,
+    AbuRequest(
+            AbuRequestHeader header,
             Request jettyRequest,
             HttpServletRequest servletRequest,
             HttpServletResponse servletResponse ) {

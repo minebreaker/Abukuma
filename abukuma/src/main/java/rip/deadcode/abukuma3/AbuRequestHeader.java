@@ -4,12 +4,12 @@ import org.eclipse.jetty.server.Request;
 
 import javax.servlet.http.HttpServletRequest;
 
-public final class ARequestHeader {
+public final class AbuRequestHeader {
 
     private final Request jettyRequest;
     private final HttpServletRequest servletRequest;
 
-    ARequestHeader( Request jettyRequest, HttpServletRequest servletRequest ) {
+    AbuRequestHeader( Request jettyRequest, HttpServletRequest servletRequest ) {
         this.jettyRequest = jettyRequest;
         this.servletRequest = servletRequest;
     }

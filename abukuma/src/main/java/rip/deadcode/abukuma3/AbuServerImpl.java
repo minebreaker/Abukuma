@@ -4,12 +4,12 @@ import org.eclipse.jetty.server.Server;
 
 import static rip.deadcode.akashi.util.Uncheck.uncheck;
 
-public final class AbukumaServerImpl implements AbukumaServer {
+public final class AbuServerImpl implements AbuServer {
 
-    private final AConfig config;
-    private final ARouter router;
+    private final AbuConfig config;
+    private final AbuRouter router;
 
-    public AbukumaServerImpl( AConfig config, ARouter router ) {
+    public AbuServerImpl( AbuConfig config, AbuRouter router ) {
         this.config = config;
         this.router = router;
     }

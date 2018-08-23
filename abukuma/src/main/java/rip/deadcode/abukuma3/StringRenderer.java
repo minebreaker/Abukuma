@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public final class StringRenderer implements ARenderer {
+public final class StringRenderer implements AbuRenderer {
 
     @Override public boolean render( OutputStream os, Object body ) throws IOException {
         if ( body instanceof String ) {
