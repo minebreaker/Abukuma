@@ -1,5 +1,4 @@
-# 阿武隈
-## Abukuma - Simple-Stupid Web Framework
+# 阿武隈 - シンプルなWebフレームワーク
 
 アブクマは、シンプルさとスタイルを兼ねそろえたJava/Kotlin向けのHTTPライブラリーです。
 
@@ -8,25 +7,25 @@
 
 ### Motivation
 
-アブクマはNettyの小さなラッパーであり、ルーティング機能を提供することと、簡潔なHTTPリクエスト/レスポンスの操作を可能とすることに注力します。  
-(もし`com.twitter.finagle.http.service.RoutingService`を気に入っているのなら、ただのFinagleを使うことをお勧めします)  
+> シンプル != 簡単
 
-もし信頼できる高性能なライブラリーを探しているのであれば、以下を検討してみてください。
+アブクマはJettyの小さなラッパーであり、ルーティング機能を提供することと、簡潔なHTTPリクエスト/レスポンスの操作を可能とすることに注力します。  
 
-* [Finatra](https://twitter.github.io/finatra)
-* [Vert.x](http://vertx.io)
-* [Ratpack](https://ratpack.io)
+シンプルは簡単とイコールではありません。
+「簡単」なWebアプリケーションフレームワークはたくさんあります。
+代表例がRuby on Railsでしょう。
+しかしRailsを使ったことのある人はみな経験しているように、簡単であることは、我々が解決しようとしているまさにその問題において簡単であることを意味しません。
+アブクマは代わりにシンプルであろうとします。
 
 
 ## 2. Design Goal
 
-### Simple
+### シンプル
 
-* API easily understandable
+* 不変オブジェクト
+* 関数指向
 
-### Explicitness over implicitness
-
-* Explicit over implicit
+### 暗黙的であるより明示的に
 
 ### Good old Java
 
@@ -41,11 +40,13 @@
 * Application
     * Config
 * Router
-* Component
-    * Service
-    * Repository
-* View
-    * Template
+    * Routers
+* Handler
+    * ErrorHandler
+* Renderer
+    * StringRenderer
+    * OutputStreamRenderer
+    * ThymeleafRenderer
     * JSON
 
 
@@ -54,34 +55,17 @@
 ```java
 class Application {
 
+    private static Config config = Configs.builder()
+                                          .port(8080)
+                                          .build();
+
+    private static Router router =
+            (request) -> ((ctx) -> Response.body("<h1>hello, world</h1>"));
+
     public static void main(String[] args) {
         Abukuma.config(config())
-               .route(router())
+               .router(router())
                .run();
     }
-
-    private static Config config() {
-        return Config.builder()
-                     .port(8080)
-                     .build();
-    }
-
-    private static Router router() {
-        return Router.builder()
-                     .get("/", ctx -> "<h1>hello, world</h1>")
-                     .notFound("/", ctx -> "<div>not found</div>")
-                     .build();
-    }
-
 }
 ```
-
-
-## 5. RxJavaインテグレーション
-
-
-## 6. Guiceインテグレーション
-
-
-## 7. Sessionエクステンション
-
