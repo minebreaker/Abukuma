@@ -9,20 +9,24 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            url = "https://dl.bintray.com/minebreaker/test"
+        }
     }
 
     dependencies {
         testCompile(
-                'junit:junit:4.12',
-                'com.google.truth:truth:0.39',
-                'com.google.truth.extensions:truth-java8-extension:0.39',
-                'org.mockito:mockito-core:2.17.0',
+                'org.junit.jupiter:junit-jupiter-api:5.2.0',
+                'com.google.truth:truth:0.42',
+                'com.google.truth.extensions:truth-java8-extension:0.42',
+                'org.mockito:mockito-core:2.21.0',
 //            'com.google.jimfs:jimfs:1.1',
+                'rip.deadcode:izvestia:0.2',
 
                 'org.slf4j:jul-to-slf4j:1.7.25', // Guava uses java.util.logging
                 'ch.qos.logback:logback-classic:1.2.3'
         )
-        testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+        testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
