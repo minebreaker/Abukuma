@@ -1,6 +1,7 @@
-package rip.deadcode.abukuma3;
+package rip.deadcode.abukuma3.renderer.internal;
 
 import com.google.common.io.ByteStreams;
+import rip.deadcode.abukuma3.renderer.AbuRenderer;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,7 +1,9 @@
-package rip.deadcode.abukuma3;
+package rip.deadcode.abukuma3.request;
 
 import com.google.common.collect.ImmutableMap;
 import org.eclipse.jetty.server.Request;
+import rip.deadcode.abukuma3.internal.Unsafe;
+import rip.deadcode.abukuma3.parser.AbuParser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +19,7 @@ public final class AbuRequest {
     private final HttpServletRequest servletRequest;
     private final HttpServletResponse servletResponse;
 
-    AbuRequest(
+    public AbuRequest(
             AbuRequestHeader header,
             Request jettyRequest,
             HttpServletRequest servletRequest,

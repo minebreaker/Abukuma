@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3;
+package rip.deadcode.abukuma3.response;
 
 public final class AbuResponse {
 
@@ -6,6 +6,12 @@ public final class AbuResponse {
 
     public AbuResponse( Object body ) {
         this.body = body;
+    }
+
+    public AbuResponse copy() {
+        return new AbuResponse(
+                body
+        );
     }
 
     public Object getBody() {
@@ -16,11 +22,5 @@ public final class AbuResponse {
         AbuResponse r = this.copy();
         r.body = body;
         return r;
-    }
-
-    public AbuResponse copy() {
-        return new AbuResponse(
-                body
-        );
     }
 }

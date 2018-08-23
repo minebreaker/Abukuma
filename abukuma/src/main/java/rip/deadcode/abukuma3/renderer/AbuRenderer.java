@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3;
+package rip.deadcode.abukuma3.renderer;
 
 import java.io.IOException;
 import java.io.OutputStream;
