@@ -24,7 +24,9 @@ public final class Example {
                .router( AbuRouters.builder()
                                   .get( "/", req -> new AbuResponse( "hello, root" ) )
                                   .get( "/get", req -> new AbuResponse( "hello, get" ) )
-                                  .get( "/get/nested", req -> new AbuResponse( "hello, nested" ) )
+                                  .get( "/param/:name", req -> new AbuResponse(
+                                          String.format( "hello, %s!", req.getPathParams().get( "name" ) ) )
+                                  )
                                   .post( "/post", req -> new AbuResponse( "hello, post" ) )
                                   .notFound( req -> new AbuResponse( "not found" ) )
                                   .build() )

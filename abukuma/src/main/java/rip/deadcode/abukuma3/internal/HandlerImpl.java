@@ -4,12 +4,12 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
-import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.request.AbuRequest;
 import rip.deadcode.abukuma3.request.AbuRequestHeader;
 import rip.deadcode.abukuma3.response.AbuResponse;
 import rip.deadcode.abukuma3.router.AbuRouter;
+import rip.deadcode.abukuma3.router.RoutingContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +27,7 @@ public final class HandlerImpl extends AbstractHandler {
         this.context = context;
         this.router = context.getRouter();
         this.exceptionHandler = context.getExceptionHandler();
+        //noinspection OptionalGetWithoutIsPresent  // At least has default implementations
         this.renderer = context.getRenderers().stream().reduce( ( r, then ) -> r.ifFailed( then ) ).get();
     }
 
@@ -38,12 +39,12 @@ public final class HandlerImpl extends AbstractHandler {
             HttpServletResponse servletResponse ) throws IOException, ServletException {
 
         AbuRequestHeader header = new AbuRequestHeader( context, baseRequest, servletRequest );
-        AbuHandler handler = router.route( header );
-        AbuRequest request = new AbuRequest( context, header, baseRequest, servletRequest, servletResponse );
+        RoutingContext routing = router.route( header );
+        AbuRequest request = new AbuRequest( context, header, baseRequest, servletRequest, servletResponse, routing.getPathParams() );
 
         AbuResponse response;
         try {
-            response = handler.handle( request );
+            response = routing.getHandler().handle( request );
 
         } catch ( Exception e ) {
             response = exceptionHandler.handleException( e, request );

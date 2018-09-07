@@ -1,19 +1,22 @@
 package rip.deadcode.abukuma3.router;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableMap;
 import com.google.mu.util.stream.BiStream;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.request.AbuRequestHeader;
 import rip.deadcode.abukuma3.response.AbuResponse;
+import rip.deadcode.abukuma3.router.internal.RoutingContextImpl;
+import rip.deadcode.akashi.collection.Tuple;
+import rip.deadcode.akashi.collection.Tuples;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static rip.deadcode.akashi.lang.Languages.TODO;
+import static java.util.stream.Collectors.toList;
 
+// TODO refactoring all
 public final class AbuRouters {
 
     public static AbuRouterBuilder builder() {
@@ -39,12 +42,15 @@ public final class AbuRouters {
 
         private AbuRouterBuilder() {}
 
-        private static final AbuHandler defaultNotFoundHandler = request -> {
-            return new AbuResponse( "" );  // TODO
-        };
+        private static final RoutingContext defaultNotFound = new RoutingContextImpl(
+                ImmutableMap.of(),
+                request -> {
+                    return new AbuResponse( "" );  // TODO
+                }
+        );
 
         private List<Route> handlers = new ArrayList<>();
-        private AbuHandler notFound;
+        private RoutingContext notFound;
 
         public AbuRouterBuilder path( String pattern, AbuHandler handler ) {
             handlers.add( new Route( null, pattern, handler ) );
@@ -62,46 +68,56 @@ public final class AbuRouters {
         }
 
         public AbuRouterBuilder notFound( AbuHandler handler ) {
-            this.notFound = handler;
+            this.notFound = new RoutingContextImpl( ImmutableMap.of(), handler );
             return this;
         }
 
-        private static boolean matchesRoute( AbuRequestHeader requestHeader, @Nullable String method, String pattern ) {
-            boolean methodMatches = method == null || requestHeader.getMethod().equalsIgnoreCase( method );
-            if ( !methodMatches ) return false;
+        @Nullable
+        private static Tuple<Route, Map<String, String>> matchesRoute( AbuRequestHeader requestHeader, Route route ) {
+            boolean methodMatches = route.method == null || requestHeader.getMethod().equalsIgnoreCase( route.method );
+            if ( !methodMatches ) return null;
 
-            // TODO refactoring
             Splitter s = Splitter.on( "/" ).omitEmptyStrings();
             List<String> url = s.splitToList( requestHeader.getRequestUrl() );
-            List<String> patternList = s.splitToList( pattern );
+            List<String> patternList = s.splitToList( route.pattern );
 
             // If the sizes differ, immediately return false. Note BiStream.zip can be used with different sized streams.
-            if ( url.size() != patternList.size() ) return false;
+            if ( url.size() != patternList.size() ) return null;
 
-            return BiStream.zip( url.stream(), patternList.stream() )
-                           .allMatch( ( p, u ) -> isMatch( p, u ) );
+            List<Map<String, String>> result =
+                    BiStream.zip( patternList.stream(), url.stream() )
+                            .map( ( p, u ) -> matchEach( p, u ) )
+                            .collect( toList() );
+            if ( result.stream().allMatch( e -> e != null ) ) {
+                Map<String, String> params = result.stream().collect( HashMap::new, Map::putAll, Map::putAll );
+                return Tuples.of( route, ImmutableMap.copyOf( params ) );
+            } else {
+                return null;
+            }
         }
 
-        private static boolean isMatch( String pattern, String urlElement ) {
-            if ( !pattern.startsWith( ":" ) ) {
-                return pattern.equals( urlElement );
+        @Nullable
+        private static Map<String, String> matchEach( String pattern, String urlElement ) {
+            if ( pattern.startsWith( ":" ) ) {
+                String key = pattern.substring( 1 );
+                return ImmutableMap.of( key, urlElement );
             } else {
-                TODO();  // TODO
-                return false;
+                return pattern.equals( urlElement ) ? ImmutableMap.of() : null;
             }
         }
 
         public AbuRouter build() {
             return request -> {
 
-                Optional<Route> route = handlers.stream()
-                                                .filter( candidate -> matchesRoute( request, candidate.method, candidate.pattern ) )
-                                                .findAny();
+                Optional<Tuple<Route, Map<String, String>>> route = handlers.stream()
+                                                                            .map( candidate -> matchesRoute( request, candidate ) )
+                                                                            .filter( candidate -> candidate != null )
+                                                                            .findAny();
 
                 return route.isPresent()
-                       ? route.get().handler
+                       ? new RoutingContextImpl( route.get().getRight(), route.get().getLeft().handler )
                        : notFound == null
-                         ? defaultNotFoundHandler
+                         ? defaultNotFound
                          : notFound;
             };
         }
