@@ -5,6 +5,9 @@ import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.internal.Unsafe;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URL;
+
+import static rip.deadcode.akashi.util.Uncheck.uncheck;
 
 public final class AbuRequestHeader {
 
@@ -20,6 +23,31 @@ public final class AbuRequestHeader {
 
     public ExecutionContext getContext() {
         return context;
+    }
+
+    public String getMethod() {
+        return jettyRequest.getMethod();
+    }
+
+    /**
+     * Returns the URL reconstructed by jetty.
+     *
+     * @return URL of the request
+     * @see Request#getRequestURL()
+     */
+    public URL getUrl() {
+        return uncheck( () -> new URL( jettyRequest.getRequestURL().toString() ) );
+    }
+
+    /**
+     * Returns the URL {@link String} sent from the client.
+     * It is without query parameters.
+     *
+     * @return URL String
+     * @see Request#getRequestURI()
+     */
+    public String getRequestUrl() {
+        return jettyRequest.getRequestURI();
     }
 
     @Unsafe
