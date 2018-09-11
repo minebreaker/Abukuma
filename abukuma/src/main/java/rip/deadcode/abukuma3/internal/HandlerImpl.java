@@ -5,16 +5,19 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
+import rip.deadcode.abukuma3.router.AbuRouter;
+import rip.deadcode.abukuma3.router.RoutingContext;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 import rip.deadcode.abukuma3.value.AbuResponse;
-import rip.deadcode.abukuma3.router.AbuRouter;
-import rip.deadcode.abukuma3.router.RoutingContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.Closeable;
 import java.io.IOException;
+
+import static rip.deadcode.akashi.util.Try.possibly;
 
 public final class HandlerImpl extends AbstractHandler {
 
@@ -42,18 +45,24 @@ public final class HandlerImpl extends AbstractHandler {
         RoutingContext routing = router.route( header );
         AbuRequest request = new AbuRequest( context, header, baseRequest, servletRequest, servletResponse, routing.getPathParams() );
 
-        AbuResponse response;
+        AbuResponse response = possibly(
+                () -> routing.getHandler().handle( request )
+        ).orElse(
+                e -> exceptionHandler.handleException( e, request )
+        );
+
         try {
-            response = routing.getHandler().handle( request );
+            servletResponse.setContentType( response.header().contentType() );
 
-        } catch ( Exception e ) {
-            response = exceptionHandler.handleException( e, request );
+            renderer.render( servletResponse.getOutputStream(), response.body() );
+
+            baseRequest.setHandled( true );
+
+        } finally {
+            Object body = response.body();
+            if ( body instanceof Closeable ) {
+                ( (Closeable) body ).close();
+            }
         }
-
-        servletResponse.setContentType( response.header().contentType() );
-
-        renderer.render( servletResponse.getOutputStream(), response.body() );
-
-        baseRequest.setHandled( true );
     }
 }
