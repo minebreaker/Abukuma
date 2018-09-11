@@ -9,21 +9,21 @@ import static rip.deadcode.akashi.util.Uncheck.uncheck;
 public final class AbuServerImpl implements AbuServer {
 
     private final ExecutionContext context;
+    private Server server;
 
     public AbuServerImpl( ExecutionContext context ) {
         this.context = context;
     }
 
-    /**
-     * Runs the server.
-     * This method blocks the thread.
-     */
-    public void run() {
-        Server server = new Server( context.getConfig().port() );
+    @Override public void run() {
+        server = new Server( context.getConfig().port() );
         server.setHandler( new HandlerImpl( context ) );
-        uncheck( () -> {
-            server.start();
-            server.join();
-        } );
+        uncheck( () -> server.start() );
+    }
+
+    @Override public void stop() {
+        if ( server != null ) {
+            uncheck( () -> server.stop() );
+        }
     }
 }
