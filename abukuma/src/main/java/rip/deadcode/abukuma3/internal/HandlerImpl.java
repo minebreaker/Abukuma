@@ -5,9 +5,9 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
-import rip.deadcode.abukuma3.request.AbuRequest;
-import rip.deadcode.abukuma3.request.AbuRequestHeader;
-import rip.deadcode.abukuma3.response.AbuResponse;
+import rip.deadcode.abukuma3.value.AbuRequest;
+import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.AbuResponse;
 import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.router.RoutingContext;
 
@@ -50,7 +50,9 @@ public final class HandlerImpl extends AbstractHandler {
             response = exceptionHandler.handleException( e, request );
         }
 
-        renderer.render( servletResponse.getOutputStream(), response.getBody() );
+        servletResponse.setContentType( response.header().contentType() );
+
+        renderer.render( servletResponse.getOutputStream(), response.body() );
 
         baseRequest.setHandled( true );
     }

@@ -2,7 +2,7 @@ package rip.deadcode.abukuma3;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import rip.deadcode.abukuma3.config.AbuConfig;
+import rip.deadcode.abukuma3.value.AbuConfig;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.internal.AbuServerImpl;
 import rip.deadcode.abukuma3.internal.DefaultExceptionHandler;

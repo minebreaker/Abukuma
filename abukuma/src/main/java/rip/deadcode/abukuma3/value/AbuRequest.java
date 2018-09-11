@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3.request;
+package rip.deadcode.abukuma3.value;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
@@ -40,26 +40,26 @@ public final class AbuRequest {
     }
 
     @SuppressWarnings( "unchecked" )
-    public <T> T getBody( Class<T> cls ) {
+    public <T> T body( Class<T> cls ) {
         AbuParser<?> parser = context.getParsers().get( cls );
         checkNotNull( parser, "Could not find an appropriate parser for the type '%s'.", cls );
         return (T) parser.parse( tryUncheck( () -> jettyRequest.getInputStream() ), header );
     }
 
-    public ExecutionContext getContext() {
+    public ExecutionContext context() {
         return context;
     }
 
-    public AbuRequestHeader getHeader() {
+    public AbuRequestHeader header() {
         return header;
     }
 
-    public Map<String, String> getPathParams() {
+    public Map<String, String> pathParams() {
         return pathParams;
     }
 
     // TODO use original implementation for getting single value
-    public Multimap<String, String> getQueryParams() {
+    public Multimap<String, String> queryParams() {
         Multimap<String, String> params =
                 jettyRequest.getQueryParameters().entrySet().stream()
                             .collect(
@@ -71,17 +71,17 @@ public final class AbuRequest {
     }
 
     @Unsafe
-    public Request getJettyRequest() {
+    public Request jettyRequest() {
         return jettyRequest;
     }
 
     @Unsafe
-    public HttpServletRequest getServletRequest() {
+    public HttpServletRequest servletRequest() {
         return servletRequest;
     }
 
     @Unsafe
-    public HttpServletResponse getServletResponse() {
+    public HttpServletResponse servletResponse() {
         return servletResponse;
     }
 }

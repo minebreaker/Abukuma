@@ -1,34 +1,24 @@
 package rip.deadcode.abukuma3.example;
 
 import rip.deadcode.abukuma3.Abukuma;
-import rip.deadcode.abukuma3.config.AbuConfig;
-import rip.deadcode.abukuma3.response.AbuResponse;
 import rip.deadcode.abukuma3.router.AbuRouters;
+import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.value.AbuResponse;
 
 public final class Example {
 
-    public static void main( String[] args ) throws Exception {
+    public static void main( String[] args ) {
 
-//        Abukuma.config( new AbuConfig.Builder().build() )
-//               .router( _req -> request -> {
-//                   String body = request.getBody( String.class );
-//                   request.getServletResponse().setContentType( "text/html; charset=utf-8" );
-//                   return new AbuResponse( String.format( "<h1>hello, %s</h1>", body.isEmpty() ? "world" : body ) );
-//               } )
-//               .build()
-//               .run();
-
-        Abukuma.config( new AbuConfig.Builder()
-                                .port( 8080 )
-                                .build() )
+        Abukuma.config( AbuConfig.create() )
                .router( AbuRouters.builder()
-                                  .get( "/", req -> new AbuResponse( "hello, root" ) )
-                                  .get( "/get", req -> new AbuResponse( "hello, get" ) )
-                                  .get( "/param/:name", req -> new AbuResponse(
-                                          String.format( "hello, %s!", req.getPathParams().get( "name" ) ) )
+                                  .get( "/", req -> AbuResponse.create( "<h1>hello, world</h1>" )
+                                                               .header( h -> h.contentType( "text/html" ) ) )
+                                  .get( "/user/:name", req -> AbuResponse.create(
+                                          String.format( "<h1>hello, %s!</h1>", req.pathParams().get( "name" ) ) )
+                                                                          .header( h -> h.contentType( "text/html" ) )
                                   )
-                                  .post( "/post", req -> new AbuResponse( "hello, post" ) )
-                                  .notFound( req -> new AbuResponse( "not found" ) )
+                                  .notFound( req -> AbuResponse.create( "<h1>not found</h1>" )
+                                                               .header( h -> h.contentType( "text/html" ) ) )
                                   .build() )
                .build()
                .run();

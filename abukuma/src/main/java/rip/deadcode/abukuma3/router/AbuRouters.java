@@ -4,9 +4,9 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.mu.util.stream.BiStream;
 import rip.deadcode.abukuma3.handler.AbuHandler;
-import rip.deadcode.abukuma3.request.AbuRequestHeader;
-import rip.deadcode.abukuma3.response.AbuResponse;
 import rip.deadcode.abukuma3.router.internal.RoutingContextImpl;
+import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.AbuResponse;
 import rip.deadcode.akashi.collection.Tuple;
 import rip.deadcode.akashi.collection.Tuples;
 
@@ -45,7 +45,7 @@ public final class AbuRouters {
         private static final RoutingContext defaultNotFound = new RoutingContextImpl(
                 ImmutableMap.of(),
                 request -> {
-                    return new AbuResponse( "" );  // TODO
+                    return AbuResponse.create( "<h1>404 Not Found</h1>" ).header( h -> h.contentType( "text/html" ) );
                 }
         );
 
@@ -74,11 +74,11 @@ public final class AbuRouters {
 
         @Nullable
         private static Tuple<Route, Map<String, String>> matchesRoute( AbuRequestHeader requestHeader, Route route ) {
-            boolean methodMatches = route.method == null || requestHeader.getMethod().equalsIgnoreCase( route.method );
+            boolean methodMatches = route.method == null || requestHeader.method().equalsIgnoreCase( route.method );
             if ( !methodMatches ) return null;
 
             Splitter s = Splitter.on( "/" ).omitEmptyStrings();
-            List<String> url = s.splitToList( requestHeader.getRequestUrl() );
+            List<String> url = s.splitToList( requestHeader.requestUrl() );
             List<String> patternList = s.splitToList( route.pattern );
 
             // If the sizes differ, immediately return false. Note BiStream.zip can be used with different sized streams.

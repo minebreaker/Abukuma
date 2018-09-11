@@ -19,7 +19,7 @@ public final class AbuServerImpl implements AbuServer {
      * This method blocks the thread.
      */
     public void run() {
-        Server server = new Server( context.getConfig().getPort() );
+        Server server = new Server( context.getConfig().port() );
         server.setHandler( new HandlerImpl( context ) );
         uncheck( () -> {
             server.start();

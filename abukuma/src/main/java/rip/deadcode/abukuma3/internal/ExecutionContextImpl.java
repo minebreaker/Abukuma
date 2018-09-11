@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.internal;
 
 import rip.deadcode.abukuma3.ExecutionContext;
-import rip.deadcode.abukuma3.config.AbuConfig;
+import rip.deadcode.abukuma3.value.AbuConfig;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.parser.AbuParser;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;

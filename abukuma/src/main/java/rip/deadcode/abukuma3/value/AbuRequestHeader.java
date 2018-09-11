@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3.request;
+package rip.deadcode.abukuma3.value;
 
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.ExecutionContext;
@@ -21,11 +21,11 @@ public final class AbuRequestHeader {
         this.servletRequest = servletRequest;
     }
 
-    public ExecutionContext getContext() {
+    public ExecutionContext context() {
         return context;
     }
 
-    public String getMethod() {
+    public String method() {
         return jettyRequest.getMethod();
     }
 
@@ -35,7 +35,7 @@ public final class AbuRequestHeader {
      * @return URL of the request
      * @see Request#getRequestURL()
      */
-    public URL getUrl() {
+    public URL url() {
         return uncheck( () -> new URL( jettyRequest.getRequestURL().toString() ) );
     }
 
@@ -46,17 +46,17 @@ public final class AbuRequestHeader {
      * @return URL String
      * @see Request#getRequestURI()
      */
-    public String getRequestUrl() {
+    public String requestUrl() {
         return jettyRequest.getRequestURI();
     }
 
     @Unsafe
-    public HttpServletRequest getServletRequest() {
+    public HttpServletRequest servletRequest() {
         return servletRequest;
     }
 
     @Unsafe
-    public Request getJettyRequest() {
+    public Request jettyRequest() {
         return jettyRequest;
     }
 }
