@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.internal;
 
+import com.google.common.net.HttpHeaders;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.ExecutionContext;
@@ -52,7 +53,9 @@ public final class HandlerImpl extends AbstractHandler {
         );
 
         try {
-            servletResponse.setContentType( response.header().contentType() );
+            response.header().mayGet( HttpHeaders.CONTENT_TYPE ).ifPresent(
+                    s -> servletResponse.setContentType( s )
+            );
 
             renderer.render( servletResponse.getOutputStream(), response.body() );
 

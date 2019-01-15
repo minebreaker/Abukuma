@@ -48,6 +48,8 @@
     * OutputStreamRenderer
     * ThymeleafRenderer
     * JSON
+* Utilities
+    * UrlBuilder
 
 
 ## 4. Getting started

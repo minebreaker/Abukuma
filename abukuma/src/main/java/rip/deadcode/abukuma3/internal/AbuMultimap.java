@@ -3,19 +3,26 @@ package rip.deadcode.abukuma3.internal;
 import com.google.common.collect.ForwardingMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbuMultimap extends ForwardingMultimap<String, String> {
 
     public String getValue( String key ) {
-        return delegate().get( key ).iterator().next();
+        return checkNotNull( get( key ).iterator().next() );
     }
 
     public Set<String> getValues( String key ) {
         return ImmutableSet.copyOf( delegate().get( key ) );
+    }
+
+    public Optional<String> mayGet( String key ) {
+        return Optional.ofNullable( get( key ).iterator().next() );
     }
 
     public abstract AbuMultimap copy();

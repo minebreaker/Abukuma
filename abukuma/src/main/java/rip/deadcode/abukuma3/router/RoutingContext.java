@@ -9,5 +9,4 @@ public interface RoutingContext {
     public Map<String, String> getPathParams();
 
     public AbuHandler getHandler();
-
 }
