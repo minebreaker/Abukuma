@@ -4,7 +4,7 @@ import rip.deadcode.abukuma3.handler.AbuHandler;
 
 import java.util.Map;
 
-public interface RoutingContext {
+public interface AbuRoutingContext {
 
     public Map<String, String> getPathParams();
 

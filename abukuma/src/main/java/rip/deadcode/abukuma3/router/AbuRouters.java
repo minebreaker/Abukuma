@@ -59,7 +59,7 @@ public final class AbuRouters {
 
         private AbuRouterBuilder() {}
 
-        private static final RoutingContext defaultNotFound = new RoutingContextImpl(
+        private static final AbuRoutingContext defaultNotFound = new RoutingContextImpl(
                 ImmutableMap.of(),
                 request -> {
                     return AbuResponse.create( "<h1>404 Not Found</h1>" ).header( h -> h.contentType( "text/html" ) );
@@ -67,7 +67,7 @@ public final class AbuRouters {
         );
 
         private List<Route> mappings = new ArrayList<>();
-        @Nullable private RoutingContext notFound;
+        @Nullable private AbuRoutingContext notFound;
 
         public AbuRouterBuilder path( String pattern, AbuHandler handler ) {
             mappings.add( new PathRoute( null, pattern, handler ) );
@@ -123,7 +123,7 @@ public final class AbuRouters {
         }
 
         @Nullable
-        private static RoutingContext matchesRoute( AbuRequestHeader requestHeader, Route route ) {
+        private static AbuRoutingContext matchesRoute( AbuRequestHeader requestHeader, Route route ) {
             if ( route instanceof PathRoute ) {
                 return matchesPathRoute( requestHeader, (PathRoute) route );
             } else if ( route instanceof MatcherRoute ) {
@@ -138,7 +138,7 @@ public final class AbuRouters {
             }
         }
 
-        private static RoutingContext matchesPathRoute( AbuRequestHeader requestHeader, PathRoute route ) {
+        private static AbuRoutingContext matchesPathRoute( AbuRequestHeader requestHeader, PathRoute route ) {
 
             boolean methodMatches = route.method == null || requestHeader.method().equalsIgnoreCase( route.method );
             if ( !methodMatches ) return null;
@@ -177,10 +177,10 @@ public final class AbuRouters {
         public AbuRouter build() {
             return request -> {
 
-                Optional<RoutingContext> route = mappings.stream()
-                                                         .map( candidate -> matchesRoute( request, candidate ) )
-                                                         .filter( candidate -> candidate != null )
-                                                         .findAny();
+                Optional<AbuRoutingContext> route = mappings.stream()
+                                                            .map( candidate -> matchesRoute( request, candidate ) )
+                                                            .filter( candidate -> candidate != null )
+                                                            .findAny();
 
                 if ( route.isPresent() ) {
                     return route.get();

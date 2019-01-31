@@ -3,11 +3,11 @@ package rip.deadcode.abukuma3.internal;
 import com.google.common.net.HttpHeaders;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.router.AbuRouter;
-import rip.deadcode.abukuma3.router.RoutingContext;
+import rip.deadcode.abukuma3.router.AbuRoutingContext;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 import rip.deadcode.abukuma3.value.AbuResponse;
@@ -20,14 +20,14 @@ import java.io.IOException;
 
 import static rip.deadcode.akashi.util.Try.possibly;
 
-public final class HandlerImpl extends AbstractHandler {
+public final class JettyHandlerImpl extends AbstractHandler {
 
-    private final ExecutionContext context;
+    private final AbuExecutionContext context;
     private final AbuRouter router;
     private final AbuExceptionHandler exceptionHandler;
     private final AbuRenderer renderer;
 
-    HandlerImpl( ExecutionContext context ) {
+    JettyHandlerImpl( AbuExecutionContext context ) {
         this.context = context;
         this.router = context.getRouter();
         this.exceptionHandler = context.getExceptionHandler();
@@ -43,7 +43,7 @@ public final class HandlerImpl extends AbstractHandler {
             HttpServletResponse servletResponse ) throws IOException, ServletException {
 
         AbuRequestHeader header = new AbuRequestHeader( context, baseRequest, servletRequest );
-        RoutingContext routing = router.route( header );
+        AbuRoutingContext routing = router.route( header );
         AbuRequest request = new AbuRequest( context, header, baseRequest, servletRequest, servletResponse, routing.getPathParams() );
 
         AbuResponse response = possibly(

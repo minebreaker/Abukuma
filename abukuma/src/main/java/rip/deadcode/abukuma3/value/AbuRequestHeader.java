@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.value;
 
 import org.eclipse.jetty.server.Request;
-import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.internal.Unsafe;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,17 +11,17 @@ import static rip.deadcode.akashi.util.Uncheck.uncheck;
 
 public final class AbuRequestHeader {
 
-    private final ExecutionContext context;
+    private final AbuExecutionContext context;
     private final Request jettyRequest;
     private final HttpServletRequest servletRequest;
 
-    public AbuRequestHeader( ExecutionContext context, Request jettyRequest, HttpServletRequest servletRequest ) {
+    public AbuRequestHeader( AbuExecutionContext context, Request jettyRequest, HttpServletRequest servletRequest ) {
         this.context = context;
         this.jettyRequest = jettyRequest;
         this.servletRequest = servletRequest;
     }
 
-    public ExecutionContext context() {
+    public AbuExecutionContext context() {
         return context;
     }
 

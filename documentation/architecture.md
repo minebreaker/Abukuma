@@ -1,73 +1,43 @@
-# 阿武隈 - シンプルなWebフレームワーク
+# Architecture
 
-アブクマは、シンプルさとスタイルを兼ねそろえたJava/Kotlin向けのHTTPライブラリーです。
+## Flow
 
-
-## 1. Preface
-
-### Motivation
-
-> シンプル != 簡単
-
-アブクマはJettyの小さなラッパーであり、ルーティング機能を提供することと、簡潔なHTTPリクエスト/レスポンスの操作を可能とすることに注力します。  
-
-シンプルは簡単とイコールではありません。
-「簡単」なWebアプリケーションフレームワークはたくさんあります。
-代表例がRuby on Railsでしょう。
-しかしRailsを使ったことのある人はみな経験しているように、簡単であることは、我々が解決しようとしているまさにその問題において簡単であることを意味しません。
-アブクマは代わりにシンプルであろうとします。
+1. A user sends a request.
+2. The server receives the request and parse headers.
+3. The `Router` investigates the request URI and headers,
+    decide which `Handler` to invoke to handle the request.
+4. The `Handler` receives the request, and returns a response to it.
+5. `Handler`s can call `Parser` to parse the http body into an appropriate class.
+6. The body object inside the response is converted to the output stream by `Renderer`.
 
 
-## 2. Design Goal
-
-### シンプル
-
-* 不変オブジェクト
-* 関数指向
-
-### 暗黙的であるより明示的に
-
-### Good old Java
-
-* No XML, No Annotations
-* Slightly opinionated
-
-
-## 3. Overview
-
-### コンポーネント
+## Components
 
 * Application
+    * Abukuma
+    * AbuServer
     * Config
-* Router
+* Routing
+    * Router
     * Routers
+    * RoutingContext
 * Handler
     * ErrorHandler
+* Parser
+    * StringParser
+    * InputStreamParser
 * Renderer
     * StringRenderer
     * OutputStreamRenderer
     * ThymeleafRenderer
-    * JSON
+    * JsonRenderer
 * Utilities
-    * UrlBuilder
+    * UriBuilder
 
 
-## 4. Getting started
+### `Config`
 
-```java
-class Application {
-
-    private static Config config = Configs.builder()
-                                          .port(8080)
-                                          .build();
-
-    private static Router router =
-            (request) -> ((ctx) -> Response.body("<h1>hello, world</h1>"));
-
-    public static void main(String[] args) {
-        Abukuma.config(config())
-               .router(router())
-               .run();
-    }
-}
-```
+* `AbuConfig.create()` `AbuConfig.development()` `AbuConfig.production()`
+* `AbuPojoConfig`
+* `AbuConfig.json()` `AbuConfig.yaml()` `AbuConfig.properties()`
+* `AbuTypeSafeConfig.load()`

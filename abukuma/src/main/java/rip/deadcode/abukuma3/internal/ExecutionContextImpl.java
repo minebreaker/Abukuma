@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.internal;
 
-import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.value.AbuConfig;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.parser.AbuParser;
@@ -10,7 +10,7 @@ import rip.deadcode.abukuma3.router.AbuRouter;
 import java.util.List;
 import java.util.Map;
 
-public final class ExecutionContextImpl implements ExecutionContext {
+public final class ExecutionContextImpl implements AbuExecutionContext {
 
     private final AbuConfig config;
     private final Map<Class<?>, AbuParser<?>> parsers;

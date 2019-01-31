@@ -4,7 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimap;
 import org.eclipse.jetty.server.Request;
-import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.internal.Unsafe;
 import rip.deadcode.abukuma3.parser.AbuParser;
 
@@ -17,7 +17,7 @@ import static rip.deadcode.akashi.util.Uncheck.tryUncheck;
 
 public final class AbuRequest {
 
-    private final ExecutionContext context;
+    private final AbuExecutionContext context;
     private final AbuRequestHeader header;
     private final Request jettyRequest;
     private final HttpServletRequest servletRequest;
@@ -25,7 +25,7 @@ public final class AbuRequest {
     private final Map<String, String> pathParams;
 
     public AbuRequest(
-            ExecutionContext context,
+            AbuExecutionContext context,
             AbuRequestHeader header,
             Request jettyRequest,
             HttpServletRequest servletRequest,
@@ -46,7 +46,7 @@ public final class AbuRequest {
         return (T) parser.parse( tryUncheck( () -> jettyRequest.getInputStream() ), header );
     }
 
-    public ExecutionContext context() {
+    public AbuExecutionContext context() {
         return context;
     }
 

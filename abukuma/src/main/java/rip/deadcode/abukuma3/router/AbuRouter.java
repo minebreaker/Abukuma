@@ -4,5 +4,5 @@ import rip.deadcode.abukuma3.value.AbuRequestHeader;
 
 @FunctionalInterface
 public interface AbuRouter {
-    public RoutingContext route( AbuRequestHeader request );
+    public AbuRoutingContext route( AbuRequestHeader request );
 }

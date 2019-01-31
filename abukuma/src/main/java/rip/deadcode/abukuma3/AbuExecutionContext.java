@@ -9,7 +9,7 @@ import rip.deadcode.abukuma3.router.AbuRouter;
 import java.util.List;
 import java.util.Map;
 
-public interface ExecutionContext {
+public interface AbuExecutionContext {
 
     public AbuConfig getConfig();
 

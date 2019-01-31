@@ -1,11 +1,11 @@
 package rip.deadcode.abukuma3.router.internal;
 
 import rip.deadcode.abukuma3.handler.AbuHandler;
-import rip.deadcode.abukuma3.router.RoutingContext;
+import rip.deadcode.abukuma3.router.AbuRoutingContext;
 
 import java.util.Map;
 
-public final class RoutingContextImpl implements RoutingContext {
+public final class RoutingContextImpl implements AbuRoutingContext {
 
     private final Map<String, String> pathParams;
     private final AbuHandler handler;
