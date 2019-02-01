@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.net.HttpHeaders;
+import com.google.common.net.MediaType;
 import rip.deadcode.abukuma3.internal.AbuMultimap;
 
 public final class AbuHeader extends AbuMultimap {
@@ -55,5 +56,9 @@ public final class AbuHeader extends AbuMultimap {
 
     public AbuHeader contentType( String value ) {
         return set( HttpHeaders.CONTENT_TYPE, value );
+    }
+
+    public AbuHeader contentType( MediaType value ) {
+        return set( HttpHeaders.CONTENT_TYPE, value.toString() );
     }
 }

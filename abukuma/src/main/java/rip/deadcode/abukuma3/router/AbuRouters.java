@@ -4,6 +4,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.mu.util.stream.BiStream;
 import rip.deadcode.abukuma3.handler.AbuHandler;
+import rip.deadcode.abukuma3.internal.utils.Resources;
 import rip.deadcode.abukuma3.router.internal.RoutingContextImpl;
 import rip.deadcode.abukuma3.router.internal.UriHandler;
 import rip.deadcode.abukuma3.router.internal.UriRootHandler;
@@ -12,13 +13,10 @@ import rip.deadcode.abukuma3.value.AbuResponse;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.BiPredicate;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 // TODO refactoring all
@@ -61,9 +59,7 @@ public final class AbuRouters {
 
         private static final AbuRoutingContext defaultNotFound = new RoutingContextImpl(
                 ImmutableMap.of(),
-                request -> {
-                    return AbuResponse.create( "<h1>404 Not Found</h1>" ).header( h -> h.contentType( "text/html" ) );
-                }
+                request -> AbuResponse.create( "<h1>404 Not Found</h1>" ).header( h -> h.contentType( "text/html" ) )
         );
 
         private List<Route> mappings = new ArrayList<>();
@@ -84,27 +80,9 @@ public final class AbuRouters {
             return this;
         }
 
-        private static URI grabResource( String path ) {
-            try {
-                return checkNotNull( AbuRouters.class.getClassLoader().getResource( path ) ).toURI();
-            } catch ( URISyntaxException e ) {
-                throw new RuntimeException( e );
-            }
-        }
-
         public AbuRouterBuilder file( String mappingPath, Path servingPath ) {
             mappings.add( new PathRoute( "GET", mappingPath, UriHandler.create( servingPath.toUri() ) ) );
             return this;
-        }
-
-        public AbuRouterBuilder resource( String mappingPath, String resourcePath ) {
-            mappings.add( new PathRoute( "GET", mappingPath, UriHandler.create( grabResource( resourcePath ) ) ) );
-            return this;
-        }
-
-        private static BiPredicate<String, String> rootMatcher( String pattern ) {
-            return ( method, url ) -> method.equalsIgnoreCase( "GET" )
-                                      && url.equals( pattern ) || ( url + "/" ).startsWith( pattern );
         }
 
         public AbuRouterBuilder dir( String mappingRootPath, Path directoryBase ) {
@@ -112,9 +90,19 @@ public final class AbuRouters {
             return this;
         }
 
-        public AbuRouterBuilder resources( String mappingRootPath, String resourceBase ) {
-            mappings.add( new MatcherRoute( rootMatcher( mappingRootPath ), UriRootHandler.create( grabResource( resourceBase ) ) ) );
+        public AbuRouterBuilder resource( String mappingPath, String resourcePath ) {
+            mappings.add( new PathRoute( "GET", mappingPath, UriHandler.create( Resources.grabResource( resourcePath ) ) ) );
             return this;
+        }
+
+        public AbuRouterBuilder resources( String mappingRootPath, String resourceBase ) {
+            mappings.add( new MatcherRoute( rootMatcher( mappingRootPath ), UriRootHandler.create( Resources.grabResource( resourceBase ) ) ) );
+            return this;
+        }
+
+        private static BiPredicate<String, String> rootMatcher( String pattern ) {
+            return ( method, url ) -> method.equalsIgnoreCase( "GET" )
+                                      && url.equals( pattern ) || ( url + "/" ).startsWith( pattern );
         }
 
         public AbuRouterBuilder notFound( AbuHandler handler ) {

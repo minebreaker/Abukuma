@@ -15,7 +15,7 @@ public final class Example {
                                                                .header( h -> h.contentType( "text/html" ) ) )
                                   .get( "/:name", req -> AbuResponse.create(
                                           String.format( "<h1>hello, %s!</h1>", req.pathParams().get( "name" ) ) )
-                                                                         .header( h -> h.contentType( "text/html" ) )
+                                                                    .header( h -> h.contentType( "text/html" ) )
                                   )
                                   .notFound( req -> AbuResponse.create( "<h1>not found</h1>" )
                                                                .header( h -> h.contentType( "text/html" ) ) )

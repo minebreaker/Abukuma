@@ -21,6 +21,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class Abukuma {
 
+    private Abukuma() {
+        throw new AssertionError();
+    }
+
     public static AbuServerBuilder config( AbuConfig config ) {
         return new AbuServerBuilder().config( config );
     }

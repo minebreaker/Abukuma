@@ -34,7 +34,7 @@ public final class UriHandler implements AbuHandler {
         // TODO cache
 
         try {
-            return AbuResponse.create( Files.newInputStream( Paths.get( uri ) ) )
+            return AbuResponse.create( Files.newInputStream( Paths.get( uri ) ) )  // FIXME FileSystem
                               .header( h -> h.contentType( guessMediaType( uri.toString() ) ) );
         } catch ( IOException e ) {
             throw new UncheckedIOException( e );
@@ -42,7 +42,7 @@ public final class UriHandler implements AbuHandler {
     }
 
     // don't use for unsafe source!
-    private String guessMediaType( String fileName ) {
+    private static String guessMediaType( String fileName ) {
         String extension = last( extensionSplitter.splitToList( fileName ) ).toLowerCase();
         switch ( extension ) {
 
