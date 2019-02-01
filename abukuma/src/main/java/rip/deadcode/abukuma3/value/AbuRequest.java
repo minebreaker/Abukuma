@@ -6,14 +6,16 @@ import com.google.common.collect.Multimap;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.internal.Unsafe;
-import rip.deadcode.abukuma3.parser.AbuParser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static rip.deadcode.akashi.util.Uncheck.tryUncheck;
+import static com.google.common.base.Preconditions.checkState;
 
 public final class AbuRequest {
 
@@ -39,11 +41,21 @@ public final class AbuRequest {
         this.pathParams = pathParams;
     }
 
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings( "unchecked" )  // checked by Class.isInstance(Object)
     public <T> T body( Class<T> cls ) {
-        AbuParser<?> parser = context.getParsers().get( cls );
-        checkNotNull( parser, "Could not find an appropriate parser for the type '%s'.", cls );
-        return (T) parser.parse( tryUncheck( () -> jettyRequest.getInputStream() ), header );
+        try ( InputStream is = jettyRequest.getInputStream() ) {
+            Object result = context.getParserChain().parse( cls, is, header );
+            checkNotNull( result, "Could not find an appropriate parser for the type '%s'.", cls );
+            checkState(
+                    cls.isInstance( result ),
+                    "Illegal instance '%s' of type '%s' was returned by the parser for the request '%s'. This may be caused by a bug of the parsers.",
+                    result, result.getClass(), cls
+            );
+            return (T) result;
+
+        } catch ( IOException e ) {
+            throw new UncheckedIOException( e );
+        }
     }
 
     public AbuExecutionContext context() {

@@ -27,7 +27,7 @@
     * StringParser
     * InputStreamParser
 * Renderer
-    * StringRenderer
+    * CharSequenceRenderer
     * OutputStreamRenderer
     * ThymeleafRenderer
     * JsonRenderer

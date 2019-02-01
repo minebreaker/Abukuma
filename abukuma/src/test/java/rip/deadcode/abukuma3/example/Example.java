@@ -13,7 +13,7 @@ public final class Example {
                .router( AbuRouters.builder()
                                   .get( "/", req -> AbuResponse.create( "<h1>hello, world</h1>" )
                                                                .header( h -> h.contentType( "text/html" ) ) )
-                                  .get( "/user/:name", req -> AbuResponse.create(
+                                  .get( "/:name", req -> AbuResponse.create(
                                           String.format( "<h1>hello, %s!</h1>", req.pathParams().get( "name" ) ) )
                                                                          .header( h -> h.contentType( "text/html" ) )
                                   )
