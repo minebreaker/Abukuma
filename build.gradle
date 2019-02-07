@@ -1,6 +1,6 @@
 subprojects {
     group = 'rip.deadcode.abukuma3'
-    version = '0.1-SNAPSHOT'
+    version = '0.1.0-SNAPSHOT'
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -38,5 +38,4 @@ subprojects {
         classifier = 'javadoc'
         from javadoc.destinationDir
     }
-
 }

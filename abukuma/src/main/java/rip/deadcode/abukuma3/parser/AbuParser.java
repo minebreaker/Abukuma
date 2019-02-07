@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 /**
  * Parser implementations are responsible for closing the {@link InputStream}.
- * @param <T>
+ * @param <T> Class to be parsed.
  */
 @FunctionalInterface
 public interface AbuParser<T> {

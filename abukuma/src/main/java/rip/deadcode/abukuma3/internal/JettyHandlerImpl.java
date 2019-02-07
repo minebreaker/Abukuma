@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.Closeable;
 import java.io.IOException;
 
-import static rip.deadcode.akashi.util.Try.possibly;
+import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
+
 
 public final class JettyHandlerImpl extends AbstractHandler {
 
@@ -42,7 +43,7 @@ public final class JettyHandlerImpl extends AbstractHandler {
             HttpServletRequest servletRequest,
             HttpServletResponse servletResponse ) throws IOException, ServletException {
 
-        AbuRequestHeader header = new AbuRequestHeader( context, baseRequest, servletRequest );
+        AbuRequestHeader header = new AbuRequestHeader( context, baseRequest );
         AbuRoutingContext routing = router.route( header );
         AbuRequest request = new AbuRequest( context, header, baseRequest, servletRequest, servletResponse, routing.getPathParams() );
 

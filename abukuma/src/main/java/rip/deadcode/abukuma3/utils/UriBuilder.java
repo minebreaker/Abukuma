@@ -1,8 +1,11 @@
 package rip.deadcode.abukuma3.utils;
 
+import rip.deadcode.abukuma3.internal.utils.Uncheck;
+
 import java.net.URI;
 
-import static rip.deadcode.akashi.util.Uncheck.tryUncheck;
+import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
+
 
 public final class UriBuilder {
 
@@ -27,6 +30,6 @@ public final class UriBuilder {
 
 
     public URI build() {
-        return tryUncheck( () -> new URI( scheme, authority, path, query, fragment ) );
+        return Uncheck.uncheck( () -> new URI( scheme, authority, path, query, fragment ) );
     }
 }

@@ -1,1 +1,6 @@
-include 'abukuma'
+include (
+        'abukuma',
+        'abukuma-gson',
+        'abukuma-hocon',
+        'abukuma-thymeleaf'
+)

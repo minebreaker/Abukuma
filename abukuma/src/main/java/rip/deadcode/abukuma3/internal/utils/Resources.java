@@ -4,7 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static rip.deadcode.akashi.lang.MoreMoreObjects.coalesce;
+import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.coalesce;
 
 public final class Resources {
 

@@ -2,7 +2,7 @@ package rip.deadcode.abukuma3.router;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
-import com.google.mu.util.stream.BiStream;
+import com.google.common.collect.Streams;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.internal.utils.Resources;
 import rip.deadcode.abukuma3.router.internal.RoutingContextImpl;
@@ -31,13 +31,13 @@ public final class AbuRouters {
 
         private static class Route {}
 
-        private static final class PathRoute extends Route {
+        private static final class PathSegmentRoute extends Route {
 
             @Nullable private final String method;
             private final String pattern;
             private final AbuHandler handler;
 
-            private PathRoute( String method, String pattern, AbuHandler handler ) {
+            private PathSegmentRoute( String method, String pattern, AbuHandler handler ) {
                 this.method = method;
                 this.pattern = pattern;
                 this.handler = handler;
@@ -59,29 +59,29 @@ public final class AbuRouters {
 
         private static final AbuRoutingContext defaultNotFound = new RoutingContextImpl(
                 ImmutableMap.of(),
-                request -> AbuResponse.create( "<h1>404 Not Found</h1>" ).header( h -> h.contentType( "text/html" ) )
+                request -> AbuResponse.create( "<h1>404 Not Found</h1>" ).header( h -> h.contentType( "text/html" ) )  // TODO
         );
 
         private List<Route> mappings = new ArrayList<>();
         @Nullable private AbuRoutingContext notFound;
 
         public AbuRouterBuilder path( String pattern, AbuHandler handler ) {
-            mappings.add( new PathRoute( null, pattern, handler ) );
+            mappings.add( new PathSegmentRoute( null, pattern, handler ) );
             return this;
         }
 
         public AbuRouterBuilder get( String pattern, AbuHandler handler ) {
-            mappings.add( new PathRoute( "GET", pattern, handler ) );
+            mappings.add( new PathSegmentRoute( "GET", pattern, handler ) );
             return this;
         }
 
         public AbuRouterBuilder post( String pattern, AbuHandler handler ) {
-            mappings.add( new PathRoute( "POST", pattern, handler ) );
+            mappings.add( new PathSegmentRoute( "POST", pattern, handler ) );
             return this;
         }
 
         public AbuRouterBuilder file( String mappingPath, Path servingPath ) {
-            mappings.add( new PathRoute( "GET", mappingPath, UriHandler.create( servingPath.toUri() ) ) );
+            mappings.add( new PathSegmentRoute( "GET", mappingPath, UriHandler.create( servingPath.toUri() ) ) );
             return this;
         }
 
@@ -91,7 +91,7 @@ public final class AbuRouters {
         }
 
         public AbuRouterBuilder resource( String mappingPath, String resourcePath ) {
-            mappings.add( new PathRoute( "GET", mappingPath, UriHandler.create( Resources.grabResource( resourcePath ) ) ) );
+            mappings.add( new PathSegmentRoute( "GET", mappingPath, UriHandler.create( Resources.grabResource( resourcePath ) ) ) );
             return this;
         }
 
@@ -112,36 +112,31 @@ public final class AbuRouters {
 
         @Nullable
         private static AbuRoutingContext matchesRoute( AbuRequestHeader requestHeader, Route route ) {
-            if ( route instanceof PathRoute ) {
-                return matchesPathRoute( requestHeader, (PathRoute) route );
+            if ( route instanceof PathSegmentRoute ) {
+                return matchesPathSegment( requestHeader, (PathSegmentRoute) route );
             } else if ( route instanceof MatcherRoute ) {
-                MatcherRoute mRoute = (MatcherRoute) route;
-                if ( mRoute.pathMatcher.test( requestHeader.method(), requestHeader.requestUrl() ) )
-                    return new RoutingContextImpl( ImmutableMap.of(), mRoute.handler );
-                else {
-                    return null;
-                }
+                return matchesMatcherRoute( requestHeader, (MatcherRoute) route );
             } else {
                 throw new Error();  // This won't happen
             }
         }
 
-        private static AbuRoutingContext matchesPathRoute( AbuRequestHeader requestHeader, PathRoute route ) {
+        private static AbuRoutingContext matchesPathSegment( AbuRequestHeader requestHeader, PathSegmentRoute route ) {
 
             boolean methodMatches = route.method == null || requestHeader.method().equalsIgnoreCase( route.method );
             if ( !methodMatches ) return null;
 
             Splitter s = Splitter.on( "/" ).omitEmptyStrings();
-            List<String> url = s.splitToList( requestHeader.requestUrl() );
+            List<String> requestPathSegments = s.splitToList( requestHeader.requestUri() );
             List<String> patternList = s.splitToList( route.pattern );
 
             // If the sizes differ, immediately return false. Note BiStream.zip can be used with different sized streams.
-            if ( url.size() != patternList.size() ) return null;
+            if ( requestPathSegments.size() != patternList.size() ) return null;
 
             List<Map<String, String>> result =
-                    BiStream.zip( patternList.stream(), url.stream() )
-                            .map( ( p, u ) -> matchEach( p, u ) )
-                            .collect( toList() );
+                    Streams.zip( patternList.stream(), requestPathSegments.stream(), ( p, u ) -> matchEachSegment( p, u ) )
+                           .collect( toList() );
+
             if ( result.stream().allMatch( e -> e != null ) ) {
                 Map<String, String> params = result.stream().collect( HashMap::new, Map::putAll, Map::putAll );
                 return new RoutingContextImpl( ImmutableMap.copyOf( params ), route.handler );
@@ -151,7 +146,7 @@ public final class AbuRouters {
         }
 
         @Nullable
-        private static Map<String, String> matchEach( String pattern, String urlElement ) {
+        private static Map<String, String> matchEachSegment( String pattern, String urlElement ) {
             if ( pattern.equals( "*" ) ) {
                 return ImmutableMap.of();
             } else if ( pattern.startsWith( ":" ) ) {
@@ -159,6 +154,16 @@ public final class AbuRouters {
                 return ImmutableMap.of( key, urlElement );
             } else {
                 return pattern.equals( urlElement ) ? ImmutableMap.of() : null;
+            }
+        }
+
+        @Nullable
+        private static AbuRoutingContext matchesMatcherRoute( AbuRequestHeader requestHeader, MatcherRoute route ) {
+
+            if ( route.pathMatcher.test( requestHeader.method(), requestHeader.requestUri() ) )
+                return new RoutingContextImpl( ImmutableMap.of(), route.handler );
+            else {
+                return null;
             }
         }
 

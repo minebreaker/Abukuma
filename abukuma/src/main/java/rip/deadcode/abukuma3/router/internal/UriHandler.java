@@ -11,7 +11,8 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static rip.deadcode.akashi.collection.MoreLists.last;
+import static rip.deadcode.abukuma3.internal.utils.MoreLists.last;
+
 
 public final class UriHandler implements AbuHandler {
 
