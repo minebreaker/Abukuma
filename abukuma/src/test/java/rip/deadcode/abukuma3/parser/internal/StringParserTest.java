@@ -3,7 +3,7 @@ package rip.deadcode.abukuma3.parser.internal;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
-import static rip.deadcode.abukuma3.test.internal.utils.TestUtils.str2is;
+import static rip.deadcode.abukuma3.internal.utils.IoStreams.str2is;
 
 
 class StringParserTest {

@@ -30,10 +30,10 @@ public final class JettyHandlerImpl extends AbstractHandler {
 
     JettyHandlerImpl( AbuExecutionContext context ) {
         this.context = context;
-        this.router = context.getRouter();
-        this.exceptionHandler = context.getExceptionHandler();
+        this.router = context.router();
+        this.exceptionHandler = context.exceptionHandler();
         //noinspection OptionalGetWithoutIsPresent  // At least has default implementations
-        this.renderer = context.getRenderers().stream().reduce( ( r, then ) -> r.ifFailed( then ) ).get();
+        this.renderer = context.renderers().stream().reduce( ( r, then ) -> r.ifFailed( then ) ).get();
     }
 
     @Override

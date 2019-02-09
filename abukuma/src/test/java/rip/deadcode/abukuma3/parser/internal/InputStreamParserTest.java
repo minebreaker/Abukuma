@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import java.io.InputStream;
 
 import static com.google.common.truth.Truth.assertThat;
-import static rip.deadcode.abukuma3.test.internal.utils.TestUtils.is2str;
-import static rip.deadcode.abukuma3.test.internal.utils.TestUtils.str2is;
+import static rip.deadcode.abukuma3.internal.utils.IoStreams.is2str;
+import static rip.deadcode.abukuma3.internal.utils.IoStreams.str2is;
 
 
 class InputStreamParserTest {

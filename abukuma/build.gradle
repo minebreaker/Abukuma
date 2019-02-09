@@ -6,20 +6,3 @@ dependencies {
             'org.slf4j:slf4j-api:1.7.25',
     )
 }
-
-artifacts {
-    archives jar
-    archives sourcesJar
-    archives javadocJar
-}
-
-test {
-    useJUnitPlatform()
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-}

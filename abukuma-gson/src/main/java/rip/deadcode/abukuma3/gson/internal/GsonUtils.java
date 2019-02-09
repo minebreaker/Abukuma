@@ -20,4 +20,8 @@ public final class GsonUtils {
 
         return false;
     }
+
+    static boolean checkHeader(String contentType) {
+        return contentType.contains( "application/json" );  // FIXME Mime parser
+    }
 }

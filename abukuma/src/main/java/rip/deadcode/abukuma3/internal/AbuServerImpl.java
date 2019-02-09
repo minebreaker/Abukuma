@@ -23,7 +23,7 @@ public final class AbuServerImpl implements AbuServer {
     @Override public void run() {
         showInfo();
 
-        server = new Server( context.getConfig().port() );
+        server = new Server( context.config().port() );
         server.setHandler( new JettyHandlerImpl( context ) );
         uncheck( () -> server.start() );
     }

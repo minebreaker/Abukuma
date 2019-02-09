@@ -34,27 +34,27 @@ public final class ExecutionContextImpl implements AbuExecutionContext {
         this.exceptionHandler = exceptionHandler;
     }
 
-    @Override public AbuConfig getConfig() {
+    @Override public AbuConfig config() {
         return config;
     }
 
-    @Override public List<AbuParser<?>> getParsers() {
+    @Override public List<AbuParser<?>> parsers() {
         return parsers;
     }
 
-    @Override public AbuParser<?> getParserChain() {
+    @Override public AbuParser<?> parserChain() {
         return parserChain;
     }
 
-    @Override public List<AbuRenderer> getRenderers() {
+    @Override public List<AbuRenderer> renderers() {
         return renderers;
     }
 
-    @Override public AbuRouter getRouter() {
+    @Override public AbuRouter router() {
         return router;
     }
 
-    @Override public AbuExceptionHandler getExceptionHandler() {
+    @Override public AbuExceptionHandler exceptionHandler() {
         return exceptionHandler;
     }
 }

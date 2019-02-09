@@ -44,7 +44,7 @@ public final class AbuRequest {
     @SuppressWarnings( "unchecked" )  // checked by Class.isInstance(Object)
     public <T> T body( Class<T> cls ) {
         try ( InputStream is = jettyRequest.getInputStream() ) {
-            Object result = context.getParserChain().parse( cls, is, header );
+            Object result = context.parserChain().parse( cls, is, header );
             checkNotNull( result, "Could not find an appropriate parser for the type '%s'.", cls );
             checkState(
                     cls.isInstance( result ),

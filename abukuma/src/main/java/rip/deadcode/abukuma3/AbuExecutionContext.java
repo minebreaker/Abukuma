@@ -10,15 +10,15 @@ import java.util.List;
 
 public interface AbuExecutionContext {
 
-    public AbuConfig getConfig();
+    public AbuConfig config();
 
-    public List<AbuParser<?>> getParsers();
+    public List<AbuParser<?>> parsers();
 
-    public AbuParser<?> getParserChain();
+    public AbuParser<?> parserChain();
 
-    public List<AbuRenderer> getRenderers();
+    public List<AbuRenderer> renderers();
 
-    public AbuRouter getRouter();
+    public AbuRouter router();
 
-    public AbuExceptionHandler getExceptionHandler();
+    public AbuExceptionHandler exceptionHandler();
 }

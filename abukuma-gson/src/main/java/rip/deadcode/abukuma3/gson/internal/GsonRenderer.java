@@ -6,6 +6,7 @@ import rip.deadcode.abukuma3.renderer.AbuRenderer;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import static rip.deadcode.abukuma3.gson.internal.GsonUtils.isAnnotatedBy;
 
@@ -25,6 +26,7 @@ public final class GsonRenderer implements AbuRenderer {
             return false;
         }
 
-        return false;
+        gson.toJson( body, new OutputStreamWriter( os ) );
+        return true;
     }
 }
