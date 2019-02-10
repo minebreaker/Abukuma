@@ -1,14 +1,18 @@
 package rip.deadcode.abukuma3.parser.internal;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.parser.AbuParser;
 import rip.deadcode.abukuma3.parser.UrlEncoded;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 
 import javax.annotation.Nullable;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static rip.deadcode.abukuma3.internal.utils.IoStreams.is2str;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -25,12 +29,84 @@ public final class UrlEncodedParser implements AbuParser<UrlEncoded> {
             return null;
         }
 
-        String s = is2str( body );  // TODO charset
+        Multimap<String, String> result = parse( body );
+        return UrlEncoded.create( result );
+    }
 
+    @VisibleForTesting
+    static Multimap<String, String> parse( InputStream is ) throws IOException {
 
+        Multimap<String, String> out = HashMultimap.create();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
+        while ( true ) {
+            Multimap<String, String> ret = parsePair( is, out, baos );
+            if ( ret == null ) {
+                return out;
+            } else {
+                out = ret;
+            }
+        }
+    }
 
+    private static Multimap<String, String> parsePair(
+            InputStream is, Multimap<String, String> parsed, ByteArrayOutputStream baos ) throws IOException {
 
-        return null;
+        is.mark( 1 );
+        int i = is.read();
+
+        if ( i == -1 ) {
+            return null;
+
+        } else if ( i == and ) {
+            return parsed;
+
+        } else if ( i == equal ) {
+            // Empty key
+            String v = parseKeyOrValue( is, baos, true );
+            parsed.put( "", v );  // The implementation should allow duplicate key
+            return parsed;
+
+        } else {
+            is.reset();
+            String k = parseKeyOrValue( is, baos, false );
+
+            is.mark( 1 );
+            i = is.read();
+
+            if ( i == and ) {  // Does not have a value
+                parsed.put( k, "" );
+                return parsed;
+            }
+
+            String v = parseKeyOrValue( is, baos, true );
+            parsed.put( k, v );  // The implementation should allow duplicate key
+            return parsed;
+        }
+    }
+
+    private static final int equal = '=';
+    private static final int and = '&';
+    private static final int plus = '+';
+
+    private static String parseKeyOrValue( InputStream is, ByteArrayOutputStream baos, boolean allowEqual ) throws IOException {
+
+        baos.reset();
+
+        while ( true ) {
+            is.mark( 1 );
+            int i = is.read();
+
+            if ( i == -1 || !allowEqual && i == equal || i == and ) {
+                is.reset();
+                return URLDecoder.decode( new String( baos.toByteArray(), StandardCharsets.UTF_8 ), "UTF-8" );
+            }
+
+            if ( i == plus ) {
+                baos.write( ' ' );
+            } else {
+                baos.write( i );
+            }
+        }
     }
 }
