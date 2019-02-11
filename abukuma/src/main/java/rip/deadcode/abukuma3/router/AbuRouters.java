@@ -81,7 +81,7 @@ public final class AbuRouters {
         }
 
         public AbuRouterBuilder file( String mappingPath, Path servingPath ) {
-            mappings.add( new PathSegmentRoute( "GET", mappingPath, UriHandler.create( servingPath.toUri() ) ) );
+            mappings.add( new PathSegmentRoute( "GET", mappingPath, UriHandler.create( () -> servingPath.toUri() ) ) );
             return this;
         }
 
@@ -91,7 +91,7 @@ public final class AbuRouters {
         }
 
         public AbuRouterBuilder resource( String mappingPath, String resourcePath ) {
-            mappings.add( new PathSegmentRoute( "GET", mappingPath, UriHandler.create( Resources.grabResource( resourcePath ) ) ) );
+            mappings.add( new PathSegmentRoute( "GET", mappingPath, UriHandler.create( () -> Resources.grabResource( resourcePath ) ) ) );
             return this;
         }
 

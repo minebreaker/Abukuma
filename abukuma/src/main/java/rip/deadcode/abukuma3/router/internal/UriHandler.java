@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3.router.internal;
 
 import com.google.common.base.Splitter;
+import com.google.common.base.Supplier;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuResponse;
@@ -18,13 +19,13 @@ public final class UriHandler implements AbuHandler {
 
     private static final Splitter extensionSplitter = Splitter.on( "." ).omitEmptyStrings();
 
-    private final URI uri;
+    private final Supplier<URI> uri;
 
-    private UriHandler( URI uri ) {
+    private UriHandler( Supplier<URI> uri ) {
         this.uri = uri;
     }
 
-    public static UriHandler create( URI uri ) {
+    public static UriHandler create( Supplier<URI> uri ) {
         return new UriHandler( uri );
     }
 
@@ -35,8 +36,9 @@ public final class UriHandler implements AbuHandler {
         // TODO cache
 
         try {
-            return AbuResponse.create( Files.newInputStream( Paths.get( uri ) ) )  // FIXME FileSystem
-                              .header( h -> h.contentType( guessMediaType( uri.toString() ) ) );
+            URI target = uri.get();
+            return AbuResponse.create( Files.newInputStream( Paths.get( target ) ) )  // FIXME FileSystem
+                              .header( h -> h.contentType( guessMediaType( target.toString() ) ) );
         } catch ( IOException e ) {
             throw new UncheckedIOException( e );
         }

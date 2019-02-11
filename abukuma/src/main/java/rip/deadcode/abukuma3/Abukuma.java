@@ -8,6 +8,7 @@ import rip.deadcode.abukuma3.internal.ExecutionContextImpl;
 import rip.deadcode.abukuma3.parser.AbuParser;
 import rip.deadcode.abukuma3.parser.internal.InputStreamParser;
 import rip.deadcode.abukuma3.parser.internal.StringParser;
+import rip.deadcode.abukuma3.parser.internal.UrlEncodedParser;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.renderer.internal.InputStreamRenderer;
 import rip.deadcode.abukuma3.renderer.internal.CharSequenceRenderer;
@@ -31,6 +32,12 @@ public final class Abukuma {
 
     @NotThreadSafe
     public static final class AbuServerBuilder {
+
+        private static final List<AbuParser<?>> defualtParsers = ImmutableList.of(
+                new UrlEncodedParser(),
+                new StringParser(),
+                new InputStreamParser()
+        );
 
         private AbuConfig config;
         private AbuRouter router;
@@ -88,12 +95,11 @@ public final class Abukuma {
             checkNotNull( config );
             checkNotNull( router );
             if ( parsers == null ) {
-                parsers = ImmutableList.of( new StringParser(), new InputStreamParser() );
+                parsers = defualtParsers;
             } else {
                 parsers = ImmutableList.<AbuParser<?>>builder()
                         .addAll( parsers )
-                        .add( new StringParser() )
-                        .add( new InputStreamParser() )
+                        .addAll( defualtParsers )
                         .build();
             }
             if ( renderers == null ) {

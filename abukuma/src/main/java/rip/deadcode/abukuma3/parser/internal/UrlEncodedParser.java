@@ -8,6 +8,7 @@ import rip.deadcode.abukuma3.parser.UrlEncoded;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 
 import javax.annotation.Nullable;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +30,7 @@ public final class UrlEncodedParser implements AbuParser<UrlEncoded> {
             return null;
         }
 
-        Multimap<String, String> result = parse( body );
+        Multimap<String, String> result = parse( new BufferedInputStream( body ) );
         return UrlEncoded.create( result );
     }
 

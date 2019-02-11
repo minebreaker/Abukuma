@@ -1,6 +1,5 @@
 package rip.deadcode.abukuma3.internal;
 
-import com.google.common.net.HttpHeaders;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.AbuExecutionContext;
@@ -45,7 +44,14 @@ public final class JettyHandlerImpl extends AbstractHandler {
 
         AbuRequestHeader header = new AbuRequestHeader( context, baseRequest );
         AbuRoutingContext routing = router.route( header );
-        AbuRequest request = new AbuRequest( context, header, baseRequest, servletRequest, servletResponse, routing.getPathParams() );
+        AbuRequest request = new AbuRequest(
+                context,
+                header,
+                baseRequest,
+                servletRequest,
+                servletResponse,
+                routing.getPathParams()
+        );
 
         AbuResponse response = possibly(
                 () -> routing.getHandler().handle( request )
@@ -53,10 +59,12 @@ public final class JettyHandlerImpl extends AbstractHandler {
                 e -> exceptionHandler.handleException( e, request )
         );
 
+
         try {
-            response.header().mayGet( HttpHeaders.CONTENT_TYPE ).ifPresent(
-                    s -> servletResponse.setContentType( s )
-            );
+            servletResponse.setStatus( response.status() );
+            response.header().forEach( ( k, v ) -> {
+                servletResponse.setHeader( k, v );
+            } );
 
             renderer.render( servletResponse.getOutputStream(), response.body() );
 

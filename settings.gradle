@@ -2,5 +2,6 @@ include (
         'abukuma',
         'abukuma-gson',
         'abukuma-hocon',
-        'abukuma-thymeleaf'
+        'abukuma-thymeleaf',
+        'abukuma-yaml'
 )

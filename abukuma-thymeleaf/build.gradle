@@ -4,20 +4,3 @@ dependencies {
             'org.thymeleaf:thymeleaf:3.0.11.RELEASE'
     )
 }
-
-artifacts {
-    archives jar
-    archives sourcesJar
-    archives javadocJar
-}
-
-test {
-    useJUnitPlatform()
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-}
