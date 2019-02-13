@@ -33,7 +33,7 @@ public final class Abukuma {
     @NotThreadSafe
     public static final class AbuServerBuilder {
 
-        private static final List<AbuParser<?>> defualtParsers = ImmutableList.of(
+        private static final List<AbuParser<?>> defaultParsers = ImmutableList.of(
                 new UrlEncodedParser(),
                 new StringParser(),
                 new InputStreamParser()
@@ -95,11 +95,11 @@ public final class Abukuma {
             checkNotNull( config );
             checkNotNull( router );
             if ( parsers == null ) {
-                parsers = defualtParsers;
+                parsers = defaultParsers;
             } else {
                 parsers = ImmutableList.<AbuParser<?>>builder()
                         .addAll( parsers )
-                        .addAll( defualtParsers )
+                        .addAll( defaultParsers )
                         .build();
             }
             if ( renderers == null ) {

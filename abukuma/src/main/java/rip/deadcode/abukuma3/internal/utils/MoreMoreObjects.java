@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
+
 
 public final class MoreMoreObjects {
 
@@ -24,5 +26,10 @@ public final class MoreMoreObjects {
             }
         }
         return Optional.empty();
+    }
+
+    public static <T> T also( T value, CheckedConsumer<T, ?> f ) {
+        uncheck( () -> f.accept( value ) );
+        return value;
     }
 }

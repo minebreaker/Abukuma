@@ -5,8 +5,6 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
-    sourceCompatibility = 1.8
-
     repositories {
         mavenCentral()
         maven {
@@ -39,6 +37,17 @@ subprojects {
         from javadoc.destinationDir
     }
 
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    compileJava {
+        options.encoding = 'UTF-8'
+    }
+
+    compileTestJava {
+        options.encoding = 'UTF-8'
+    }
+
     artifacts {
         archives jar
         archives sourcesJar
@@ -55,4 +64,6 @@ subprojects {
             html.enabled = true
         }
     }
+
+    check.dependsOn(jacocoTestReport)
 }

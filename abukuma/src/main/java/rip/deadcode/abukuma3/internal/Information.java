@@ -30,4 +30,11 @@ public final class Information {
             + "//\\/ \\_/  \\ /\\\\\n"
             + "||  I    I \\//|\n"
             + "\\|\\___~____/ V/";
+
+
+    private static final char ESC = 27;
+    private static final String ANSI_YELLOW = ESC + "[33;m";
+    private static final String ANSI_REST = ESC + "[0m";
+
+    public static final String INFO_STRING = "\n\n" + ANSI_YELLOW + Information.AA + ANSI_REST + "  " + Information.VERSION;
 }

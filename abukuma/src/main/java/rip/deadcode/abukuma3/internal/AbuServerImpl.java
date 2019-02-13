@@ -1,11 +1,14 @@
 package rip.deadcode.abukuma3.internal;
 
-import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rip.deadcode.abukuma3.AbuServer;
 import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.AbuServer;
+import rip.deadcode.abukuma3.value.AbuConfig;
 
+import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.also;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
@@ -21,9 +24,24 @@ public final class AbuServerImpl implements AbuServer {
     }
 
     @Override public void run() {
-        showInfo();
+        logger.info( Information.INFO_STRING );
 
-        server = new Server( context.config().port() );
+        AbuConfig config = context.config();
+
+        HttpConfiguration jettyConfig = also( new HttpConfiguration(), c -> {
+            c.setSendServerVersion( false );
+        } );
+
+        HttpConnectionFactory connectionFactory = new HttpConnectionFactory( jettyConfig );
+
+        QueuedThreadPool threadPool = new QueuedThreadPool( config.maxThreads(), config.minThreads() );
+
+        server = new Server( threadPool );
+        ServerConnector connector = also( new ServerConnector( server, connectionFactory ), c -> {
+            c.setPort( config.port() );
+        } );
+        server.setConnectors( new Connector[] { connector } );
+
         server.setHandler( new JettyHandlerImpl( context ) );
         uncheck( () -> server.start() );
     }
@@ -32,13 +50,5 @@ public final class AbuServerImpl implements AbuServer {
         if ( server != null ) {
             uncheck( () -> server.stop() );
         }
-    }
-
-    private static final char ESC = 27;
-    private static final String ANSI_YELLOW = ESC + "[33;m";
-    private static final String ANSI_REST = ESC + "[0m";
-
-    private static void showInfo() {
-        logger.info( "\n\n{}{}{}  {}\n", ANSI_YELLOW, Information.AA, ANSI_REST, Information.VERSION );
     }
 }
