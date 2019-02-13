@@ -5,7 +5,8 @@ import com.google.common.collect.Multimap;
 import com.google.common.net.HttpHeaders;
 import rip.deadcode.abukuma3.internal.AbuAbstractMultimap;
 
-public final class AbuHeader extends AbuAbstractMultimap<AbuHeader> {
+
+public final class AbuHeader extends AbuAbstractMultimap<String, String, AbuHeader> {
 
     private final Multimap<String, String> delegate;
 

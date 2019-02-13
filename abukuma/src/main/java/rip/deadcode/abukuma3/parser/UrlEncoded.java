@@ -3,7 +3,8 @@ package rip.deadcode.abukuma3.parser;
 import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.internal.AbuAbstractMultimap;
 
-public final class UrlEncoded extends AbuAbstractMultimap<UrlEncoded> {
+
+public final class UrlEncoded extends AbuAbstractMultimap<String, String, UrlEncoded> {
 
     private final Multimap<String, String> delegate;
 

@@ -2,6 +2,7 @@ include (
         'abukuma',
         'abukuma-gson',
         'abukuma-hocon',
+        'abukuma-multipart',
         'abukuma-thymeleaf',
         'abukuma-yaml'
 )

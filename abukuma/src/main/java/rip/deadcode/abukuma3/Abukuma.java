@@ -41,8 +41,8 @@ public final class Abukuma {
 
         private AbuConfig config;
         private AbuRouter router;
-        private List<AbuParser<?>> parsers;
-        private List<AbuRenderer> renderers;
+        private List<AbuParser<?>> parsers = ImmutableList.of();
+        private List<AbuRenderer> renderers = ImmutableList.of();
         private AbuExceptionHandler exceptionHandler;
 
         private AbuServerBuilder() { }

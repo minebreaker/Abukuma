@@ -2,19 +2,20 @@ package rip.deadcode.abukuma3.internal;
 
 import com.google.common.collect.Multimap;
 
-public final class AbuMultimap extends AbuAbstractMultimap<AbuMultimap> {
 
-    private final Multimap<String, String> delegate;
+public final class AbuMultimap<K, V> extends AbuAbstractMultimap<K, V, AbuMultimap<K, V>> {
 
-    public AbuMultimap( Multimap<String, String> delegate ) {
+    private final Multimap<K, V> delegate;
+
+    public AbuMultimap( Multimap<K, V> delegate ) {
         this.delegate = delegate;
     }
 
-    @Override public AbuMultimap constructor( Multimap<String, String> delegate ) {
-        return new AbuMultimap( delegate );
+    @Override public AbuMultimap<K, V> constructor( Multimap<K, V> delegate ) {
+        return null;
     }
 
-    @Override protected Multimap<String, String> delegate() {
+    @Override protected Multimap<K, V> delegate() {
         return delegate;
     }
 }
