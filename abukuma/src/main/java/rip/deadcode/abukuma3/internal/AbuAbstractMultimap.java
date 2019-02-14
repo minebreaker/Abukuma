@@ -12,7 +12,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class AbuAbstractMultimap<K, V, T extends AbuAbstractMultimap<K, V, T>> extends ForwardingMultimap<K, V> {
 
-    public abstract T constructor( Multimap<K, V> delegate );
+    protected abstract T constructor( Multimap<K, V> delegate );
 
     public T copy() {
         return constructor( ImmutableMultimap.copyOf( delegate() ) );

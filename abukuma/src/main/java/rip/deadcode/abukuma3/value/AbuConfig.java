@@ -12,8 +12,10 @@ public final class AbuConfig {
         this.minThreads = 8;
     }
 
-    private AbuConfig( int port ) {
+    private AbuConfig( int port, int maxThreads, int minThreads ) {
         this.port = port;
+        this.maxThreads = maxThreads;
+        this.minThreads = minThreads;
     }
 
     public static AbuConfig create() {
@@ -21,7 +23,7 @@ public final class AbuConfig {
     }
 
     public AbuConfig copy() {
-        return new AbuConfig( port );
+        return new AbuConfig( port, maxThreads, minThreads );
     }
 
     public int port() {

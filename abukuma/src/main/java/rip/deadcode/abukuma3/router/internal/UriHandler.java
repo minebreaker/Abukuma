@@ -1,7 +1,6 @@
 package rip.deadcode.abukuma3.router.internal;
 
 import com.google.common.base.Splitter;
-import com.google.common.base.Supplier;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuResponse;
@@ -11,8 +10,9 @@ import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.function.Supplier;
 
-import static rip.deadcode.abukuma3.internal.utils.MoreLists.last;
+import static rip.deadcode.abukuma3.internal.utils.MoreCollections.last;
 
 
 public final class UriHandler implements AbuHandler {
@@ -46,7 +46,7 @@ public final class UriHandler implements AbuHandler {
 
     // don't use for unsafe source!
     private static String guessMediaType( String fileName ) {
-        String extension = last( extensionSplitter.splitToList( fileName ) ).toLowerCase();
+        String extension = last( extensionSplitter.split( fileName ) ).toLowerCase();
         switch ( extension ) {
 
         // TEXT

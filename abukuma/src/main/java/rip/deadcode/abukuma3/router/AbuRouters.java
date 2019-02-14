@@ -1,9 +1,10 @@
 package rip.deadcode.abukuma3.router;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Streams;
 import rip.deadcode.abukuma3.handler.AbuHandler;
+import rip.deadcode.abukuma3.internal.utils.MoreCollections;
 import rip.deadcode.abukuma3.internal.utils.Resources;
 import rip.deadcode.abukuma3.router.internal.RoutingContextImpl;
 import rip.deadcode.abukuma3.router.internal.UriHandler;
@@ -17,7 +18,6 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.function.BiPredicate;
 
-import static java.util.stream.Collectors.toList;
 
 // TODO refactoring all
 public final class AbuRouters {
@@ -62,7 +62,7 @@ public final class AbuRouters {
                 request -> AbuResponse.create( "<h1>404 Not Found</h1>" ).header( h -> h.contentType( "text/html" ) )  // TODO
         );
 
-        private List<Route> mappings = new ArrayList<>();
+        private final List<Route> mappings = new ArrayList<>();
         @Nullable private AbuRoutingContext notFound;
 
         public AbuRouterBuilder path( String pattern, AbuHandler handler ) {
@@ -127,15 +127,14 @@ public final class AbuRouters {
             if ( !methodMatches ) return null;
 
             Splitter s = Splitter.on( "/" ).omitEmptyStrings();
-            List<String> requestPathSegments = s.splitToList( requestHeader.requestUri() );
-            List<String> patternList = s.splitToList( route.pattern );
+            List<String> requestPathSegments = ImmutableList.copyOf( s.split( requestHeader.requestUri() ) );
+            List<String> patternList = ImmutableList.copyOf( s.split( route.pattern ) );
 
             // If the sizes differ, immediately return false. Note BiStream.zip can be used with different sized streams.
             if ( requestPathSegments.size() != patternList.size() ) return null;
 
-            List<Map<String, String>> result =
-                    Streams.zip( patternList.stream(), requestPathSegments.stream(), ( p, u ) -> matchEachSegment( p, u ) )
-                           .collect( toList() );
+            List<Map<String, String>> result = ImmutableList.copyOf(
+                    MoreCollections.zip( patternList, requestPathSegments, AbuRouterBuilder::matchEachSegment ) );
 
             if ( result.stream().allMatch( e -> e != null ) ) {
                 Map<String, String> params = result.stream().collect( HashMap::new, Map::putAll, Map::putAll );

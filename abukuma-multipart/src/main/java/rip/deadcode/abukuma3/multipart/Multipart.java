@@ -12,7 +12,7 @@ import java.util.Map;
 
 public final class Multipart extends AbuAbstractMultimap<String, FileItem, Multipart> {
 
-    private Multimap<String, FileItem> delegate;
+    private final Multimap<String, FileItem> delegate;
 
     private Multipart( Multimap<String, FileItem> delegate ) {
         this.delegate = delegate;
