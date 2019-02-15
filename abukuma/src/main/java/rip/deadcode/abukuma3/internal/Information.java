@@ -24,13 +24,12 @@ public final class Information {
      * </pre>
      */
     public static final String AA =
-            ",_.        ,_.\n"
-            + "\\o/,------.\\o/\n"
-            + " // /   |\\/\\^\\\n"
-            + "//\\/ \\_/  \\ /\\\\\n"
-            + "||  I    I \\//|\n"
-            + "\\|\\___~____/ V/";
-
+            ",_.        ,_.\n" +
+            "\\o/.______.\\o/\n" +
+            " /( /  J \\/\\^\\\n" +
+            "//\\/ \\_/  \\ /\\\\\n" +
+            "|| I  _  I \\//|\n" +
+            " V`--------'V/";
 
     private static final char ESC = 27;
     private static final String ANSI_YELLOW = ESC + "[33;m";

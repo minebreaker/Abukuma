@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3;
 
 import com.google.common.collect.ImmutableList;
 import rip.deadcode.abukuma3.filter.AbuFilter;
+import rip.deadcode.abukuma3.filter.AbuFilters;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.internal.AbuServerImpl;
 import rip.deadcode.abukuma3.internal.DefaultExceptionHandler;
@@ -138,7 +139,7 @@ public final class Abukuma {
                     parsers.stream().reduce( AbuParser::ifFailed ).get(),
                     renderers,
                     filters,
-                    filters.stream().reduce( AbuFilter::then ).get(),
+                    filters.stream().reduce( AbuFilter::then ).orElseGet( AbuFilters::noop ),
                     router,
                     exceptionHandler
             ) );
