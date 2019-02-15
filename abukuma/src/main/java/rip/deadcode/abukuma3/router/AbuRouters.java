@@ -3,6 +3,7 @@ package rip.deadcode.abukuma3.router;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.internal.utils.MoreCollections;
 import rip.deadcode.abukuma3.internal.utils.Resources;
@@ -17,6 +18,8 @@ import javax.annotation.concurrent.NotThreadSafe;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.BiPredicate;
+
+import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.also;
 
 
 // TODO refactoring all
@@ -133,8 +136,10 @@ public final class AbuRouters {
             // If the sizes differ, immediately return false. Note BiStream.zip can be used with different sized streams.
             if ( requestPathSegments.size() != patternList.size() ) return null;
 
-            List<Map<String, String>> result = ImmutableList.copyOf(
-                    MoreCollections.zip( patternList, requestPathSegments, AbuRouterBuilder::matchEachSegment ) );
+            List<Map<String, String>> result = also(
+                    new ArrayList<>(),
+                    e -> Iterables.addAll( e, MoreCollections.zip( patternList, requestPathSegments, AbuRouterBuilder::matchEachSegment ) )
+            );
 
             if ( result.stream().allMatch( e -> e != null ) ) {
                 Map<String, String> params = result.stream().collect( HashMap::new, Map::putAll, Map::putAll );

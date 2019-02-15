@@ -6,6 +6,7 @@ import rip.deadcode.abukuma3.router.AbuRouters;
 import rip.deadcode.abukuma3.value.AbuConfig;
 import rip.deadcode.abukuma3.value.AbuResponse;
 
+
 public final class Example {
 
     public static void main( String[] args ) {
@@ -16,7 +17,7 @@ public final class Example {
                                                                .header( h -> h.contentType( "text/html" ) ) )
                                   .get( "/user/:name", req -> AbuResponse.create(
                                           String.format( "<h1>hello, %s!</h1>", req.pathParams().get( "name" ) ) )
-                                                                    .header( h -> h.contentType( "text/html" ) )
+                                                                         .header( h -> h.contentType( "text/html" ) )
                                   )
                                   .resource( "/resource", "rip/deadcode/abukuma3/example/post.html" )
                                   .post( "/post", req -> AbuResponse.create(

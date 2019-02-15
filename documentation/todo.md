@@ -1,16 +1,25 @@
-* public -> package private
-* ParametersAreNonNullByDefault
-* ルーティングを別スレッドで実行(必要ある?)
-* Builder -> 不変コピーを返すように変更 (パフォーマンス? 気にしない?)
-* ビルダーを独立したクラスへ
-* Public classes should be refactored tp interfaces
-* Async Wrapper
+## Features
+
 * Context-path aware routing
+
+
+## Refactoring
+
+* ParametersAreNonNullByDefault
+* Builder -> Immutable copying object
+* Public classes should be refactored to interfaces
 * Write tests
-* Separate backend
 * ParseResult RenderResult, to enable modifying headers 
-* Test written in Kotlin
-* Remove Guava beta APIs
+
+
+## Ideas
+
+* ルーティングを別スレッドで実行(必要ある?)
+* Async Wrapper
+* Separate backend
+
+
+## Extensions
 
 * RxJava Integration
 * Guice Integration

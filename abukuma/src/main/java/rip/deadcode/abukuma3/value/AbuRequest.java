@@ -12,10 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.net.URL;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+
 
 public final class AbuRequest {
 
@@ -60,6 +62,18 @@ public final class AbuRequest {
 
     public AbuExecutionContext context() {
         return context;
+    }
+
+    public String method() {
+        return header.method();
+    }
+
+    public URL url() {
+        return header.url();
+    }
+
+    public String requestUri() {
+        return header.requestUri();
     }
 
     public AbuRequestHeader header() {

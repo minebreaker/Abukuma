@@ -4,6 +4,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
+import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.router.AbuRoutingContext;
@@ -53,8 +54,10 @@ public final class JettyHandlerImpl extends AbstractHandler {
                 routing.getPathParams()
         );
 
+        AbuHandler handler = routing.getHandler();
+
         AbuResponse response = possibly(
-                () -> routing.getHandler().handle( request )
+                () -> context.filterChain().filter( request, handler )
         ).orElse(
                 e -> exceptionHandler.handleException( e, request )
         );

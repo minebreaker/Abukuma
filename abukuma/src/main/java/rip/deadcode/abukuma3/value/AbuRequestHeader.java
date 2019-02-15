@@ -1,13 +1,17 @@
 package rip.deadcode.abukuma3.value;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterators;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.internal.Unsafe;
 import rip.deadcode.abukuma3.internal.utils.Uncheck;
 
+import javax.annotation.Nullable;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Optional;
+import java.util.Set;
 
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 
@@ -50,6 +54,19 @@ public final class AbuRequestHeader {
      */
     public String requestUri() {
         return jettyRequest.getRequestURI();
+    }
+
+    @Nullable
+    public String getValue( String headerName ) {
+        return jettyRequest.getHeader( headerName );
+    }
+
+    public Set<String> getValues( String headerName ) {
+        return ImmutableSet.copyOf( Iterators.forEnumeration( jettyRequest.getHeaders( headerName ) ) );
+    }
+
+    public Optional<String> mayGet( String headerName ) {
+        return Optional.ofNullable( jettyRequest.getHeader( headerName ) );
     }
 
     public String contentType() {

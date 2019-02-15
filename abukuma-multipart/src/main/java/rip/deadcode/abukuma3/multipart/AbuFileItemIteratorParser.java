@@ -12,6 +12,7 @@ import java.io.InputStream;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
+// TODO `FileItemIterator` should be wrapped
 public final class AbuFileItemIteratorParser implements AbuParser<FileItemIterator> {
 
     private static final ServletFileUpload upload = new ServletFileUpload();

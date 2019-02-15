@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3;
 
 import com.google.common.collect.ImmutableList;
+import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.internal.AbuServerImpl;
 import rip.deadcode.abukuma3.internal.DefaultExceptionHandler;
@@ -10,8 +11,8 @@ import rip.deadcode.abukuma3.parser.internal.InputStreamParser;
 import rip.deadcode.abukuma3.parser.internal.StringParser;
 import rip.deadcode.abukuma3.parser.internal.UrlEncodedParser;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
-import rip.deadcode.abukuma3.renderer.internal.InputStreamRenderer;
 import rip.deadcode.abukuma3.renderer.internal.CharSequenceRenderer;
+import rip.deadcode.abukuma3.renderer.internal.InputStreamRenderer;
 import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.value.AbuConfig;
 
@@ -19,6 +20,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
 
 public final class Abukuma {
 
@@ -43,6 +45,7 @@ public final class Abukuma {
         private AbuRouter router;
         private List<AbuParser<?>> parsers = ImmutableList.of();
         private List<AbuRenderer> renderers = ImmutableList.of();
+        private List<AbuFilter> filters = ImmutableList.of();
         private AbuExceptionHandler exceptionHandler;
 
         private AbuServerBuilder() { }
@@ -86,6 +89,22 @@ public final class Abukuma {
             return this;
         }
 
+        public AbuServerBuilder addFilter( AbuFilter filter ) {
+            this.filters = ImmutableList.<AbuFilter>builder()
+                    .addAll( filters )
+                    .add( filter )
+                    .build();
+            return this;
+        }
+
+        public AbuServerBuilder addFilter( AbuFilter... filter ) {
+            this.filters = ImmutableList.<AbuFilter>builder()
+                    .addAll( filters )
+                    .add( filter )
+                    .build();
+            return this;
+        }
+
         public AbuServerBuilder exceptionHandler( AbuExceptionHandler exceptionHandler ) {
             this.exceptionHandler = exceptionHandler;
             return this;
@@ -118,6 +137,8 @@ public final class Abukuma {
                     parsers,
                     parsers.stream().reduce( AbuParser::ifFailed ).get(),
                     renderers,
+                    filters,
+                    filters.stream().reduce( AbuFilter::then ).get(),
                     router,
                     exceptionHandler
             ) );
