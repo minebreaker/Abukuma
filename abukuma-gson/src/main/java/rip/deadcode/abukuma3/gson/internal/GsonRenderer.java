@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 
 import static rip.deadcode.abukuma3.gson.internal.GsonUtils.isAnnotatedBy;
 
+
 public final class GsonRenderer implements AbuRenderer {
 
     private final Gson gson;
@@ -26,7 +27,9 @@ public final class GsonRenderer implements AbuRenderer {
             return false;
         }
 
-        gson.toJson( body, new OutputStreamWriter( os ) );
+        try ( OutputStreamWriter osw = new OutputStreamWriter( os ) ) {
+            gson.toJson( body, osw );
+        }
         return true;
     }
 }
