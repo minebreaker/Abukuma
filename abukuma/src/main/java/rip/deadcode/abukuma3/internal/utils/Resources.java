@@ -12,8 +12,7 @@ public final class Resources {
 
         URL location = coalesce(
                 Resources.class.getClassLoader().getResource( path ),
-                () -> Thread.currentThread().getContextClassLoader().getResource( path ),
-                () -> ClassLoader.getSystemResource( path )
+                () -> Thread.currentThread().getContextClassLoader().getResource( path )
         ).orElseThrow( () -> new IllegalArgumentException(
                 String.format( "Could not locate the resource of the pass '%s'.", path ) ) );
 

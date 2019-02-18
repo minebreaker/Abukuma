@@ -69,8 +69,20 @@ public final class Abukuma {
             return this;
         }
 
-        public AbuServerBuilder renderer( List<AbuRenderer> renderers ) {
-            this.renderers = ImmutableList.copyOf( renderers );
+        public AbuServerBuilder addParsers( AbuParser<?>... parsers ) {
+            this.parsers = ImmutableList.<AbuParser<?>>builder()
+                    .add( parsers )
+                    .addAll( this.parsers )
+                    .build();
+            return this;
+        }
+
+
+        public AbuServerBuilder addParsers( List<AbuParser<?>> parsers ) {
+            this.parsers = ImmutableList.<AbuParser<?>>builder()
+                    .addAll( parsers )
+                    .addAll( this.parsers )
+                    .build();
             return this;
         }
 
@@ -82,10 +94,19 @@ public final class Abukuma {
             return this;
         }
 
-        public AbuServerBuilder addRenderers( AbuRenderer... renderer ) {
+        public AbuServerBuilder addRenderers( AbuRenderer... renderers ) {
             this.renderers = ImmutableList.<AbuRenderer>builder()
+                    .addAll( this.renderers )
+                    .add( renderers )
+                    .build();
+            return this;
+        }
+
+
+        public AbuServerBuilder addRenderers( List<AbuRenderer> renderers ) {
+            this.renderers = ImmutableList.<AbuRenderer>builder()
+                    .addAll( this.renderers )
                     .addAll( renderers )
-                    .add( renderer )
                     .build();
             return this;
         }
@@ -98,10 +119,18 @@ public final class Abukuma {
             return this;
         }
 
-        public AbuServerBuilder addFilter( AbuFilter... filter ) {
+        public AbuServerBuilder addFilter( AbuFilter... filters ) {
             this.filters = ImmutableList.<AbuFilter>builder()
+                    .addAll( this.filters )
+                    .add( filters )
+                    .build();
+            return this;
+        }
+
+        public AbuServerBuilder addFilter( List<AbuFilter> filters ) {
+            this.filters = ImmutableList.<AbuFilter>builder()
+                    .addAll( this.filters )
                     .addAll( filters )
-                    .add( filter )
                     .build();
             return this;
         }
@@ -114,6 +143,7 @@ public final class Abukuma {
         private void check() {
             checkNotNull( config );
             checkNotNull( router );
+
             if ( parsers == null ) {
                 parsers = defaultParsers;
             } else {
