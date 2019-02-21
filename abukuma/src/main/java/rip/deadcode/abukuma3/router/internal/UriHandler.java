@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.router.internal;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Splitter;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.value.AbuRequest;
@@ -31,21 +32,24 @@ public final class UriHandler implements AbuHandler {
 
     @Override
     public AbuResponse handle( AbuRequest request ) {
+        return handle( request, uri.get() );
+    }
 
+    static AbuResponse handle( AbuRequest request, URI uri ) {
         // TODO may add `Content-Disposition: attachment; filename=`?
         // TODO cache
 
         try {
-            URI target = uri.get();
-            return AbuResponse.create( Files.newInputStream( Paths.get( target ) ) )  // FIXME FileSystem
-                              .header( h -> h.contentType( guessMediaType( target.toString() ) ) );
+            return AbuResponse.create( Files.newInputStream( Paths.get( uri ) ) )  // FIXME FileSystem
+                              .header( h -> h.contentType( guessMediaType( uri.toString() ) ) );
         } catch ( IOException e ) {
             throw new UncheckedIOException( e );
         }
     }
 
     // don't use for unsafe source!
-    private static String guessMediaType( String fileName ) {
+    @VisibleForTesting
+    static String guessMediaType( String fileName ) {
         String extension = last( extensionSplitter.split( fileName ) ).toLowerCase();
         switch ( extension ) {
 

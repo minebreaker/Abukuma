@@ -10,18 +10,12 @@
 * Public classes should be refactored to interfaces
 * Write tests
 * ParseResult RenderResult, to enable modifying headers 
+* Single factory class for all?
+* Registry class for DI?
 
 
 ## Ideas
 
-* ルーティングを別スレッドで実行(必要ある?)
+* Routing on another thread
 * Async Wrapper
 * Separate backend
-
-
-## Extensions
-
-* RxJava Integration
-* Guice Integration
-* Session Extension
-* Typesafe Config Integration

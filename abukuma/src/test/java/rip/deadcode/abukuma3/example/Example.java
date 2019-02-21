@@ -20,6 +20,7 @@ public final class Example {
                                                                          .header( h -> h.contentType( "text/html" ) )
                                   )
                                   .resource( "/resource", "rip/deadcode/abukuma3/example/post.html" )
+                                  .resources( "/resources", "rip/deadcode/abukuma3/example" )
                                   .post( "/post", req -> AbuResponse.create(
                                           String.format(
                                                   "<h1>hello, %s!</h1>",

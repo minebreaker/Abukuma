@@ -89,7 +89,10 @@ public final class AbuRouters {
         }
 
         public AbuRouterBuilder dir( String mappingRootPath, Path directoryBase ) {
-            mappings.add( new MatcherRoute( rootMatcher( mappingRootPath ), UriRootHandler.create( directoryBase.toUri() ) ) );
+            mappings.add( new MatcherRoute(
+                    rootMatcher( mappingRootPath ),
+                    UriRootHandler.create( mappingRootPath, () -> mappingRootPath, uri -> directoryBase.resolve( uri ).toUri() )
+            ) );
             return this;
         }
 
@@ -99,13 +102,17 @@ public final class AbuRouters {
         }
 
         public AbuRouterBuilder resources( String mappingRootPath, String resourceBase ) {
-            mappings.add( new MatcherRoute( rootMatcher( mappingRootPath ), UriRootHandler.create( Resources.grabResource( resourceBase ) ) ) );
+            String resourceBaseDir = resourceBase.endsWith( "/" ) ? resourceBase : resourceBase + "/";
+            mappings.add( new MatcherRoute(
+                    rootMatcher( mappingRootPath ),
+                    UriRootHandler.create( mappingRootPath, () -> resourceBaseDir, uri -> Resources.grabResource( uri ) )
+            ) );
             return this;
         }
 
         private static BiPredicate<String, String> rootMatcher( String pattern ) {
             return ( method, url ) -> method.equalsIgnoreCase( "GET" )
-                                      && url.equals( pattern ) || ( url + "/" ).startsWith( pattern );
+                                      && ( url.equals( pattern ) || ( url + "/" ).startsWith( pattern ) );
         }
 
         public AbuRouterBuilder notFound( AbuHandler handler ) {
