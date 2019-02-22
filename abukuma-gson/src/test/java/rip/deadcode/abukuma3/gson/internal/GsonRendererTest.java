@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 import static com.google.common.truth.Truth.assertThat;
 
+
 class GsonRendererTest {
 
     @Test
@@ -21,6 +22,6 @@ class GsonRendererTest {
         boolean result = AbuGson.renderer().render( os, param );
 
         assertThat( result ).isTrue();
-        assertThat( new String( os.toByteArray(), StandardCharsets.UTF_8 ) ).isEqualTo( "" );
+        assertThat( new String( os.toByteArray(), StandardCharsets.UTF_8 ) ).isEqualTo( "{\"foo\":\"bar\"}" );
     }
 }
