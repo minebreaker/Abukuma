@@ -6,6 +6,7 @@ import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
+import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
 import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.router.AbuRoutingContext;
 import rip.deadcode.abukuma3.value.AbuRequest;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.Closeable;
 import java.io.IOException;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 
 
@@ -64,14 +66,21 @@ public final class JettyHandlerImpl extends AbstractHandler {
 
 
         try {
-            servletResponse.setStatus( response.status() );
-            response.header().forEach( ( k, v ) -> {
+            AbuRenderingResult renderingResult = renderer.render( response );
+            checkNotNull( renderingResult );
+            AbuResponse renderedResponse = renderingResult.modifying().get();
+
+            servletResponse.setStatus( renderedResponse.status() );
+            renderedResponse.header().forEach( ( k, v ) -> {
                 servletResponse.setHeader( k, v );
             } );
 
-            renderer.render( servletResponse.getOutputStream(), response.body() );
+            renderingResult.rendering().accept( servletResponse.getOutputStream() );
 
             baseRequest.setHandled( true );
+
+        } catch ( Exception e ) {
+            throw new RuntimeException( e );
 
         } finally {
             Object body = response.body();

@@ -2,20 +2,26 @@ package rip.deadcode.abukuma3.renderer.internal;
 
 import rip.deadcode.abukuma3.internal.utils.IoStreams;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
+import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
+import rip.deadcode.abukuma3.value.AbuResponse;
 
-import java.io.IOException;
+import javax.annotation.Nullable;
 import java.io.InputStream;
-import java.io.OutputStream;
+
+import static rip.deadcode.abukuma3.renderer.internal.CharSequenceRenderer.ifNotSet;
 
 
 public final class InputStreamRenderer implements AbuRenderer {
 
-    @Override public boolean render( OutputStream os, Object body ) throws IOException {
-        if ( body instanceof InputStream ) {
-            IoStreams.copy( (InputStream) body, os );
-            return true;
-        } else {
-            return false;
+    @Nullable @Override public AbuRenderingResult render( AbuResponse responseCandidate ) {
+
+        if ( !( responseCandidate.body() instanceof InputStream ) ) {
+            return null;
         }
+
+        return new AbuRenderingResult(
+                os -> IoStreams.copy( (InputStream) responseCandidate.body(), os ),
+                () -> ifNotSet( responseCandidate, "application/octet-stream" )
+        );
     }
 }

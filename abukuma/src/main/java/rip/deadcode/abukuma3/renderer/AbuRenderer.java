@@ -1,7 +1,9 @@
 package rip.deadcode.abukuma3.renderer;
 
+import rip.deadcode.abukuma3.value.AbuResponse;
+
+import javax.annotation.Nullable;
 import java.io.IOException;
-import java.io.OutputStream;
 
 
 /**
@@ -10,10 +12,13 @@ import java.io.OutputStream;
 @FunctionalInterface
 public interface AbuRenderer {
 
-    public boolean render( OutputStream os, Object body ) throws IOException;
+    @Nullable
+    public AbuRenderingResult render( AbuResponse responseCandidate ) throws IOException;
 
     public default AbuRenderer ifFailed( AbuRenderer downstream ) {
-        return ( os, body ) ->
-                render( os, body ) || downstream.render( os, body );
+        return responseCandidate -> {
+            AbuRenderingResult result = render( responseCandidate );
+            return result != null ? result : downstream.render( responseCandidate );
+        };
     }
 }
