@@ -16,6 +16,7 @@ import rip.deadcode.abukuma3.value.AbuResponse;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiPredicate;
 
@@ -91,7 +92,7 @@ public final class AbuRouters {
         public AbuRouterBuilder dir( String mappingRootPath, Path directoryBase ) {
             mappings.add( new MatcherRoute(
                     rootMatcher( mappingRootPath ),
-                    UriRootHandler.create( mappingRootPath, () -> mappingRootPath, uri -> directoryBase.resolve( uri ).toUri() )
+                    UriRootHandler.create( mappingRootPath, () -> directoryBase.toString(), uri -> Paths.get( uri ).toUri() )
             ) );
             return this;
         }

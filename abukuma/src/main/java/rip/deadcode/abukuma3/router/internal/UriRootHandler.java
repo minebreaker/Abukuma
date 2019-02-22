@@ -36,7 +36,7 @@ public final class UriRootHandler implements AbuHandler {
 
         assert mappingRoot.startsWith( request.toString() );
 
-        // TODO index
+        // TODO index.html
         String target = request.requestUri().substring( mappingRoot.length() + 1 );
         URI requestedFile = resolver.apply( Paths.get( fileSystemRootUri.get() ).resolve( target ).toString() );
 
