@@ -7,6 +7,7 @@ import com.google.common.collect.Iterables;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.internal.utils.MoreCollections;
 import rip.deadcode.abukuma3.internal.utils.Resources;
+import rip.deadcode.abukuma3.router.internal.MatchingHandler;
 import rip.deadcode.abukuma3.router.internal.RoutingContextImpl;
 import rip.deadcode.abukuma3.router.internal.UriHandler;
 import rip.deadcode.abukuma3.router.internal.UriRootHandler;
@@ -15,6 +16,7 @@ import rip.deadcode.abukuma3.value.AbuResponse;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -90,9 +92,13 @@ public final class AbuRouters {
         }
 
         public AbuRouterBuilder dir( String mappingRootPath, Path directoryBase ) {
+            MatchingHandler handler = UriRootHandler.create( mappingRootPath, directoryBase.toString(), uri -> {
+                Path path = Paths.get( uri );
+                return Files.exists( path ) ? Optional.of( path.toUri() ) : Optional.empty();
+            } );
             mappings.add( new MatcherRoute(
-                    rootMatcher( mappingRootPath ),
-                    UriRootHandler.create( mappingRootPath, () -> directoryBase.toString(), uri -> Paths.get( uri ).toUri() )
+                    ( method, url ) -> method.equals( "GET" ) && handler.matches( url ),
+                    handler
             ) );
             return this;
         }
@@ -102,18 +108,15 @@ public final class AbuRouters {
             return this;
         }
 
+        // TODO need refactoring
         public AbuRouterBuilder resources( String mappingRootPath, String resourceBase ) {
             String resourceBaseDir = resourceBase.endsWith( "/" ) ? resourceBase : resourceBase + "/";
+            MatchingHandler handler = UriRootHandler.create( mappingRootPath, resourceBaseDir, uri -> Resources.mayGrabResource( uri ) );
             mappings.add( new MatcherRoute(
-                    rootMatcher( mappingRootPath ),
-                    UriRootHandler.create( mappingRootPath, () -> resourceBaseDir, uri -> Resources.grabResource( uri ) )
+                    ( method, url ) -> method.equals( "GET" ) && handler.matches( url ),
+                    handler
             ) );
             return this;
-        }
-
-        private static BiPredicate<String, String> rootMatcher( String pattern ) {
-            return ( method, url ) -> method.equalsIgnoreCase( "GET" )
-                                      && ( url.equals( pattern ) || ( url + "/" ).startsWith( pattern ) );
         }
 
         public AbuRouterBuilder notFound( AbuHandler handler ) {

@@ -1,44 +1,45 @@
 package rip.deadcode.abukuma3.router.internal;
 
-import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuResponse;
 
 import java.net.URI;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 
-public final class UriRootHandler implements AbuHandler {
-
-    // URL           /context/router-root/dir/file.txt
-    // Mapping Root  /context/router-root
-    // File Root     /etc/http/
-    // File          /etc/http/dir/file.txt
-    // Request       /context/router-root/dir/file.txt
+public final class UriRootHandler implements MatchingHandler {
 
     private final String mappingRoot;
-    private final Supplier<String> fileSystemRootUri;
-    private final Function<String, URI> resolver;
+    private final String fileSystemRootUri;
+    private final Function<String, Optional<URI>> resolver;
 
-    private UriRootHandler( String mappingRoot, Supplier<String> fileSystemRootUri, Function<String, URI> resolver ) {
+    private UriRootHandler( String mappingRoot, String fileSystemRootUri, Function<String, Optional<URI>> resolver ) {
         this.mappingRoot = mappingRoot;
         this.fileSystemRootUri = fileSystemRootUri;
         this.resolver = resolver;
     }
 
-    public static UriRootHandler create( String mappingRoot, Supplier<String> fileSystemRootUri, Function<String, URI> resolver ) {
+    public static UriRootHandler create( String mappingRoot, String fileSystemRootUri, Function<String, Optional<URI>> resolver ) {
         return new UriRootHandler( mappingRoot, fileSystemRootUri, resolver );
+    }
+
+    private Optional<URI> resolve( String uri ) {
+        String target = uri.substring( mappingRoot.length() + 1 );
+        return resolver.apply( Paths.get( fileSystemRootUri ).resolve( target ).toString() );
+    }
+
+    @Override public boolean matches( String uri ) {
+        return resolve( uri ).isPresent();
     }
 
     @Override public AbuResponse handle( AbuRequest request ) {
 
-        assert mappingRoot.startsWith( request.toString() );
+        assert mappingRoot.startsWith( request.requestUri() );
 
         // TODO index.html
-        String target = request.requestUri().substring( mappingRoot.length() + 1 );
-        URI requestedFile = resolver.apply( Paths.get( fileSystemRootUri.get() ).resolve( target ).toString() );
+        URI requestedFile = resolve( request.requestUri() ).orElseThrow( RuntimeException::new );
 
         return UriHandler.handle( request, requestedFile );
     }
