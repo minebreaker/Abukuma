@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.Abukuma;
 import rip.deadcode.abukuma3.multipart.AbuFileItemIteratorParser;
 import rip.deadcode.abukuma3.router.AbuRouters;
-import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.value.AbuConfigs;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuResponse;
 
@@ -20,7 +20,7 @@ public class Example {
 
     public static void main( String[] args ) {
 
-        Abukuma.config( AbuConfig.create() )
+        Abukuma.config( AbuConfigs.create() )
                .addParser( new AbuFileItemIteratorParser() )
                .router( AbuRouters.builder()
                                   .resource( "/", "rip/deadcode/abukuma3/multipart/example/form.html" )

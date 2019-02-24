@@ -1,58 +1,19 @@
 package rip.deadcode.abukuma3.value;
 
-public final class AbuConfig {
+import rip.deadcode.abukuma3.value.internal.AbuConfigImpl;
 
-    private int port;
-    private int maxThreads;
-    private int minThreads;
 
-    private AbuConfig() {
-        this.port = 8080;
-        this.maxThreads = 128;
-        this.minThreads = 8;
-    }
+public interface AbuConfig {
 
-    private AbuConfig( int port, int maxThreads, int minThreads ) {
-        this.port = port;
-        this.maxThreads = maxThreads;
-        this.minThreads = minThreads;
-    }
+    public int port();
 
-    public static AbuConfig create() {
-        return new AbuConfig();
-    }
+    public AbuConfigImpl port( int port );
 
-    public AbuConfig copy() {
-        return new AbuConfig( port, maxThreads, minThreads );
-    }
+    public int maxThreads();
 
-    public int port() {
-        return port;
-    }
+    public AbuConfigImpl maxThreads( int maxThreads );
 
-    public AbuConfig port( int port ) {
-        AbuConfig c = copy();
-        c.port = port;
-        return c;
-    }
+    public int minThreads();
 
-    public int maxThreads() {
-        return maxThreads;
-    }
-
-    public AbuConfig maxThreads( int maxThreads ) {
-        AbuConfig c = copy();
-        c.maxThreads = maxThreads;
-        return c;
-    }
-
-    public int minThreads() {
-        return minThreads;
-    }
-
-    public AbuConfig minThreads( int minThreads ) {
-        AbuConfig c = copy();
-        c.minThreads = minThreads;
-        return c;
-    }
+    public AbuConfigImpl minThreads( int minThreads );
 }

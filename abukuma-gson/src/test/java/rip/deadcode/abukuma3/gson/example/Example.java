@@ -4,7 +4,7 @@ import rip.deadcode.abukuma3.Abukuma;
 import rip.deadcode.abukuma3.gson.AbuGson;
 import rip.deadcode.abukuma3.gson.JsonBody;
 import rip.deadcode.abukuma3.router.AbuRouters;
-import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.value.AbuConfigs;
 import rip.deadcode.abukuma3.value.AbuResponse;
 
 
@@ -40,7 +40,7 @@ public final class Example {
 
     public static void main( String[] args ) {
 
-        Abukuma.config( AbuConfig.create() )
+        Abukuma.config( AbuConfigs.create() )
                .addParser( AbuGson.parser() )
                .addRenderer( AbuGson.renderer() )
                .router( AbuRouters.builder()

@@ -3,7 +3,7 @@ package rip.deadcode.abukuma3.example;
 import rip.deadcode.abukuma3.Abukuma;
 import rip.deadcode.abukuma3.parser.UrlEncoded;
 import rip.deadcode.abukuma3.router.AbuRouters;
-import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.value.AbuConfigs;
 import rip.deadcode.abukuma3.value.AbuResponse;
 
 import java.nio.file.Paths;
@@ -13,7 +13,7 @@ public final class Example {
 
     public static void main( String[] args ) {
 
-        Abukuma.config( AbuConfig.create() )
+        Abukuma.config( AbuConfigs.create() )
                .router( AbuRouters.builder()
                                   .get( "/", req -> AbuResponse.create( "<h1>hello, world</h1>" )
                                                                .header( h -> h.contentType( "text/html" ) ) )
