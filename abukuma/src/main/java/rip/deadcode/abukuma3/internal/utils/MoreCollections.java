@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.internal.utils;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -16,6 +17,11 @@ public final class MoreCollections {
         checkState( i.hasNext() );
 
         return i.next();
+    }
+
+    public static <T> Optional<T> mayFirst( Iterable<T> iter ) {
+        Iterator<T> i = iter.iterator();
+        return i.hasNext() ? Optional.of( i.next() ) : Optional.empty();
     }
 
     public static <T> T last( Iterable<T> iter ) {

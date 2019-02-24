@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URL;
 import java.util.Map;
+import java.util.Optional;
 
 
 public interface AbuRequest {
@@ -25,7 +26,11 @@ public interface AbuRequest {
 
     public AbuRequestHeader header();
 
+    public Optional<String> pathParam( String key );
+
     public Map<String, String> pathParams();
+
+    public Optional<String> queryParam( String key );
 
     public Multimap<String, String> queryParams();
 

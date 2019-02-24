@@ -16,9 +16,11 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static rip.deadcode.abukuma3.internal.utils.MoreCollections.mayFirst;
 
 
 public final class AbuRequestImpl implements AbuRequest {
@@ -46,7 +48,7 @@ public final class AbuRequestImpl implements AbuRequest {
     }
 
     @SuppressWarnings( "unchecked" )  // checked by Class.isInstance(Object)
-    public <T> T body( Class<T> cls ) {
+    @Override public <T> T body( Class<T> cls ) {
         try ( InputStream is = jettyRequest.getInputStream() ) {
             Object result = context.parserChain().parse( cls, is, header );
             checkNotNull( result, "Could not find an appropriate parser for the type '%s'.", cls );
@@ -62,32 +64,39 @@ public final class AbuRequestImpl implements AbuRequest {
         }
     }
 
-    public AbuExecutionContext context() {
+    @Override public AbuExecutionContext context() {
         return context;
     }
 
-    public String method() {
+    @Override public String method() {
         return header.method();
     }
 
-    public URL url() {
+    @Override public URL url() {
         return header.url();
     }
 
-    public String requestUri() {
+    @Override public String requestUri() {
         return header.requestUri();
     }
 
-    public AbuRequestHeader header() {
+    @Override public AbuRequestHeader header() {
         return header;
     }
 
-    public Map<String, String> pathParams() {
+    @Override public Optional<String> pathParam( String key ) {
+        return Optional.ofNullable( pathParams.get( key ) );
+    }
+
+    @Override public Map<String, String> pathParams() {
         return pathParams;
     }
 
-    // TODO use original implementation for getting single value
-    public Multimap<String, String> queryParams() {
+    @Override public Optional<String> queryParam( String key ) {
+        return mayFirst( jettyRequest.getQueryParameters().getValues( key ) );
+    }
+
+    @Override public Multimap<String, String> queryParams() {
         Multimap<String, String> params =
                 jettyRequest.getQueryParameters().entrySet().stream()
                             .collect(
@@ -99,16 +108,19 @@ public final class AbuRequestImpl implements AbuRequest {
     }
 
     @Unsafe
+    @Override
     public Request jettyRequest() {
         return jettyRequest;
     }
 
     @Unsafe
+    @Override
     public HttpServletRequest servletRequest() {
         return servletRequest;
     }
 
     @Unsafe
+    @Override
     public HttpServletResponse servletResponse() {
         return servletResponse;
     }
