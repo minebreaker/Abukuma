@@ -11,6 +11,7 @@ import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.router.AbuRoutingContext;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.internal.AbuRequestImpl;
 import rip.deadcode.abukuma3.value.AbuResponse;
 
 import javax.servlet.ServletException;
@@ -47,7 +48,7 @@ public final class JettyHandlerImpl extends AbstractHandler {
 
         AbuRequestHeader header = new AbuRequestHeader( context, baseRequest );
         AbuRoutingContext routing = router.route( header );
-        AbuRequest request = new AbuRequest(
+        AbuRequest request = new AbuRequestImpl(
                 context,
                 header,
                 baseRequest,
