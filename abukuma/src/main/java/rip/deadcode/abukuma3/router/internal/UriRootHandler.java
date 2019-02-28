@@ -16,7 +16,7 @@ public final class UriRootHandler implements MatchingHandler {
     private final Function<String, Optional<URI>> resolver;
 
     private UriRootHandler( String mappingRoot, String fileSystemRootUri, Function<String, Optional<URI>> resolver ) {
-        this.mappingRoot = mappingRoot;
+        this.mappingRoot = mappingRoot.endsWith( "/" ) ? mappingRoot : mappingRoot + "/";
         this.fileSystemRootUri = fileSystemRootUri;
         this.resolver = resolver;
     }
@@ -26,8 +26,23 @@ public final class UriRootHandler implements MatchingHandler {
     }
 
     private Optional<URI> resolve( String uri ) {
-        String target = uri.substring( mappingRoot.length() + 1 );
-        return resolver.apply( Paths.get( fileSystemRootUri ).resolve( target ).toString() );
+
+        // Check mapping
+        if ( !uri.startsWith( mappingRoot ) ) {
+            return Optional.empty();
+        }
+
+        String target = uri.substring( mappingRoot.length() );
+        String targetFileStr = Paths.get( fileSystemRootUri ).resolve( target ).normalize().toString();
+        String resolvedRoot = Paths.get( fileSystemRootUri ).normalize().toString();
+
+        // Directory traversal check
+        if ( !targetFileStr.startsWith( resolvedRoot ) ) {
+            return Optional.empty();
+        }
+
+        // TODO index.html
+        return resolver.apply( targetFileStr );
     }
 
     @Override public boolean matches( String uri ) {
@@ -36,11 +51,7 @@ public final class UriRootHandler implements MatchingHandler {
 
     @Override public AbuResponse handle( AbuRequest request ) {
 
-        assert mappingRoot.startsWith( request.requestUri() );
-
-        // TODO index.html
         URI requestedFile = resolve( request.requestUri() ).orElseThrow( RuntimeException::new );
-
         return UriHandler.handle( request, requestedFile );
     }
 }
