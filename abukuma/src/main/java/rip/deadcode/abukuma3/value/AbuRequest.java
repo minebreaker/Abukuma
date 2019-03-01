@@ -24,6 +24,7 @@ public interface AbuRequest {
 
     public String requestUri();
 
+    // TODO header can have multiple values, but only the last one should be used?
     public AbuRequestHeader header();
 
     public Optional<String> pathParam( String key );
@@ -32,6 +33,7 @@ public interface AbuRequest {
 
     public Optional<String> queryParam( String key );
 
+    // TODO Query param can have multiple values?
     public Multimap<String, String> queryParams();
 
     @Unsafe
