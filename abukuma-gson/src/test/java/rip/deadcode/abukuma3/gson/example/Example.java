@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3.gson.example;
 
 import rip.deadcode.abukuma3.Abukuma;
+import rip.deadcode.abukuma3.filter.AbuFilters;
 import rip.deadcode.abukuma3.gson.AbuGson;
 import rip.deadcode.abukuma3.gson.JsonBody;
 import rip.deadcode.abukuma3.router.AbuRouters;
@@ -43,6 +44,7 @@ public final class Example {
         Abukuma.config( AbuConfigs.create() )
                .addParser( AbuGson.parser() )
                .addRenderer( AbuGson.renderer() )
+               .addFilter( AbuFilters.antiCsrf() )
                .router( AbuRouters.builder()
                                   .post( "/post", req -> {
                                       Request request = req.body( Request.class );

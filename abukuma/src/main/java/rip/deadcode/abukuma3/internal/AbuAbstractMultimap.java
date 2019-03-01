@@ -4,6 +4,7 @@ import com.google.common.collect.*;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,7 +28,12 @@ public abstract class AbuAbstractMultimap<K, V, T extends AbuAbstractMultimap<K,
     }
 
     public Optional<V> mayGet( K key ) {
-        return Optional.ofNullable( get( key ).iterator().next() );
+        Iterator<V> i = get( key ).iterator();
+        if ( !i.hasNext() ) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable( i.next() );
     }
 
     public T set( K key, V value ) {

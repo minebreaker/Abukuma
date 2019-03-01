@@ -1,12 +1,13 @@
 package rip.deadcode.abukuma3.renderer.internal;
 
-import com.google.common.base.Strings;
+import com.google.common.net.HttpHeaders;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
 import rip.deadcode.abukuma3.value.AbuResponse;
 
 import javax.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 
 public final class CharSequenceRenderer implements AbuRenderer {
@@ -26,6 +27,7 @@ public final class CharSequenceRenderer implements AbuRenderer {
             return null;
         }
 
+        // TODO charset
         return new AbuRenderingResult(
                 os -> os.write( ( (CharSequence) responseCandidate.body() ).toString().getBytes( StandardCharsets.UTF_8 ) ),
                 () -> ifNotSet( responseCandidate, "text/plain; charset=utf-8" )
@@ -34,7 +36,9 @@ public final class CharSequenceRenderer implements AbuRenderer {
 
     static AbuResponse ifNotSet( AbuResponse base, String mime ) {
 
-        if ( !Strings.isNullOrEmpty( base.header().contentType() ) ) {
+        Optional<String> contentTypeSet = base.header().mayGet( HttpHeaders.CONTENT_TYPE );
+
+        if  ( !contentTypeSet.isPresent() || contentTypeSet.get().isEmpty() ) {
             return base;
         }
 
