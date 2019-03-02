@@ -1,11 +1,16 @@
 package rip.deadcode.abukuma3.internal.utils;
 
+import com.google.common.collect.Iterables;
+
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
 import static com.google.common.base.Preconditions.checkState;
+import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.also;
 
 
 public final class MoreCollections {
@@ -53,5 +58,12 @@ public final class MoreCollections {
                 };
             }
         };
+    }
+
+    public static <T, U, V> List<V> zipToList( Iterable<T> iter1, Iterable<U> iter2, BiFunction<T, U, V> zipper ) {
+        return also(
+                new ArrayList<>(),
+                e -> Iterables.addAll( e, zip( iter1, iter2, zipper ) )
+        );
     }
 }
