@@ -17,6 +17,7 @@
 * Single factory class for all?
 * Registry class for DI
 * Persistent map/list
+* Remove prefixes?
 
 
 ## Ideas
