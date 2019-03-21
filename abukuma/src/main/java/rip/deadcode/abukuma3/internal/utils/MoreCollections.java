@@ -1,12 +1,10 @@
 package rip.deadcode.abukuma3.internal.utils;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -65,5 +63,22 @@ public final class MoreCollections {
                 new ArrayList<>(),
                 e -> Iterables.addAll( e, zip( iter1, iter2, zipper ) )
         );
+    }
+
+    public static <K, V> Map<K, V> assoc( Map<K, V> into, K key, V value ) {
+        if ( into.containsKey( key ) ) {
+            return ImmutableMap.copyOf(
+                    also( new HashMap<>(), m -> {
+                        m.putAll( into );
+                        m.put( key, value );
+                    } )
+            );
+
+        } else {
+            return ImmutableMap.<K, V>builder()
+                    .putAll( into )
+                    .put( key, value )
+                    .build();
+        }
     }
 }

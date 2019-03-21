@@ -1,6 +1,7 @@
 ## Features
 
 * Context-path aware routing
+* Cookies
 
 
 ## Bugs
@@ -18,6 +19,9 @@
 * Registry class for DI
 * Persistent map/list
 * Remove prefixes?
+* Config implementing Map
+* Persistent Multimap
+* Content-type based dispatcher
 
 
 ## Ideas
