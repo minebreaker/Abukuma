@@ -8,7 +8,7 @@ import rip.deadcode.abukuma3.value.AbuResponse;
 import javax.annotation.Nullable;
 import java.io.InputStream;
 
-import static rip.deadcode.abukuma3.renderer.internal.CharSequenceRenderer.ifNotSet;
+import static rip.deadcode.abukuma3.renderer.internal.Renderers.ifNotSet;
 
 
 public final class InputStreamRenderer implements AbuRenderer {
