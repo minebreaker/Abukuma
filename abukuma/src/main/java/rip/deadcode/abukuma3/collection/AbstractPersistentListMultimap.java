@@ -35,10 +35,12 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
         this.delegate = envelope.load;
     }
 
+    @SuppressWarnings( "unchecked" )
     protected AbstractPersistentListMultimap( Multimap<K, V> copy ) {
         this.delegate = copy.asMap().entrySet().stream().reduce(
                 PersistentHashMap.empty(),
                 ( acc, e ) -> acc.assoc( e.getKey(), PersistentVector.ofIter( e.getValue() ) ),
+                // Should be safe to cast
                 ( t, o ) -> (PersistentHashMap<K, ImList<V>>) PersistentHashMap.of( (Iterable) t.concat( o ) )
         );
     }
