@@ -33,7 +33,7 @@ public final class Information {
 
     private static final char ESC = 27;
     private static final String ANSI_YELLOW = ESC + "[33;m";
-    private static final String ANSI_REST = ESC + "[0m";
+    private static final String ANSI_RESET = ESC + "[0m";
 
-    public static final String INFO_STRING = "\n\n" + ANSI_YELLOW + Information.AA + ANSI_REST + "  " + Information.VERSION + "\n";
+    public static final String INFO_STRING = "\n\n" + ANSI_YELLOW + Information.AA + ANSI_RESET + "  " + Information.VERSION + "\n";
 }
