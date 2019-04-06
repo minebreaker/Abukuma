@@ -11,13 +11,12 @@
 
 ## Refactoring
 
-* ParametersAreNonNullByDefault
 * Builder -> Immutable copying object
+* Router Builder API
 * Public classes should be refactored to interfaces
 * Write tests
 * Single factory class for all?
 * Registry class for DI
-* Persistent map/list
 * Remove prefixes?
 * Config implementing Map
 * Persistent Multimap
@@ -26,7 +25,6 @@
 
 ## Ideas
 
-* Routing on another thread
 * Async Wrapper
 * Separate backend
 * Kotlin-friendly collections
