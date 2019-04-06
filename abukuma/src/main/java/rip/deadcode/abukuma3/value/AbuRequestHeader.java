@@ -74,7 +74,6 @@ public final class AbuRequestHeader {
     }
 
     public Optional<Charset> charset() {
-        // Not sure which is better
         return possibly( () -> Charset.forName( jettyRequest.getCharacterEncoding() ) ).asOptional();
     }
 

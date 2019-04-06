@@ -7,22 +7,16 @@ import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.value.AbuConfig;
 
-import java.util.List;
 
-
-public interface AbuExecutionContext {
+public interface AbuExecutionContext extends Registry {
 
     public AbuConfig config();
 
-    public List<AbuParser<?>> parsers();
+    public AbuParser<?> parser();
 
-    public AbuParser<?> parserChain();
+    public AbuRenderer renderer();
 
-    public List<AbuRenderer> renderers();
-
-    public List<AbuFilter> filters();
-
-    public AbuFilter filterChain();
+    public AbuFilter filter();
 
     public AbuRouter router();
 

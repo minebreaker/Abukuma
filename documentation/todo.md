@@ -19,8 +19,8 @@
 * Registry class for DI
 * Remove prefixes?
 * Config implementing Map
-* Persistent Multimap
 * Content-type based dispatcher
+* Fluent header API
 
 
 ## Ideas

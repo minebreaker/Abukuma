@@ -165,10 +165,8 @@ public final class Abukuma {
             //noinspection OptionalGetWithoutIsPresent  should have at least one default implementations
             return new AbuServerImpl( new ExecutionContextImpl(
                     config,
-                    parsers,
                     parsers.stream().reduce( AbuParser::ifFailed ).get(),
-                    renderers,
-                    filters,
+                    renderers.stream().reduce( ( r, then ) -> r.ifFailed( then ) ).get(),
                     filters.stream().reduce( AbuFilter::then ).orElseGet( AbuFilters::noop ),
                     router,
                     exceptionHandler

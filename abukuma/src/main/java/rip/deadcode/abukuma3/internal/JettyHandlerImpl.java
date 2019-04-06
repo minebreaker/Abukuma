@@ -3,6 +3,7 @@ package rip.deadcode.abukuma3.internal;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
@@ -11,8 +12,8 @@ import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.router.AbuRoutingContext;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
-import rip.deadcode.abukuma3.value.internal.AbuRequestImpl;
 import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.internal.AbuRequestImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,13 +31,14 @@ public final class JettyHandlerImpl extends AbstractHandler {
     private final AbuRouter router;
     private final AbuExceptionHandler exceptionHandler;
     private final AbuRenderer renderer;
+    private final AbuFilter filter;
 
     JettyHandlerImpl( AbuExecutionContext context ) {
         this.context = context;
         this.router = context.router();
         this.exceptionHandler = context.exceptionHandler();
-        //noinspection OptionalGetWithoutIsPresent  // At least has default implementations
-        this.renderer = context.renderers().stream().reduce( ( r, then ) -> r.ifFailed( then ) ).get();
+        this.renderer = context.renderer();
+        this.filter = context.filter();
     }
 
     @Override
@@ -60,11 +62,10 @@ public final class JettyHandlerImpl extends AbstractHandler {
         AbuHandler handler = routing.getHandler();
 
         AbuResponse response = possibly(
-                () -> context.filterChain().filter( request, handler )
+                () -> filter.filter( request, handler )
         ).orElse(
                 e -> exceptionHandler.handleException( e, request )
         );
-
 
         try {
             AbuRenderingResult renderingResult = renderer.render( response );

@@ -36,13 +36,14 @@ public final class AbuServerImpl implements AbuServer {
 
         QueuedThreadPool threadPool = new QueuedThreadPool( config.maxThreads(), config.minThreads() );
 
-        server = new Server( threadPool );
-        ServerConnector connector = also( new ServerConnector( server, connectionFactory ), c -> {
-            c.setPort( config.port() );
-        } );
-        server.setConnectors( new Connector[] { connector } );
+        server = also( new Server( threadPool ), server -> {
+            ServerConnector connector = also( new ServerConnector( server, connectionFactory ), c -> {
+                c.setPort( config.port() );
+            } );
 
-        server.setHandler( new JettyHandlerImpl( context ) );
+            server.setConnectors( new Connector[] { connector } );
+            server.setHandler( new JettyHandlerImpl( context ) );
+        } );
         uncheck( () -> server.start() );
     }
 
