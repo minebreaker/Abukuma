@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.renderer.internal;
 
-import rip.deadcode.abukuma3.internal.utils.IoStreams;
+import com.google.common.io.ByteStreams;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
 import rip.deadcode.abukuma3.value.AbuResponse;
@@ -20,7 +20,7 @@ public final class InputStreamRenderer implements AbuRenderer {
         }
 
         return new AbuRenderingResult(
-                os -> IoStreams.copy( (InputStream) responseCandidate.body(), os ),
+                os -> ByteStreams.copy( (InputStream) responseCandidate.body(), os ),
                 () -> ifNotSet( responseCandidate, "application/octet-stream" )
         );
     }

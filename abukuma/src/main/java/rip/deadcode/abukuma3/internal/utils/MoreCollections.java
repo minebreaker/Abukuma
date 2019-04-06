@@ -4,7 +4,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -65,6 +70,7 @@ public final class MoreCollections {
         );
     }
 
+    // TODO should use persistent map
     public static <K, V> Map<K, V> assoc( Map<K, V> into, K key, V value ) {
         if ( into.containsKey( key ) ) {
             return ImmutableMap.copyOf(
