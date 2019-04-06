@@ -1,29 +1,25 @@
 package rip.deadcode.abukuma3.value;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.net.HttpHeaders;
-import rip.deadcode.abukuma3.internal.AbuAbstractMultimap;
+import rip.deadcode.abukuma3.collection.AbstractPersistentListMultimap;
 
 
-public final class AbuHeader extends AbuAbstractMultimap<String, String, AbuHeader> {
+public final class AbuHeader extends AbstractPersistentListMultimap<String, String, AbuHeader> {
 
-    private final Multimap<String, String> delegate;
+    private AbuHeader() {
+        super();
+    }
 
-    private AbuHeader( Multimap<String, String> delegate ) {
-        this.delegate = delegate;
+    private AbuHeader( Envelope delegate ) {
+        super( delegate );
     }
 
     public static AbuHeader create() {
-        return new AbuHeader( ImmutableMultimap.of() );
+        return new AbuHeader();
     }
 
-    @Override public AbuHeader constructor( Multimap<String, String> delegate ) {
+    @Override public AbuHeader constructor( Envelope delegate ) {
         return new AbuHeader( delegate );
-    }
-
-    @Override protected Multimap<String, String> delegate() {
-        return delegate;
     }
 
     public String contentType() {

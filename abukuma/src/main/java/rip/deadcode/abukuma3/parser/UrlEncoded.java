@@ -1,26 +1,25 @@
 package rip.deadcode.abukuma3.parser;
 
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
-import rip.deadcode.abukuma3.internal.AbuAbstractMultimap;
+import rip.deadcode.abukuma3.collection.AbstractPersistentListMultimap;
 
 
-public final class UrlEncoded extends AbuAbstractMultimap<String, String, UrlEncoded> {
-
-    private final Multimap<String, String> delegate;
+public final class UrlEncoded extends AbstractPersistentListMultimap<String, String, UrlEncoded> {
 
     private UrlEncoded( Multimap<String, String> delegate ) {
-        this.delegate = delegate;
+        super( delegate );
     }
 
-    public static UrlEncoded create( Multimap<String, String> delegate ) {
+    private UrlEncoded( Envelope<String, String> delegate ) {
+        super( delegate );
+    }
+
+    public static UrlEncoded create( ListMultimap<String, String> delegate ) {
         return new UrlEncoded( delegate );
     }
 
-    @Override public UrlEncoded constructor( Multimap<String, String> delegate ) {
+    @Override public UrlEncoded constructor( Envelope<String, String> delegate ) {
         return new UrlEncoded( delegate );
-    }
-
-    @Override protected Multimap<String, String> delegate() {
-        return delegate;
     }
 }

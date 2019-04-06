@@ -1,8 +1,8 @@
 package rip.deadcode.abukuma3.parser.internal;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import rip.deadcode.abukuma3.parser.AbuParser;
 import rip.deadcode.abukuma3.parser.UrlEncoded;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
@@ -30,18 +30,18 @@ public final class UrlEncodedParser implements AbuParser<UrlEncoded> {
             return null;
         }
 
-        Multimap<String, String> result = parse( new BufferedInputStream( body ) );
+        ListMultimap<String, String> result = parse( new BufferedInputStream( body ) );
         return UrlEncoded.create( result );
     }
 
     @VisibleForTesting
-    static Multimap<String, String> parse( InputStream is ) throws IOException {
+    static ListMultimap<String, String> parse( InputStream is ) throws IOException {
 
-        Multimap<String, String> out = HashMultimap.create();
+        ListMultimap<String, String> out = ArrayListMultimap.create();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         while ( true ) {
-            Multimap<String, String> ret = parsePair( is, out, baos );
+            ListMultimap<String, String> ret = parsePair( is, out, baos );
             if ( ret == null ) {
                 return out;
             } else {
@@ -50,8 +50,8 @@ public final class UrlEncodedParser implements AbuParser<UrlEncoded> {
         }
     }
 
-    private static Multimap<String, String> parsePair(
-            InputStream is, Multimap<String, String> parsed, ByteArrayOutputStream baos ) throws IOException {
+    private static ListMultimap<String, String> parsePair(
+            InputStream is, ListMultimap<String, String> parsed, ByteArrayOutputStream baos ) throws IOException {
 
         is.mark( 1 );
         int i = is.read();

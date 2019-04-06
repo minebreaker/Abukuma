@@ -1,42 +1,40 @@
 package rip.deadcode.abukuma3.multipart;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.apache.commons.fileupload.FileItem;
-import rip.deadcode.abukuma3.internal.AbuAbstractMultimap;
+import rip.deadcode.abukuma3.collection.AbstractPersistentListMultimap;
 
 import java.util.List;
 import java.util.Map;
 
 
 // TODO `FIleItem` should be wrapped
-public final class Multipart extends AbuAbstractMultimap<String, FileItem, Multipart> {
+public final class Multipart extends AbstractPersistentListMultimap<String, FileItem, Multipart> {
 
-    private final Multimap<String, FileItem> delegate;
+    private Multipart( Envelope<String, FileItem> envelope ) {
+        super( envelope );
+    }
 
-    private Multipart( Multimap<String, FileItem> delegate ) {
-        this.delegate = delegate;
+    private Multipart( ListMultimap<String, FileItem> delegate ) {
+        super( delegate );
     }
 
     static Multipart create( Map<String, List<FileItem>> items ) {
 
-        Multimap<String, FileItem> temp = items
+        ListMultimap<String, FileItem> temp = items
                 .entrySet()
                 .stream()
                 .collect(
-                        HashMultimap::create,
+                        ArrayListMultimap::create,
                         ( acc, entry ) -> acc.putAll( entry.getKey(), entry.getValue() ),
                         ( acc, other ) -> acc.putAll( other )
                 );
-        return new Multipart( ImmutableMultimap.copyOf( temp ) );
+        return new Multipart( ImmutableListMultimap.copyOf( temp ) );
     }
 
-    @Override public Multipart constructor( Multimap<String, FileItem> delegate ) {
+    @Override public Multipart constructor( Envelope<String, FileItem> delegate ) {
         return new Multipart( delegate );
-    }
-
-    @Override protected Multimap<String, FileItem> delegate() {
-        return delegate;
     }
 }

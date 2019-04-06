@@ -1,6 +1,7 @@
 dependencies {
     compile(
             'org.eclipse.jetty:jetty-server:9.4.14.v20181114',
+            'org.organicdesign:Paguro:3.1.2',
 
             'com.google.guava:guava:27.0.1-jre',
             'org.slf4j:slf4j-api:1.7.25',

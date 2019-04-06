@@ -29,3 +29,4 @@
 * Routing on another thread
 * Async Wrapper
 * Separate backend
+* Kotlin-friendly collections
