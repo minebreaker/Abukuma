@@ -15,9 +15,9 @@ subprojects {
     dependencies {
         testCompile(
                 'org.junit.jupiter:junit-jupiter-api:5.4.1',
-                'com.google.truth:truth:0.43',
-                'com.google.truth.extensions:truth-java8-extension:0.43',
-                'org.mockito:mockito-core:2.25.1',
+                'com.google.truth:truth:0.44',
+                'com.google.truth.extensions:truth-java8-extension:0.44',
+                'org.mockito:mockito-core:2.26.0',
 //            'com.google.jimfs:jimfs:1.1',
                 'rip.deadcode:izvestia:0.3',
 
