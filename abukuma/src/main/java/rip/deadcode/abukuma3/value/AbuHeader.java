@@ -10,7 +10,7 @@ public final class AbuHeader extends AbstractPersistentListMultimap<String, Stri
         super();
     }
 
-    private AbuHeader( Envelope delegate ) {
+    private AbuHeader( Envelope<String, String> delegate ) {
         super( delegate );
     }
 
@@ -18,7 +18,7 @@ public final class AbuHeader extends AbstractPersistentListMultimap<String, Stri
         return new AbuHeader();
     }
 
-    @Override public AbuHeader constructor( Envelope delegate ) {
+    @Override public AbuHeader constructor( Envelope<String, String> delegate ) {
         return new AbuHeader( delegate );
     }
 

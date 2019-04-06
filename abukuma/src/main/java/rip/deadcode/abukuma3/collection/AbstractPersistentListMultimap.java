@@ -100,7 +100,7 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
         if ( delegate.containsKey( key ) ) {
             return value;
         } else {
-            throw new NoSuchElementException();
+            return PersistentVector.empty();
         }
     }
 

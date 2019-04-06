@@ -44,9 +44,9 @@ add(K, V): T
 
 add(K, Iterable<V>): T
 
-    `{}.addAll(k1, [v1]) -> {k1: [v1]}`
-    `{k1: [v1]}.addAll(k1, [v2]) -> {k1: [v1, v2]}`
-    `{k1: [v1]}.addAll(k2, [v2]) -> {k1: [v1], k2: [v2]}`
+    `{}.add(k1, [v1]) -> {k1: [v1]}`
+    `{k1: [v1]}.add(k1, [v2]) -> {k1: [v1, v2]}`
+    `{k1: [v1]}.add(k2, [v2]) -> {k1: [v1], k2: [v2]}`
     `{}.addAll(k1, null) -> throw exception`
 
 set(K, V): T
