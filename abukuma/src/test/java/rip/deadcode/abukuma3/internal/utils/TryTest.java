@@ -12,6 +12,7 @@ import static rip.deadcode.abukuma3.internal.utils.Try.except;
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 import static rip.deadcode.izvestia.Core.expect;
 
+
 class TryTest {
 
     private String success() {
@@ -30,7 +31,7 @@ class TryTest {
     @Test
     void testExcept() {
         RuntimeException e = new RuntimeException();
-        assertThat( except( e ).orElse( ex -> ex ) ).isSameAs( e );
+        assertThat( except( e ).orElse( ex -> ex ) ).isSameInstanceAs( e );
     }
 
     @Test
@@ -41,7 +42,7 @@ class TryTest {
             throw e;
         }, RuntimeException.class );
 
-        assertThat( result.orElse( ex -> ex ) ).isSameAs( e );
+        assertThat( result.orElse( ex -> ex ) ).isSameInstanceAs( e );
     }
 
     @Test
@@ -52,7 +53,7 @@ class TryTest {
                 throw e;
             }, UncheckedIOException.class ).get();
         } ).throwsException( ex -> {
-            assertThat( ex ).hasCauseThat().isSameAs( e );
+            assertThat( ex ).hasCauseThat().isSameInstanceAs( e );
         } );
     }
 
