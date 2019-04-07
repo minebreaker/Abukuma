@@ -2,6 +2,7 @@
 
 * Context-path aware routing
 * Cookies
+* Module (Batch update for the registry)
 
 
 ## Bugs

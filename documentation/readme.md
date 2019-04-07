@@ -1,5 +1,8 @@
 # 阿武隈 - Simple web framework for Java/Kotlin
 
+[![CircleCI](https://circleci.com/gh/minebreaker/Abukuma.svg?style=svg)](https://circleci.com/gh/minebreaker/Abukuma)
+[![codecov](https://codecov.io/gh/minebreaker/Abukuma/branch/master/graph/badge.svg)](https://codecov.io/gh/minebreaker/Abukuma)
+
 Abukuma is a simple and elegant web framework for Java/Kotlin.
 
 
