@@ -13,14 +13,13 @@ import java.nio.charset.StandardCharsets;
 
 import static rip.deadcode.abukuma3.gson.internal.GsonUtils.checkHeader;
 
+
 public final class GsonParser implements AbuParser<Object> {
 
-    private final Gson gson;
     private final boolean requireAnnotation;
     private final boolean requireHeader;
 
-    public GsonParser( Gson gson ) {
-        this.gson = gson;
+    public GsonParser() {
         this.requireAnnotation = true;
         this.requireHeader = true;
     }
@@ -36,6 +35,8 @@ public final class GsonParser implements AbuParser<Object> {
         if ( requireHeader && !checkHeader( header.contentType() ) ) {
             return null;
         }
+
+        Gson gson = header.context().get( Gson.class );
 
         Charset charset = header.charset().orElse( StandardCharsets.UTF_8 );
         return gson.fromJson( new InputStreamReader( body, charset ), convertTo );

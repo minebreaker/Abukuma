@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.renderer;
 
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.value.AbuResponse;
 
 import javax.annotation.Nullable;
@@ -13,12 +14,12 @@ import java.io.IOException;
 public interface AbuRenderer {
 
     @Nullable
-    public AbuRenderingResult render( AbuResponse responseCandidate ) throws IOException;
+    public AbuRenderingResult render( AbuExecutionContext context, AbuResponse responseCandidate ) throws IOException;
 
     public default AbuRenderer ifFailed( AbuRenderer downstream ) {
-        return responseCandidate -> {
-            AbuRenderingResult result = render( responseCandidate );
-            return result != null ? result : downstream.render( responseCandidate );
+        return ( context, responseCandidate ) -> {
+            AbuRenderingResult result = render( context, responseCandidate );
+            return result != null ? result : downstream.render( context, responseCandidate );
         };
     }
 }

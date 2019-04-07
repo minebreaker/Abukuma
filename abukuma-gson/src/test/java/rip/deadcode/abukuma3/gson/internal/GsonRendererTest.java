@@ -1,6 +1,8 @@
 package rip.deadcode.abukuma3.gson.internal;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.gson.AbuGson;
 import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
 import rip.deadcode.abukuma3.value.AbuResponse;
@@ -9,6 +11,8 @@ import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 class GsonRendererTest {
@@ -20,7 +24,10 @@ class GsonRendererTest {
         SamplePojo param = new SamplePojo();
         param.setFoo( "bar" );
 
-        AbuRenderingResult response = AbuGson.renderer().render( AbuResponse.create( param ) );
+        AbuExecutionContext context = mock(AbuExecutionContext.class);
+        when(context.get( Gson.class )).thenReturn( new Gson() );
+
+        AbuRenderingResult response = AbuGson.renderer().render( context , AbuResponse.create( param ) );
 
         assertThat( response ).isNotNull();
 

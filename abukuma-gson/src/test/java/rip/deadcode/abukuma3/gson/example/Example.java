@@ -2,7 +2,7 @@ package rip.deadcode.abukuma3.gson.example;
 
 import rip.deadcode.abukuma3.Abukuma;
 import rip.deadcode.abukuma3.filter.AbuFilters;
-import rip.deadcode.abukuma3.gson.AbuGson;
+import rip.deadcode.abukuma3.gson.GsonModule;
 import rip.deadcode.abukuma3.gson.JsonBody;
 import rip.deadcode.abukuma3.router.AbuRouters;
 import rip.deadcode.abukuma3.value.AbuConfigs;
@@ -42,9 +42,8 @@ public final class Example {
     public static void main( String[] args ) {
 
         Abukuma.config( AbuConfigs.create() )
-               .addParser( AbuGson.parser() )
-               .addRenderer( AbuGson.renderer() )
                .addFilter( AbuFilters.antiCsrf() )
+               .addModule( GsonModule.getInstance() )
                .router( AbuRouters.builder()
                                   .post( "/post", req -> {
                                       Request request = req.body( Request.class );

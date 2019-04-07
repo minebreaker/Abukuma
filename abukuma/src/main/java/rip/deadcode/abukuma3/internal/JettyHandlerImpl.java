@@ -68,7 +68,7 @@ public final class JettyHandlerImpl extends AbstractHandler {
         );
 
         try {
-            AbuRenderingResult renderingResult = renderer.render( response );
+            AbuRenderingResult renderingResult = renderer.render( context, response );
             checkNotNull( renderingResult );
             AbuResponse renderedResponse = renderingResult.modifying().get();
 

@@ -21,4 +21,6 @@ public interface AbuExecutionContext extends Registry {
     public AbuRouter router();
 
     public AbuExceptionHandler exceptionHandler();
+
+    public AbuExecutionContext applyModule(Module module);
 }

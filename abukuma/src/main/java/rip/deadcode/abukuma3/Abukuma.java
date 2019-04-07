@@ -8,6 +8,7 @@ import rip.deadcode.abukuma3.internal.AbuServerImpl;
 import rip.deadcode.abukuma3.internal.DefaultExceptionHandler;
 import rip.deadcode.abukuma3.internal.ExecutionContextImpl;
 import rip.deadcode.abukuma3.internal.RegistryImpl;
+import rip.deadcode.abukuma3.internal.utils.MoreCollections;
 import rip.deadcode.abukuma3.parser.AbuParser;
 import rip.deadcode.abukuma3.parser.internal.InputStreamParser;
 import rip.deadcode.abukuma3.parser.internal.StringParser;
@@ -51,6 +52,7 @@ public final class Abukuma {
         private List<AbuRenderer> renderers = ImmutableList.of();
         private List<AbuFilter> filters = ImmutableList.of();
         private AbuExceptionHandler exceptionHandler;
+        private List<Module> moduels = ImmutableList.of();
 
         private AbuServerBuilder() {}
 
@@ -148,6 +150,22 @@ public final class Abukuma {
             return this;
         }
 
+        public AbuServerBuilder addModule( Module module ) {
+            this.moduels = ImmutableList.<Module>builder()
+                    .addAll( this.moduels )
+                    .add( module )
+                    .build();
+            return this;
+        }
+
+        public AbuServerBuilder addModules( Module... module ) {
+            this.moduels = ImmutableList.<Module>builder()
+                    .addAll( this.moduels )
+                    .add( module )
+                    .build();
+            return this;
+        }
+
         private void check() {
             checkNotNull( config );
             checkNotNull( router );
@@ -172,7 +190,7 @@ public final class Abukuma {
         public AbuServer build() {
             check();
             //noinspection OptionalGetWithoutIsPresent  should have at least one default implementations
-            return new AbuServerImpl( new ExecutionContextImpl(
+            AbuExecutionContext context = new ExecutionContextImpl(
                     registry,
                     config,
                     parsers.stream().reduce( AbuParser::ifFailed ).get(),
@@ -180,7 +198,15 @@ public final class Abukuma {
                     filters.stream().reduce( AbuFilter::then ).orElseGet( AbuFilters::noop ),
                     router,
                     exceptionHandler
-            ) );
+            );
+
+            AbuExecutionContext e = MoreCollections.reduce(
+                    this.moduels,
+                    context,
+                    ( acc, m ) -> acc.applyModule( m )
+            );
+
+            return new AbuServerImpl( e );
         }
     }
 

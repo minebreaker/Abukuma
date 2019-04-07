@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3.internal;
 
 import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.Module;
 import rip.deadcode.abukuma3.Registry;
 import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
@@ -9,6 +10,7 @@ import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.value.AbuConfig;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 
@@ -82,8 +84,20 @@ public final class ExecutionContextImpl implements AbuExecutionContext {
         return new ExecutionContextImpl( registry.set( cls, supplier ) );
     }
 
+    @Override public <T> Registry set( Class<T> cls, Function<Registry, ? extends T> generator ) {
+        return new ExecutionContextImpl( registry.set( cls, generator ) );
+    }
+
     @Override
     public <T> AbuExecutionContext set( Class<T> cls, String name, Supplier<? extends T> supplier ) {
         return new ExecutionContextImpl( registry.set( cls, name, supplier ) );
+    }
+
+    @Override public <T> Registry set( Class<T> cls, String name, Function<Registry, ? extends T> generator ) {
+        return new ExecutionContextImpl( registry.set( cls, name, generator ) );
+    }
+
+    @Override public AbuExecutionContext applyModule( Module module ) {
+        return new ExecutionContextImpl( module.apply( this ) );
     }
 }

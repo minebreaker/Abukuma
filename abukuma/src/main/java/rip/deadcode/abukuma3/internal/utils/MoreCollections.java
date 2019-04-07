@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.also;
 
@@ -86,5 +87,16 @@ public final class MoreCollections {
                     .put( key, value )
                     .build();
         }
+    }
+
+    public static <T, R> R reduce( Iterable<T> iterable, R identity, BiFunction<R, T, R> accumulator ) {
+
+        R r = checkNotNull( identity );
+
+        for ( T t : iterable ) {
+            r = accumulator.apply( r, t );
+        }
+
+        return r;
     }
 }
