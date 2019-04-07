@@ -7,6 +7,7 @@ import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.internal.AbuServerImpl;
 import rip.deadcode.abukuma3.internal.DefaultExceptionHandler;
 import rip.deadcode.abukuma3.internal.ExecutionContextImpl;
+import rip.deadcode.abukuma3.internal.RegistryImpl;
 import rip.deadcode.abukuma3.parser.AbuParser;
 import rip.deadcode.abukuma3.parser.internal.InputStreamParser;
 import rip.deadcode.abukuma3.parser.internal.StringParser;
@@ -19,6 +20,7 @@ import rip.deadcode.abukuma3.value.AbuConfig;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -42,6 +44,7 @@ public final class Abukuma {
                 new InputStreamParser()
         );
 
+        private Registry registry = new RegistryImpl();
         private AbuConfig config;
         private AbuRouter router;
         private List<AbuParser<?>> parsers = ImmutableList.of();
@@ -49,7 +52,7 @@ public final class Abukuma {
         private List<AbuFilter> filters = ImmutableList.of();
         private AbuExceptionHandler exceptionHandler;
 
-        private AbuServerBuilder() { }
+        private AbuServerBuilder() {}
 
         public AbuServerBuilder config( AbuConfig config ) {
             this.config = config;
@@ -140,9 +143,15 @@ public final class Abukuma {
             return this;
         }
 
+        public AbuServerBuilder registry( UnaryOperator<Registry> registry ) {
+            this.registry = registry.apply( this.registry );
+            return this;
+        }
+
         private void check() {
             checkNotNull( config );
             checkNotNull( router );
+            checkNotNull( registry );
 
             if ( parsers == null ) {
                 parsers = defaultParsers;
@@ -153,7 +162,7 @@ public final class Abukuma {
                         .build();
             }
             if ( renderers == null ) {
-                this.renderers = ImmutableList.of( new CharSequenceRenderer(), new InputStreamRenderer() );
+                renderers = ImmutableList.of( new CharSequenceRenderer(), new InputStreamRenderer() );
             } else {
                 addRenderers( new CharSequenceRenderer(), new InputStreamRenderer() );
             }
@@ -164,6 +173,7 @@ public final class Abukuma {
             check();
             //noinspection OptionalGetWithoutIsPresent  should have at least one default implementations
             return new AbuServerImpl( new ExecutionContextImpl(
+                    registry,
                     config,
                     parsers.stream().reduce( AbuParser::ifFailed ).get(),
                     renderers.stream().reduce( ( r, then ) -> r.ifFailed( then ) ).get(),

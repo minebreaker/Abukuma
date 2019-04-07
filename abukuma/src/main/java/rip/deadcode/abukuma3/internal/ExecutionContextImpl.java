@@ -21,6 +21,7 @@ public final class ExecutionContextImpl implements AbuExecutionContext {
     }
 
     public ExecutionContextImpl(
+            Registry registry,
             AbuConfig config,
             AbuParser<?> parserChain,
             AbuRenderer renderer,
@@ -28,7 +29,7 @@ public final class ExecutionContextImpl implements AbuExecutionContext {
             AbuRouter router,
             AbuExceptionHandler exceptionHandler
     ) {
-        this.registry = new RegistryImpl()
+        this.registry = registry
                 .setSingleton( AbuConfig.class, config )
                 .setSingleton( AbuParser.class, parserChain )
                 .setSingleton( AbuRenderer.class, renderer )

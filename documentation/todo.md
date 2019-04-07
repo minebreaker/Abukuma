@@ -16,7 +16,6 @@
 * Public classes should be refactored to interfaces
 * Write tests
 * Single factory class for all?
-* Registry class for DI
 * Remove prefixes?
 * Config implementing Map
 * Content-type based dispatcher
