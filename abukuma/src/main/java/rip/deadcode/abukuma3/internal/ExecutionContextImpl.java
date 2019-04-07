@@ -28,14 +28,13 @@ public final class ExecutionContextImpl implements AbuExecutionContext {
             AbuRouter router,
             AbuExceptionHandler exceptionHandler
     ) {
-        this.registry = new RegistryImpl();
-
-        this.registry.setSingleton( AbuConfig.class, config );
-        this.registry.setSingleton( AbuParser.class, parserChain );
-        this.registry.setSingleton( AbuRenderer.class, renderer );
-        this.registry.setSingleton( AbuFilter.class, filterChain );
-        this.registry.setSingleton( AbuRouter.class, router );
-        this.registry.setSingleton( AbuExceptionHandler.class, exceptionHandler );
+        this.registry = new RegistryImpl()
+                .setSingleton( AbuConfig.class, config )
+                .setSingleton( AbuParser.class, parserChain )
+                .setSingleton( AbuRenderer.class, renderer )
+                .setSingleton( AbuFilter.class, filterChain )
+                .setSingleton( AbuRouter.class, router )
+                .setSingleton( AbuExceptionHandler.class, exceptionHandler );
     }
 
     @Override public AbuConfig config() {
