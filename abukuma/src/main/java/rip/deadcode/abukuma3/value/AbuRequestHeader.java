@@ -6,10 +6,12 @@ import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.internal.Unsafe;
 import rip.deadcode.abukuma3.internal.utils.Uncheck;
+import rip.deadcode.abukuma3.value.internal.CookieImpl;
 
 import javax.annotation.Nullable;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
@@ -67,6 +69,13 @@ public final class AbuRequestHeader {
 
     public Optional<String> mayGet( String headerName ) {
         return Optional.ofNullable( jettyRequest.getHeader( headerName ) );
+    }
+
+    public Optional<Cookie> cookie( String cookieName ) {
+        return Arrays.stream( jettyRequest.getCookies() )
+                     .filter( c -> c.getName().equals( cookieName ) )
+                     .findAny()
+                     .map( CookieImpl::fromServletCookie );
     }
 
     public String contentType() {

@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.internal;
 
+import com.google.common.net.HttpHeaders;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.AbuExecutionContext;
@@ -14,6 +15,7 @@ import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 import rip.deadcode.abukuma3.value.AbuResponse;
 import rip.deadcode.abukuma3.value.internal.AbuRequestImpl;
+import rip.deadcode.abukuma3.value.internal.CookieImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -74,7 +76,13 @@ public final class JettyHandlerImpl extends AbstractHandler {
 
             servletResponse.setStatus( renderedResponse.status() );
             renderedResponse.header().forEach( ( k, v ) -> {
+                // TODO duplicate header check
                 servletResponse.setHeader( k, v );
+            } );
+            // TODO duplicate cookie check
+            renderedResponse.cookie().forEach( c -> {
+                // We don't use ServletResponse.addCookie() because it doesn't support SameSite.
+                servletResponse.setHeader( HttpHeaders.SET_COOKIE, CookieImpl.serialize( c ) );
             } );
 
             renderingResult.rendering().accept( servletResponse.getOutputStream() );
