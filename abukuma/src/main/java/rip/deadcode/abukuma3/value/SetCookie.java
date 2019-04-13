@@ -15,6 +15,6 @@ public final class SetCookie {
 
     public static Cookie delete( String name ) {
         // empty domain should mean the current domain
-        return new CookieImpl( name, "", -1, null, "/", false, false, null );
+        return new CookieImpl( name, "", 0, null, "/", false, false, null );
     }
 }

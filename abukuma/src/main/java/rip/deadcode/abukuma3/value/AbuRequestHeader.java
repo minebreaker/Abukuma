@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.value;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import org.eclipse.jetty.server.Request;
@@ -12,8 +13,10 @@ import javax.annotation.Nullable;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 
@@ -69,6 +72,16 @@ public final class AbuRequestHeader {
 
     public Optional<String> mayGet( String headerName ) {
         return Optional.ofNullable( jettyRequest.getHeader( headerName ) );
+    }
+
+    public List<Cookie> cookie() {
+        if ( jettyRequest.getCookies() == null ) {
+            return ImmutableList.of();
+        }
+
+        return Arrays.stream( jettyRequest.getCookies() )
+                     .map( CookieImpl::fromServletCookie )
+                     .collect( Collectors.toList() );
     }
 
     public Optional<Cookie> cookie( String cookieName ) {

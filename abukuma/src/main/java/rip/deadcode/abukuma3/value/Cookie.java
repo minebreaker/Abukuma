@@ -26,18 +26,21 @@ public interface Cookie {
 
     /**
      * Expiry time of this cookie(seconds).
-     * Returns empty optional for the session cookie.
+     * Returns empty optional for a session cookie.
+     * This method may also return `-1` for a session cookie,
+     * since Java Servlet cannot distinguish a null header form a minus value.
      * @return `Max-Age` attribute.
      */
     public OptionalInt maxAge();
 
     /**
+     * `null` for the session cookie.
      * `0` or minus values will be sent as-is,
      * which means the cookie will expire immediately.
-     * @param maxAge
-     * @return
+     * @param maxAge `Max-Age` attribute to set.
+     * @return The new cookie instance.
      */
-    public Cookie maxAge( int maxAge );
+    public Cookie maxAge( Integer maxAge );
 
     // TODO we need this for the session cookie
 //    public Cookie withoutMaxAge();

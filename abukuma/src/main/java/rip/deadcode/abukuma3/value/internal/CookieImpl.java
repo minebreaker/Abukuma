@@ -15,7 +15,7 @@ public final class CookieImpl implements Cookie {
 
     @Nonnull private String name;
     @Nonnull private String value;
-    private int maxAge;
+    @Nullable private Integer maxAge;
     @Nullable private String domain;
     @Nullable private String path;
     private boolean secure;
@@ -25,18 +25,17 @@ public final class CookieImpl implements Cookie {
     public CookieImpl( String name, String value ) {
         this.name = checkNotNull( name );
         this.value = checkNotNull( value );
-        this.maxAge = -1;  // FIXME
     }
 
     public CookieImpl(
-            String name,
-            String value,
-            int maxAge,
-            String domain,
-            String path,
+            @Nonnull String name,
+            @Nonnull String value,
+            @Nullable Integer maxAge,
+            @Nullable String domain,
+            @Nullable String path,
             boolean secure,
             boolean httpOnly,
-            String sameSite
+            @Nullable String sameSite
     ) {
         this.name = checkNotNull( name );
         this.value = checkNotNull( value );
@@ -98,10 +97,10 @@ public final class CookieImpl implements Cookie {
     }
 
     @Override public OptionalInt maxAge() {
-        return OptionalInt.of( maxAge );
+        return maxAge == null ? OptionalInt.empty() : OptionalInt.of( maxAge );
     }
 
-    @Override public Cookie maxAge( int maxAge ) {
+    @Override public Cookie maxAge( Integer maxAge ) {
         CookieImpl c = copy();
         c.maxAge = maxAge;
         return c;
@@ -155,5 +154,9 @@ public final class CookieImpl implements Cookie {
         CookieImpl c = copy();
         c.sameSite = sameSite;
         return c;
+    }
+
+    @Override public String toString() {
+        return serialize( this );
     }
 }
