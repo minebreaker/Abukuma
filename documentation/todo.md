@@ -1,7 +1,6 @@
 ## Features
 
 * Context-path aware routing
-* Module (Batch update for the registry)
 
 
 ## Bugs

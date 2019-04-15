@@ -1,100 +1,31 @@
 package rip.deadcode.abukuma3.value;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 
-public final class AbuResponse {
+public interface AbuResponse {
 
-    private Object body;
-    private int status;
-    private AbuHeader header;
-    private List<Cookie> cookie;
+    public Object body();
 
-    private AbuResponse( Object body, int status, AbuHeader header, List<Cookie> cookie ) {
-        this.body = body;
-        this.status = status;
-        this.header = header;
-        this.cookie = cookie;
-    }
+    public AbuResponse body( Object body );
 
-    public static AbuResponse create( Object body ) {
-        return new AbuResponse( body, 200, AbuHeader.create(), ImmutableList.of() );
-    }
+    public int status();
 
-    public AbuResponse copy() {
-        return new AbuResponse(
-                body,
-                status,
-                header,
-                cookie
-        );
-    }
+    public AbuResponse status( int status );
 
-    public Object body() {
-        return body;
-    }
+    public AbuHeader header();
 
-    public AbuResponse body( Object body ) {
-        AbuResponse r = this.copy();
-        r.body = body;
-        return r;
-    }
+    public AbuResponse header( AbuHeader header );
 
-    public int status() {
-        return status;
-    }
+    public AbuResponse header( Function<AbuHeader, AbuHeader> header );
 
-    public AbuResponse status( int status ) {
-        AbuResponse r = this.copy();
-        r.status = status;
-        return r;
-    }
+    public List<Cookie> cookie();
 
-    public AbuHeader header() {
-        return header;
-    }
+    public Optional<Cookie> cookie( String key );
 
-    public AbuResponse header( AbuHeader header ) {
-        AbuResponse r = this.copy();
-        r.header = header;
-        return r;
-    }
+    public AbuResponse addCookie( Cookie cookie );
 
-    public AbuResponse header( Function<AbuHeader, AbuHeader> header ) {
-        AbuResponse r = this.copy();
-        r.header = header.apply( this.header );
-        return r;
-    }
-
-    public List<Cookie> cookie() {
-        return cookie;
-    }
-
-    public Optional<Cookie> cookie( String key ) {
-        return cookie.stream()
-                     .filter( c -> c.name().equals( key ) )
-                     .findAny();
-    }
-
-    public AbuResponse addCookie( Cookie cookie ) {
-        AbuResponse r = copy();
-        r.cookie = ImmutableList.<Cookie>builder()
-                .addAll( this.cookie )
-                .add( cookie )
-                .build();
-        return r;
-    }
-
-    public AbuResponse addCookie( Cookie... cookie ) {
-        AbuResponse r = copy();
-        r.cookie = ImmutableList.<Cookie>builder()
-                .addAll( this.cookie )
-                .add( cookie )
-                .build();
-        return r;
-    }
+    public AbuResponse addCookie( Cookie... cookie );
 }

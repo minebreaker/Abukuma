@@ -10,6 +10,7 @@ import rip.deadcode.abukuma3.router.AbuRouters;
 import rip.deadcode.abukuma3.value.AbuConfigs;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.AbuResponses;
 
 import static rip.deadcode.abukuma3.internal.utils.IoStreams.is2str;
 
@@ -38,7 +39,7 @@ public class Example {
                 logger.info( "name: {}, content: {}", s.getName(), is2str( s.openStream() ) );
             }
 
-            return AbuResponse.create( "<p>uploaded</p>" );
+            return AbuResponses.create( "<p>uploaded</p>" );
 
         } catch ( Exception e ) {
             throw new RuntimeException( e );

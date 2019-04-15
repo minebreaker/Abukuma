@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.AbuResponses;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,8 +41,8 @@ public final class UriHandler implements AbuHandler {
         // TODO cache
 
         try {
-            return AbuResponse.create( Files.newInputStream( Paths.get( uri ) ) )  // FIXME FileSystem
-                              .header( h -> h.contentType( guessMediaType( uri.toString() ) ) );
+            return AbuResponses.create( Files.newInputStream( Paths.get( uri ) ) )  // FIXME FileSystem
+                               .header( h -> h.contentType( guessMediaType( uri.toString() ) ) );
         } catch ( IOException e ) {
             throw new UncheckedIOException( e );
         }

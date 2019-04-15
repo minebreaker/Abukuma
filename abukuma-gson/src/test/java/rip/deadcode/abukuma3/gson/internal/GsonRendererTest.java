@@ -6,6 +6,7 @@ import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.gson.AbuGson;
 import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
 import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.AbuResponses;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -24,10 +25,10 @@ class GsonRendererTest {
         SamplePojo param = new SamplePojo();
         param.setFoo( "bar" );
 
-        AbuExecutionContext context = mock(AbuExecutionContext.class);
-        when(context.get( Gson.class )).thenReturn( new Gson() );
+        AbuExecutionContext context = mock( AbuExecutionContext.class );
+        when( context.get( Gson.class ) ).thenReturn( new Gson() );
 
-        AbuRenderingResult response = AbuGson.renderer().render( context , AbuResponse.create( param ) );
+        AbuRenderingResult response = AbuGson.renderer().render( context, AbuResponses.create( param ) );
 
         assertThat( response ).isNotNull();
 

@@ -6,7 +6,7 @@ import rip.deadcode.abukuma3.gson.GsonModule;
 import rip.deadcode.abukuma3.gson.JsonBody;
 import rip.deadcode.abukuma3.router.AbuRouters;
 import rip.deadcode.abukuma3.value.AbuConfigs;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.AbuResponses;
 
 
 public final class Example {
@@ -50,8 +50,8 @@ public final class Example {
                                       Response response = new Response();
                                       response.setMessage( String.format(
                                               "hello, %s!", request.getName() != null ? request.getName() : "world" ) );
-                                      return AbuResponse.create( response )
-                                                        .header( h -> h.contentType( "application/json" ) );
+                                      return AbuResponses.create( response )
+                                                         .header( h -> h.contentType( "application/json" ) );
                                   } )
                                   .build() )
                .build()

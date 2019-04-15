@@ -4,6 +4,7 @@ import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.AbuResponses;
 
 
 public final class AntiCsrfHeaderFilter implements AbuFilter {
@@ -11,7 +12,7 @@ public final class AntiCsrfHeaderFilter implements AbuFilter {
     public static final AbuFilter singleton = new AntiCsrfHeaderFilter();
 
     private static final String defaultHeader = "X-Requested-With";
-    private static final AbuResponse errorResponse = AbuResponse.create( "" ).status( 400 );
+    private static final AbuResponse errorResponse = AbuResponses.create( "" ).status( 400 );
 
     private final String headerName;
 
