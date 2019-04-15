@@ -3,7 +3,7 @@ package rip.deadcode.abukuma3.value;
 import com.google.common.collect.Multimap;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.internal.Unsafe;
+import rip.deadcode.abukuma3.Unsafe;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

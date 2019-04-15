@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3.internal;
+package rip.deadcode.abukuma3;
 
 import java.lang.annotation.*;
 
