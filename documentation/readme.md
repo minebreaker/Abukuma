@@ -21,7 +21,8 @@ It's aim is to provide fluent routing functions and simple way to manipulate HTT
 ### Simplicity
 
 * Immutable objects
-* Function-oriented(Router as a function, handler as a function)
+* Persistent data structure
+* Function-oriented (router as a function, handler as a function)
 
 ### Explicit rather than implicit
 
@@ -29,7 +30,7 @@ It's aim is to provide fluent routing functions and simple way to manipulate HTT
 
 ### Good old Java
 
-* No XML, no Annotations
+* No XML, (mostly) no Annotations
 * Slightly opinionated
 
 
@@ -41,8 +42,8 @@ class Application {
     public static void main( String[] args ) {
         Abukuma.config( AbuConfig.create() )
                .router( AbuRouters.builder()
-                                  .get("/", request -> AbuResponse.create( "<h1>hello, world</h1>" )
-                                                                  .header( h -> h.contentType( "text/html" ) ) )
+                                  .get("/", request -> AbuResponses.create( "<h1>hello, world</h1>" )
+                                                                   .header( h -> h.contentType( "text/html" ) ) )
                                   .build() )
                .build()
                .run();

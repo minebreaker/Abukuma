@@ -19,6 +19,7 @@
 * Config implementing Map
 * Content-type based dispatcher
 * Fluent header API
+* Exception handler with type-based dispatch
 
 
 ## Ideas

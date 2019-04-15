@@ -15,7 +15,7 @@ public final class AbuConfigImpl implements AbuConfig {
         this.minThreads = 8;
     }
 
-    private AbuConfigImpl( int port, int maxThreads, int minThreads ) {
+    public AbuConfigImpl( int port, int maxThreads, int minThreads ) {
         this.port = port;
         this.maxThreads = maxThreads;
         this.minThreads = minThreads;
