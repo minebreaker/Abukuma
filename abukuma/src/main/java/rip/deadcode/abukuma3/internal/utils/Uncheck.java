@@ -5,6 +5,10 @@ import java.util.function.Function;
 
 public final class Uncheck {
 
+    private Uncheck() {
+        throw new Error();
+    }
+
     @SuppressWarnings( "unchecked" )
     public static <T, E extends Exception> T uncheck(
             CheckedSupplier<T, E> supplier, Function<E, ? extends RuntimeException> wrapper ) {
