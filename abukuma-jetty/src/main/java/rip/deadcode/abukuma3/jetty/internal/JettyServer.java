@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3.internal;
+package rip.deadcode.abukuma3.jetty.internal;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
@@ -10,20 +10,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.AbuServer;
+import rip.deadcode.abukuma3.internal.Information;
 import rip.deadcode.abukuma3.value.AbuConfig;
 
 import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.also;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
-public final class AbuServerImpl implements AbuServer {
+public final class JettyServer implements AbuServer {
 
-    private static final Logger logger = LoggerFactory.getLogger( AbuServerImpl.class );
+    private static final Logger logger = LoggerFactory.getLogger( JettyServer.class );
 
     private final AbuExecutionContext context;
     private Server server;
 
-    public AbuServerImpl( AbuExecutionContext context ) {
+    public JettyServer( AbuExecutionContext context ) {
         this.context = context;
     }
 
@@ -46,7 +47,7 @@ public final class AbuServerImpl implements AbuServer {
             } );
 
             server.setConnectors( new Connector[] { connector } );
-            server.setHandler( new JettyHandlerImpl( context ) );
+            server.setHandler( new JettyHandler( context ) );
         } );
         uncheck( () -> server.start() );
     }

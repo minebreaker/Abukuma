@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3.internal;
+package rip.deadcode.abukuma3.jetty.internal;
 
 import com.google.common.net.HttpHeaders;
 import org.eclipse.jetty.server.Request;
@@ -7,15 +7,15 @@ import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.handler.AbuHandler;
+import rip.deadcode.abukuma3.jetty.internal.value.JettyRequest;
+import rip.deadcode.abukuma3.jetty.internal.value.JettyRequestHeader;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
 import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.router.AbuRoutingContext;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
-import rip.deadcode.abukuma3.value.AbuRequestHeaderImpl;
 import rip.deadcode.abukuma3.value.AbuResponse;
-import rip.deadcode.abukuma3.value.internal.AbuRequestImpl;
 import rip.deadcode.abukuma3.value.internal.CookieImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 
 
-public final class JettyHandlerImpl extends AbstractHandler {
+public final class JettyHandler extends AbstractHandler {
 
     private final AbuExecutionContext context;
     private final AbuRouter router;
@@ -35,7 +35,7 @@ public final class JettyHandlerImpl extends AbstractHandler {
     private final AbuRenderer renderer;
     private final AbuFilter filter;
 
-    JettyHandlerImpl( AbuExecutionContext context ) {
+    JettyHandler( AbuExecutionContext context ) {
         this.context = context;
         this.router = context.router();
         this.exceptionHandler = context.exceptionHandler();
@@ -50,9 +50,9 @@ public final class JettyHandlerImpl extends AbstractHandler {
             HttpServletRequest servletRequest,
             HttpServletResponse servletResponse ) throws IOException {
 
-        AbuRequestHeader header = new AbuRequestHeaderImpl( context, baseRequest );
+        AbuRequestHeader header = new JettyRequestHeader( context, baseRequest );
         AbuRoutingContext routing = router.route( header );
-        AbuRequest request = new AbuRequestImpl(
+        AbuRequest request = new JettyRequest(
                 context,
                 header,
                 baseRequest,

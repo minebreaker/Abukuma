@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3.value.internal;
+package rip.deadcode.abukuma3.jetty.internal.value;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.mayFirst;
 
 
-public final class AbuRequestImpl implements AbuRequest {
+public final class JettyRequest implements AbuRequest {
 
     private final AbuExecutionContext context;
     private final AbuRequestHeader header;
@@ -30,7 +30,7 @@ public final class AbuRequestImpl implements AbuRequest {
     private final HttpServletResponse servletResponse;
     private final Map<String, String> pathParams;
 
-    public AbuRequestImpl(
+    public JettyRequest(
             AbuExecutionContext context,
             AbuRequestHeader header,
             Request jettyRequest,
@@ -51,7 +51,9 @@ public final class AbuRequestImpl implements AbuRequest {
             checkState(
                     cls.isInstance( result ),
                     "Illegal instance '%s' of type '%s' was returned by the parser for the request '%s'. This may be caused by a bug of the parsers.",
-                    result, result.getClass(), cls
+                    result,
+                    result.getClass(),
+                    cls
             );
             return (T) result;
 

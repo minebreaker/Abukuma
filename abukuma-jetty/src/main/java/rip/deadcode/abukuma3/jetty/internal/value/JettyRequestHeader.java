@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3.value;
+package rip.deadcode.abukuma3.jetty.internal.value;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -6,6 +6,8 @@ import com.google.common.collect.Iterators;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.internal.utils.Uncheck;
+import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.Cookie;
 import rip.deadcode.abukuma3.value.internal.CookieImpl;
 
 import javax.annotation.Nullable;
@@ -21,12 +23,12 @@ import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 
 
 // TODO Should be integrated into the AbuHeader
-public final class AbuRequestHeaderImpl implements AbuRequestHeader {
+public final class JettyRequestHeader implements AbuRequestHeader {
 
     private final AbuExecutionContext context;
     private final Request jettyRequest;
 
-    public AbuRequestHeaderImpl( AbuExecutionContext context, Request jettyRequest ) {
+    public JettyRequestHeader( AbuExecutionContext context, Request jettyRequest ) {
         this.context = context;
         this.jettyRequest = jettyRequest;
     }
@@ -78,7 +80,7 @@ public final class AbuRequestHeaderImpl implements AbuRequestHeader {
         }
 
         return Arrays.stream( jettyRequest.getCookies() )
-                     .map( AbuRequestHeaderImpl::fromServletCookie )
+                     .map( JettyRequestHeader::fromServletCookie )
                      .collect( Collectors.toList() );
     }
 
@@ -86,7 +88,7 @@ public final class AbuRequestHeaderImpl implements AbuRequestHeader {
         return Arrays.stream( jettyRequest.getCookies() )
                      .filter( c -> c.getName().equals( cookieName ) )
                      .findAny()
-                     .map( AbuRequestHeaderImpl::fromServletCookie );
+                     .map( JettyRequestHeader::fromServletCookie );
     }
 
     @Override public String contentType() {
