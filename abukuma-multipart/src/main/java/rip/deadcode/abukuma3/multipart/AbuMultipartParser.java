@@ -6,6 +6,7 @@ import rip.deadcode.abukuma3.parser.AbuParser;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -23,12 +24,13 @@ public final class AbuMultipartParser implements AbuParser<Multipart> {
             return null;
         }
 
-        if (!ServletFileUpload.isMultipartContent( header.jettyRequest() )) {
+        if ( !ServletFileUpload.isMultipartContent( (HttpServletRequest) header.rawRequest() ) ) {
             return null;
         }
 
         ServletFileUpload upload = new ServletFileUpload();
-        Map<String, List<FileItem>> items = uncheck( () -> upload.parseParameterMap( header.jettyRequest() ) );
+        Map<String, List<FileItem>> items =
+                uncheck( () -> upload.parseParameterMap( (HttpServletRequest) header.rawRequest() ) );
 
         return Multipart.create( items );
     }

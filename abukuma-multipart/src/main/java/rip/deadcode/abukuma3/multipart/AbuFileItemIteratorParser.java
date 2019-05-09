@@ -6,7 +6,7 @@ import rip.deadcode.abukuma3.parser.AbuParser;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
@@ -17,16 +17,16 @@ public final class AbuFileItemIteratorParser implements AbuParser<FileItemIterat
 
     private static final ServletFileUpload upload = new ServletFileUpload();
 
-    @Nullable @Override public FileItemIterator parse( Class<?> convertTo, InputStream body, AbuRequestHeader header ) throws IOException {
+    @Nullable @Override public FileItemIterator parse( Class<?> convertTo, InputStream body, AbuRequestHeader header ) {
 
         if ( !convertTo.equals( FileItemIterator.class ) ) {
             return null;
         }
 
-        if ( !ServletFileUpload.isMultipartContent( header.jettyRequest() ) ) {
+        if ( !ServletFileUpload.isMultipartContent( (HttpServletRequest) header.rawRequest() ) ) {
             return null;
         }
 
-        return uncheck( () -> upload.getItemIterator( header.jettyRequest() ) );
+        return uncheck( () -> upload.getItemIterator( (HttpServletRequest) header.rawRequest() ) );
     }
 }

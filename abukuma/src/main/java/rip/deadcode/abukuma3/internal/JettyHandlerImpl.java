@@ -13,11 +13,11 @@ import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.router.AbuRoutingContext;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.AbuRequestHeaderImpl;
 import rip.deadcode.abukuma3.value.AbuResponse;
 import rip.deadcode.abukuma3.value.internal.AbuRequestImpl;
 import rip.deadcode.abukuma3.value.internal.CookieImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Closeable;
@@ -48,15 +48,14 @@ public final class JettyHandlerImpl extends AbstractHandler {
             String target,
             Request baseRequest,
             HttpServletRequest servletRequest,
-            HttpServletResponse servletResponse ) throws IOException, ServletException {
+            HttpServletResponse servletResponse ) throws IOException {
 
-        AbuRequestHeader header = new AbuRequestHeader( context, baseRequest );
+        AbuRequestHeader header = new AbuRequestHeaderImpl( context, baseRequest );
         AbuRoutingContext routing = router.route( header );
         AbuRequest request = new AbuRequestImpl(
                 context,
                 header,
                 baseRequest,
-                servletRequest,
                 servletResponse,
                 routing.getPathParams()
         );

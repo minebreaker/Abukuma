@@ -1,44 +1,23 @@
 package rip.deadcode.abukuma3.value;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
+
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
-import rip.deadcode.abukuma3.internal.utils.Uncheck;
-import rip.deadcode.abukuma3.value.internal.CookieImpl;
 
 import javax.annotation.Nullable;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 
 
-// TODO Should be integrated into the AbuHeader
-public final class AbuRequestHeader {
+public interface AbuRequestHeader {
 
-    private final AbuExecutionContext context;
-    private final Request jettyRequest;
+    public AbuExecutionContext context();
 
-    public AbuRequestHeader( AbuExecutionContext context, Request jettyRequest ) {
-        this.context = context;
-        this.jettyRequest = jettyRequest;
-    }
-
-    public AbuExecutionContext context() {
-        return context;
-    }
-
-    public String method() {
-        return jettyRequest.getMethod();
-    }
+    public String method();
 
     /**
      * Returns the URL reconstructed by jetty.
@@ -46,9 +25,7 @@ public final class AbuRequestHeader {
      * @return URL of the request
      * @see Request#getRequestURL()
      */
-    public URL url() {
-        return Uncheck.uncheck( () -> new URL( jettyRequest.getRequestURL().toString() ) );
-    }
+    public URL url();
 
     /**
      * Returns the URL {@link String} sent from the client.
@@ -57,50 +34,23 @@ public final class AbuRequestHeader {
      * @return URL String
      * @see Request#getRequestURI()
      */
-    public String requestUri() {
-        return jettyRequest.getRequestURI();
-    }
+    public String requestUri();
 
     @Nullable
-    public String getValue( String headerName ) {
-        return jettyRequest.getHeader( headerName );
-    }
+    public String getValue( String headerName );
 
-    public Set<String> getValues( String headerName ) {
-        return ImmutableSet.copyOf( Iterators.forEnumeration( jettyRequest.getHeaders( headerName ) ) );
-    }
+    public Set<String> getValues( String headerName );
 
-    public Optional<String> mayGet( String headerName ) {
-        return Optional.ofNullable( jettyRequest.getHeader( headerName ) );
-    }
+    public Optional<String> mayGet( String headerName );
 
-    public List<Cookie> cookie() {
-        if ( jettyRequest.getCookies() == null ) {
-            return ImmutableList.of();
-        }
+    public List<Cookie> cookie();
 
-        return Arrays.stream( jettyRequest.getCookies() )
-                     .map( CookieImpl::fromServletCookie )
-                     .collect( Collectors.toList() );
-    }
+    public Optional<Cookie> cookie( String cookieName );
 
-    public Optional<Cookie> cookie( String cookieName ) {
-        return Arrays.stream( jettyRequest.getCookies() )
-                     .filter( c -> c.getName().equals( cookieName ) )
-                     .findAny()
-                     .map( CookieImpl::fromServletCookie );
-    }
+    public String contentType();
 
-    public String contentType() {
-        return jettyRequest.getContentType();
-    }
-
-    public Optional<Charset> charset() {
-        return possibly( () -> Charset.forName( jettyRequest.getCharacterEncoding() ) ).asOptional();
-    }
+    public Optional<Charset> charset();
 
     @Unsafe
-    public Request jettyRequest() {
-        return jettyRequest;
-    }
+    public Object rawRequest();
 }

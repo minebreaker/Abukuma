@@ -9,7 +9,6 @@ import rip.deadcode.abukuma3.Unsafe;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +27,6 @@ public final class AbuRequestImpl implements AbuRequest {
     private final AbuExecutionContext context;
     private final AbuRequestHeader header;
     private final Request jettyRequest;
-    private final HttpServletRequest servletRequest;
     private final HttpServletResponse servletResponse;
     private final Map<String, String> pathParams;
 
@@ -36,13 +34,11 @@ public final class AbuRequestImpl implements AbuRequest {
             AbuExecutionContext context,
             AbuRequestHeader header,
             Request jettyRequest,
-            HttpServletRequest servletRequest,
             HttpServletResponse servletResponse,
             Map<String, String> pathParams ) {
         this.context = context;
         this.header = header;
         this.jettyRequest = jettyRequest;
-        this.servletRequest = servletRequest;
         this.servletResponse = servletResponse;
         this.pathParams = pathParams;
     }
@@ -109,19 +105,13 @@ public final class AbuRequestImpl implements AbuRequest {
 
     @Unsafe
     @Override
-    public Request jettyRequest() {
+    public Request rawRequest() {
         return jettyRequest;
     }
 
     @Unsafe
     @Override
-    public HttpServletRequest servletRequest() {
-        return servletRequest;
-    }
-
-    @Unsafe
-    @Override
-    public HttpServletResponse servletResponse() {
+    public HttpServletResponse rawResponse() {
         return servletResponse;
     }
 }
