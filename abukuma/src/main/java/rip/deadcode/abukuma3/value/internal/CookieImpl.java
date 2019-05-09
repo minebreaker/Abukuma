@@ -51,19 +51,6 @@ public final class CookieImpl implements Cookie {
         return new CookieImpl( name, value, maxAge, domain, path, secure, httpOnly, sameSite );
     }
 
-    public static CookieImpl fromServletCookie( javax.servlet.http.Cookie cookie ) {
-        return new CookieImpl(
-                cookie.getName(),
-                cookie.getValue(),
-                cookie.getMaxAge(),
-                cookie.getDomain(),
-                cookie.getPath(),
-                cookie.getSecure(),
-                cookie.isHttpOnly(),
-                null
-        );
-    }
-
     public static String serialize( Cookie cookie ) {
         String name = cookie.name();  // TODO validate
         String value = UrlEscapers.urlFormParameterEscaper().escape( cookie.value() );

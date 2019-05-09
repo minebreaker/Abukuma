@@ -1,7 +1,6 @@
 package rip.deadcode.abukuma3.value;
 
 
-import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
 
@@ -20,10 +19,9 @@ public interface AbuRequestHeader {
     public String method();
 
     /**
-     * Returns the URL reconstructed by jetty.
+     * Returns the URL reconstructed by server implementation.
      *
      * @return URL of the request
-     * @see Request#getRequestURL()
      */
     public URL url();
 
@@ -32,7 +30,6 @@ public interface AbuRequestHeader {
      * It is without query parameters.
      *
      * @return URL String
-     * @see Request#getRequestURI()
      */
     public String requestUri();
 

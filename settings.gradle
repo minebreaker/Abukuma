@@ -1,9 +1,10 @@
 include (
         'abukuma',
-        'abukuma-example',
+        'abukuma-jetty',
         'abukuma-gson',
-        'abukuma-hocon',
         'abukuma-multipart',
+        'abukuma-hocon',
         'abukuma-thymeleaf',
-        'abukuma-yaml'
+        'abukuma-yaml',
+        'abukuma-example'
 )

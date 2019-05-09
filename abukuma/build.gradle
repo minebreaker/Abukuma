@@ -1,6 +1,5 @@
 dependencies {
     compile(
-            'org.eclipse.jetty:jetty-server:9.4.15.v20190215',
             'org.organicdesign:Paguro:3.1.2',
 
             'com.google.guava:guava:27.1-jre',

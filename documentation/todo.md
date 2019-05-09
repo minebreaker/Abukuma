@@ -1,6 +1,7 @@
 ## Features
 
 * Context-path aware routing
+* Basic and other authentication filters
 
 
 ## Bugs
@@ -25,5 +26,4 @@
 ## Ideas
 
 * Async Wrapper
-* Separate backend
 * Kotlin-friendly collections

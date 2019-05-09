@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     compile(
-            project(':abukuma'),
+            project(':abukuma-jetty'),
             project(':abukuma-gson'),
 
             'org.slf4j:jul-to-slf4j:1.7.25', // Guava uses java.util.logging

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.filter.AbuFilters;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
-import rip.deadcode.abukuma3.internal.AbuServerImpl;
 import rip.deadcode.abukuma3.internal.DefaultExceptionHandler;
 import rip.deadcode.abukuma3.internal.ExecutionContextImpl;
 import rip.deadcode.abukuma3.internal.RegistryImpl;
@@ -21,6 +20,7 @@ import rip.deadcode.abukuma3.value.AbuConfig;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.function.UnaryOperator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -200,14 +200,20 @@ public final class Abukuma {
                     exceptionHandler
             );
 
-            AbuExecutionContext e = MoreCollections.reduce(
+            AbuExecutionContext c = MoreCollections.reduce(
                     this.moduels,
                     context,
                     ( acc, m ) -> acc.applyModule( m )
             );
 
-            return new AbuServerImpl( e );
+            return createServer( c );
+        }
+
+        private static AbuServer createServer( AbuExecutionContext context ) {
+            // Should use stream() for JDK9+
+            ServiceLoader<ServerFactory> loader = ServiceLoader.load( ServerFactory.class );
+            ServerFactory factory = loader.iterator().next();  // TODO specify from configuration
+            return factory.provide( context );
         }
     }
-
 }

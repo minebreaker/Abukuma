@@ -59,13 +59,26 @@ public final class AbuRequestHeaderImpl implements AbuRequestHeader {
         return Optional.ofNullable( jettyRequest.getHeader( headerName ) );
     }
 
+    private static CookieImpl fromServletCookie( javax.servlet.http.Cookie cookie ) {
+        return new CookieImpl(
+                cookie.getName(),
+                cookie.getValue(),
+                cookie.getMaxAge(),
+                cookie.getDomain(),
+                cookie.getPath(),
+                cookie.getSecure(),
+                cookie.isHttpOnly(),
+                null
+        );
+    }
+
     @Override public List<Cookie> cookie() {
         if ( jettyRequest.getCookies() == null ) {
             return ImmutableList.of();
         }
 
         return Arrays.stream( jettyRequest.getCookies() )
-                     .map( CookieImpl::fromServletCookie )
+                     .map( AbuRequestHeaderImpl::fromServletCookie )
                      .collect( Collectors.toList() );
     }
 
@@ -73,7 +86,7 @@ public final class AbuRequestHeaderImpl implements AbuRequestHeader {
         return Arrays.stream( jettyRequest.getCookies() )
                      .filter( c -> c.getName().equals( cookieName ) )
                      .findAny()
-                     .map( CookieImpl::fromServletCookie );
+                     .map( AbuRequestHeaderImpl::fromServletCookie );
     }
 
     @Override public String contentType() {

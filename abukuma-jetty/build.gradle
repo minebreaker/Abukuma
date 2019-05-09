@@ -1,0 +1,6 @@
+dependencies {
+    compile(
+            project(':abukuma'),
+            'org.eclipse.jetty:jetty-server:9.4.15.v20190215'
+    )
+}

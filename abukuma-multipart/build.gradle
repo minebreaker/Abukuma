@@ -1,6 +1,8 @@
 dependencies {
     compile(
             project(":abukuma"),
-            'commons-fileupload:commons-fileupload:1.4'
+            'commons-fileupload:commons-fileupload:1.4',
+            // see https://commons.apache.org/proper/commons-fileupload/dependencies.html#provided
+            'javax.servlet:servlet-api:2.4'
     )
 }
