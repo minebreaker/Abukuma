@@ -1,11 +1,14 @@
 package rip.deadcode.abukuma3;
 
 import com.google.common.collect.ImmutableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.filter.AbuFilters;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
 import rip.deadcode.abukuma3.internal.DefaultExceptionHandler;
 import rip.deadcode.abukuma3.internal.ExecutionContextImpl;
+import rip.deadcode.abukuma3.internal.Information;
 import rip.deadcode.abukuma3.internal.RegistryImpl;
 import rip.deadcode.abukuma3.internal.utils.MoreCollections;
 import rip.deadcode.abukuma3.parser.AbuParser;
@@ -27,6 +30,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 
 public final class Abukuma {
+
+    private static final Logger logger = LoggerFactory.getLogger( Abukuma.class );
 
     private Abukuma() {
         throw new AssertionError();
@@ -52,9 +57,11 @@ public final class Abukuma {
         private List<AbuRenderer> renderers = ImmutableList.of();
         private List<AbuFilter> filters = ImmutableList.of();
         private AbuExceptionHandler exceptionHandler;
-        private List<Module> moduels = ImmutableList.of();
+        private List<Module> modules = ImmutableList.of();
 
-        private AbuServerBuilder() {}
+        private AbuServerBuilder() {
+            logger.info( Information.INFO_STRING );
+        }
 
         public AbuServerBuilder config( AbuConfig config ) {
             this.config = config;
@@ -151,16 +158,16 @@ public final class Abukuma {
         }
 
         public AbuServerBuilder addModule( Module module ) {
-            this.moduels = ImmutableList.<Module>builder()
-                    .addAll( this.moduels )
+            this.modules = ImmutableList.<Module>builder()
+                    .addAll( this.modules )
                     .add( module )
                     .build();
             return this;
         }
 
         public AbuServerBuilder addModules( Module... module ) {
-            this.moduels = ImmutableList.<Module>builder()
-                    .addAll( this.moduels )
+            this.modules = ImmutableList.<Module>builder()
+                    .addAll( this.modules )
                     .add( module )
                     .build();
             return this;
@@ -201,7 +208,7 @@ public final class Abukuma {
             );
 
             AbuExecutionContext c = MoreCollections.reduce(
-                    this.moduels,
+                    this.modules,
                     context,
                     ( acc, m ) -> acc.applyModule( m )
             );
@@ -213,7 +220,9 @@ public final class Abukuma {
             // Should use stream() for JDK9+
             ServiceLoader<ServerFactory> loader = ServiceLoader.load( ServerFactory.class );
             ServerFactory factory = loader.iterator().next();  // TODO specify from configuration
-            return factory.provide( context );
+            AbuServer server = factory.provide( context );
+            logger.info( "Server implementation: " + server.getClass().getCanonicalName() );
+            return server;
         }
     }
 }

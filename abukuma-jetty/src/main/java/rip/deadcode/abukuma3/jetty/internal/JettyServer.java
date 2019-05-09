@@ -6,11 +6,8 @@ import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.AbuServer;
-import rip.deadcode.abukuma3.internal.Information;
 import rip.deadcode.abukuma3.value.AbuConfig;
 
 import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.also;
@@ -18,8 +15,6 @@ import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
 public final class JettyServer implements AbuServer {
-
-    private static final Logger logger = LoggerFactory.getLogger( JettyServer.class );
 
     private final AbuExecutionContext context;
     private Server server;
@@ -29,7 +24,6 @@ public final class JettyServer implements AbuServer {
     }
 
     @Override public void run() {
-        logger.info( Information.INFO_STRING );
 
         AbuConfig config = context.config();
 
