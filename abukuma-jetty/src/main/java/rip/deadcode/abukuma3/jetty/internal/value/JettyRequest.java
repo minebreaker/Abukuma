@@ -3,6 +3,7 @@ package rip.deadcode.abukuma3.jetty.internal.value;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.net.HttpHeaders;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
@@ -103,6 +104,14 @@ public final class JettyRequest implements AbuRequest {
                                     Multimap::putAll
                             );
         return ImmutableListMultimap.copyOf( params );
+    }
+
+    @Override public Optional<String> host() {
+        return Optional.ofNullable( jettyRequest.getHeader( HttpHeaders.HOST ) );
+    }
+
+    @Override public String remoteAddress() {
+        return jettyRequest.getRemoteAddr();
     }
 
     @Unsafe

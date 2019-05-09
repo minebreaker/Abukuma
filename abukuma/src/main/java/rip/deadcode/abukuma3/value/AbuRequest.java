@@ -33,6 +33,10 @@ public interface AbuRequest {
     // TODO Query param can have multiple values?
     public Multimap<String, String> queryParams();
 
+    public Optional<String> host();
+
+    public String remoteAddress();
+
     @Unsafe
     public Object rawRequest();
 
