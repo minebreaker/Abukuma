@@ -11,3 +11,7 @@ dependencies {
             'ch.qos.logback:logback-classic:1.2.3'
     )
 }
+
+jib {
+    to.image = "minebreaker/abukuma-example:${version}"
+}
