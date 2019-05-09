@@ -1,6 +1,7 @@
 include (
         'abukuma',
         'abukuma-jetty',
+        'abukuma-netty',
         'abukuma-gson',
         'abukuma-multipart',
         'abukuma-hocon',
