@@ -8,6 +8,8 @@ import rip.deadcode.abukuma3.router.AbuRouters;
 import rip.deadcode.abukuma3.value.AbuConfigs;
 import rip.deadcode.abukuma3.value.AbuResponses;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
+
 
 public final class Example {
 
@@ -44,16 +46,15 @@ public final class Example {
         Abukuma.config( AbuConfigs.create() )
                .addFilter( AbuFilters.antiCsrf() )
                .addModule( GsonModule.getInstance() )
-               .router( AbuRouters.builder()
+               .router( AbuRouters.create()
                                   .post( "/post", req -> {
                                       Request request = req.body( Request.class );
                                       Response response = new Response();
                                       response.setMessage( String.format(
-                                              "hello, %s!", request.getName() != null ? request.getName() : "world" ) );
+                                              "hello, %s!", firstNonNull( request.getName(), "world" ) ) );
                                       return AbuResponses.create( response )
                                                          .header( h -> h.contentType( "application/json" ) );
-                                  } )
-                                  .build() )
+                                  } ) )
                .build()
                .run();
     }

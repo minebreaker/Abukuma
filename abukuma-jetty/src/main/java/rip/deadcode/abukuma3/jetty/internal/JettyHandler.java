@@ -12,7 +12,8 @@ import rip.deadcode.abukuma3.jetty.internal.value.JettyRequestHeader;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
 import rip.deadcode.abukuma3.router.AbuRouter;
-import rip.deadcode.abukuma3.router.AbuRoutingContext;
+import rip.deadcode.abukuma3.router.RoutingResult;
+import rip.deadcode.abukuma3.router.internal.RoutingContextImpl;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 import rip.deadcode.abukuma3.value.AbuResponse;
@@ -51,16 +52,22 @@ public final class JettyHandler extends AbstractHandler {
             HttpServletResponse servletResponse ) throws IOException {
 
         AbuRequestHeader header = new JettyRequestHeader( context, baseRequest );
-        AbuRoutingContext routing = router.route( header );
+        RoutingResult route = router.route( new RoutingContextImpl(
+                header,
+                header.requestUri(),
+                header.requestUri()
+        ) );
+        checkNotNull( route, "No matching route found." );
+
         AbuRequest request = new JettyRequest(
                 context,
                 header,
                 baseRequest,
                 servletResponse,
-                routing.getPathParams()
+                route.parameters()
         );
 
-        AbuHandler handler = routing.getHandler();
+        AbuHandler handler = route.handler();
 
         AbuResponse response = possibly(
                 () -> filter.filter( request, handler )

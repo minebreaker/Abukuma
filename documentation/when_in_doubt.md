@@ -14,7 +14,15 @@
 ## URL
 
 * [RFC 3986](https://tools.ietf.org/html/rfc3986)
-* [WHATWG URL](https://url.spec.whatwg.org/#url-fragment-string)
+* [WHATWG URL](https://url.spec.whatwg.org)
+
+
+### Path matching
+
+* [Spring](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping)
+* [Play](https://www.playframework.com/documentation/latest/ScalaRouting)
+* [Compojure](https://github.com/weavejester/compojure/wiki/Routes-In-Detail)
+    * [Clout](https://github.com/weavejester/clout)
 
 
 ## MIME

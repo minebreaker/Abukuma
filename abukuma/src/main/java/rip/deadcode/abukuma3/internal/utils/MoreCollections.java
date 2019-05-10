@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.internal.utils;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
@@ -98,5 +99,19 @@ public final class MoreCollections {
         }
 
         return r;
+    }
+
+    public static <T> List<T> addFirst( List<T> list, T value ) {
+        return ImmutableList.<T>builder()
+                .add( value )
+                .addAll( list )
+                .build();
+    }
+
+    public static <T> List<T> addLast( List<T> list, T value ) {
+        return ImmutableList.<T>builder()
+                .addAll( list )
+                .add( value )
+                .build();
     }
 }

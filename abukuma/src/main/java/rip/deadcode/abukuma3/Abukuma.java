@@ -19,6 +19,7 @@ import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.renderer.internal.CharSequenceRenderer;
 import rip.deadcode.abukuma3.renderer.internal.InputStreamRenderer;
 import rip.deadcode.abukuma3.router.AbuRouter;
+import rip.deadcode.abukuma3.router.RouterSpec;
 import rip.deadcode.abukuma3.value.AbuConfig;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -68,8 +69,9 @@ public final class Abukuma {
             return this;
         }
 
-        public AbuServerBuilder router( AbuRouter router ) {
-            this.router = router;
+        public AbuServerBuilder router( RouterSpec router ) {
+            // TODO RouterSpec -> RouterSpec
+            this.router = router.createRouter();
             return this;
         }
 

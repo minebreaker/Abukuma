@@ -23,10 +23,9 @@ public class Example {
 
         Abukuma.config( AbuConfigs.create() )
                .addParser( new AbuFileItemIteratorParser() )
-               .router( AbuRouters.builder()
+               .router( AbuRouters.create()
                                   .resource( "/", "rip/deadcode/abukuma3/multipart/example/form.html" )
-                                  .post( "/post", Example::handle )
-                                  .build() )
+                                  .post( "/post", Example::handle ) )
                .build()
                .run();
     }

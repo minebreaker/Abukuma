@@ -37,6 +37,20 @@
     * UriBuilder
 
 
+### Routing
+
+```
+Router :: RoutingContext -> RoutingResult
+RoutingContext :: ( Header, ContextPath )
+RoutingResult :: ( Parameters, Handler )
+
+Route :: ( RouteMatcher, Handler )
+
+RouteMatcher :: RoutingContext -> Parameters
+PathMatcher :: Path -> Parameters
+```
+
+
 ### `Config`
 
 * `AbuConfig.create()` `AbuConfig.development()` `AbuConfig.production()`

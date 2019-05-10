@@ -41,10 +41,8 @@ class Application {
 
     public static void main( String[] args ) {
         Abukuma.config( AbuConfig.create() )
-               .router( AbuRouters.builder()
-                                  .get("/", request -> AbuResponses.create( "<h1>hello, world</h1>" )
-                                                                   .header( h -> h.contentType( "text/html" ) ) )
-                                  .build() )
+               .router( AbuRouters.get("/", AbuResponses.create( "<h1>hello, world</h1>" )
+                                                        .header( h -> h.contentType( "text/html" ) ) ) )
                .build()
                .run();
     }
