@@ -7,6 +7,9 @@ import rip.deadcode.abukuma3.value.AbuResponse;
 import javax.annotation.Nonnull;
 
 
+/**
+ * If filter consumed the request body, filter MUST NOT invoke given handler.
+ */
 @FunctionalInterface
 public interface AbuFilter {
 
