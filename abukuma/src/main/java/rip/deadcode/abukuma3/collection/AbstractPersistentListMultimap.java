@@ -153,6 +153,13 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
         return constructor( delegate.assoc( key, vec( value ) ) );
     }
 
+    protected Envelope<K, V> setRaw( K key, V value ) {
+        checkNotNull( key );
+        checkNotNull( value );
+
+        return new Envelope<>( delegate.assoc( key, vec( value ) ) );
+    }
+
     @SuppressWarnings( "unchecked" )
     @Override
     public T set( K key, Iterable<? extends V> values ) {
@@ -195,11 +202,12 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
         throw new UnsupportedOperationException();
     }
 
-    @Deprecated @Override final public List<V> removeAll( @Nullable Object key ) {
+    @Deprecated @Override public final List<V> removeAll( @Nullable Object key ) {
         throw new UnsupportedOperationException();
     }
 
-    @Deprecated @Override final public List<V> replaceValues( @Nullable K key, @Nullable Iterable<? extends V> values ) {
+    @Deprecated @Override
+    public final List<V> replaceValues( @Nullable K key, @Nullable Iterable<? extends V> values ) {
         throw new UnsupportedOperationException();
     }
 }
