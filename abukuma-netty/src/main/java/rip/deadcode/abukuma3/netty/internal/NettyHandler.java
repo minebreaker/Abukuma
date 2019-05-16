@@ -1,6 +1,5 @@
 package rip.deadcode.abukuma3.netty.internal;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,19 +20,80 @@ import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.internal.HandlerAdapter;
+import rip.deadcode.abukuma3.netty.internal.value.NettyRequest;
+import rip.deadcode.abukuma3.netty.internal.value.NettyRequestHeader;
+import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
+import rip.deadcode.abukuma3.value.AbuRequest;
+import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.AbuResponse;
 
-import java.nio.charset.StandardCharsets;
+import java.io.ByteArrayOutputStream;
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 public final class NettyHandler extends ChannelInitializer<SocketChannel> {
 
-    private final AbuExecutionContext context;
+    private final HandlerAdapter<RequestAndContent, ChannelHandlerContext> adapter;
     private final EventExecutorGroup executors;
 
     public NettyHandler( AbuExecutionContext context ) {
-        this.context = context;
+
+        this.adapter = new HandlerAdapter<RequestAndContent, ChannelHandlerContext>( context ) {
+
+            @Override
+            protected AbuRequestHeader createHeader( AbuExecutionContext context, RequestAndContent originalRequest ) {
+                return new NettyRequestHeader( context, originalRequest );
+            }
+
+            @Override
+            protected AbuRequest createRequest(
+                    AbuExecutionContext context,
+                    AbuRequestHeader header,
+                    RequestAndContent originalRequest,
+                    ChannelHandlerContext originalResponse,
+                    Map<String, String> pathParams ) {
+                return new NettyRequest( context, header, originalRequest, originalResponse, pathParams );
+            }
+
+            @Override
+            protected void submitResponse(
+                    AbuExecutionContext context,
+                    AbuResponse response,
+                    AbuRenderingResult renderingResult,
+                    RequestAndContent originalRequest,
+                    ChannelHandlerContext originalResponse ) throws Exception {
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                renderingResult.rendering().accept( baos );
+
+                FullHttpResponse nettyResponse = new DefaultFullHttpResponse(
+                        HttpVersion.HTTP_1_1,
+                        HttpResponseStatus.valueOf( response.status() ),
+                        Unpooled.copiedBuffer( baos.toByteArray() )
+                );
+
+                nettyResponse.headers().add( HttpHeaderNames.CONTENT_LENGTH, nettyResponse.content().readableBytes() );
+                nettyResponse.headers().add( HttpHeaderNames.CONTENT_TYPE, response.header().contentType() );
+
+                // TODO respect keep-alive
+                originalResponse.writeAndFlush( nettyResponse ).addListener( ChannelFutureListener.CLOSE );
+            }
+        };
 
         this.executors = new DefaultEventExecutorGroup( 16 );
+    }
+
+    public static final class RequestAndContent {
+        public final HttpRequest request;
+        public final HttpContent content;
+
+        private RequestAndContent( HttpRequest request, HttpContent content ) {
+            this.request = request;
+            this.content = content;
+        }
     }
 
     @Override
@@ -42,37 +102,32 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
           .addLast( new HttpRequestDecoder() )
           .addLast( new HttpResponseEncoder() )
           .addLast( new HttpContentCompressor() )
-          .addLast( executors, new Handler() );
+          .addLast( executors, new Handler( adapter ) );
     }
 
     private static final class Handler extends SimpleChannelInboundHandler<Object> {
+
+        private final HandlerAdapter<RequestAndContent, ChannelHandlerContext> adapter;
+        private HttpRequest request;
+
+        private Handler( HandlerAdapter<RequestAndContent, ChannelHandlerContext> adapter ) {
+            this.adapter = adapter;
+        }
+
         @Override
         protected void channelRead0( ChannelHandlerContext ctx, Object msg ) throws Exception {
 
-            System.out.println( "=========" );
-
             if ( msg instanceof HttpRequest ) {
-                System.out.println( msg );
+                this.request = (HttpRequest) msg;
             }
 
-            if ( msg instanceof HttpContent ) {
-                System.out.println( msg );
+            if ( msg instanceof LastHttpContent ) {
+                checkNotNull( request );
+                HttpContent content = (HttpContent) msg;
 
-                if ( msg instanceof LastHttpContent ) {
-
-                    ByteBuf body = Unpooled.copiedBuffer( "hello from netty", StandardCharsets.US_ASCII );
-
-                    FullHttpResponse response = new DefaultFullHttpResponse(
-                            HttpVersion.HTTP_1_1,
-                            HttpResponseStatus.OK,
-                            body
-                    );
-
-                    response.headers().add( HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes() );
-                    response.headers().add( HttpHeaderNames.CONTENT_TYPE, "text/plain" );
-
-                    ctx.writeAndFlush( response ).addListener( ChannelFutureListener.CLOSE );
-                }
+                adapter.handle( new RequestAndContent( request, content ), ctx );
+            } else {
+                throw new IllegalStateException( "TODO not supported yet" );
             }
         }
     }

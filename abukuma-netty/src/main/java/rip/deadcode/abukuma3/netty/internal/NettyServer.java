@@ -31,7 +31,7 @@ public final class NettyServer implements AbuServer {
                     .group( parentGroup, workerGroup )
                     .channel( NioServerSocketChannel.class )
                     .childHandler( new NettyHandler( context ) )
-                    .bind( 8080 ).syncUninterruptibly()
+                    .bind( context.config().port() ).syncUninterruptibly()
                     .channel().closeFuture().syncUninterruptibly();
 
         } catch ( RuntimeException e ) {
