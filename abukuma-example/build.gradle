@@ -13,5 +13,5 @@ dependencies {
 }
 
 jib {
-    to.image = "minebreaker/abukuma-example:${version}"
+    to.image = "minebreaker/${project.name}:${version}"
 }
