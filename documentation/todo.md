@@ -1,29 +1,37 @@
 ## Features
 
-* Context-path aware routing
-* Basic and other authentication filters
+* Test utilities
+* Content-type based dispatcher
+* Exception handler with type-based dispatch
+* Lens
+    * Strict lens (Prism, Lens, Optional...) or more easy-to-use ones (`getIn()` `setIn()` things)?
 
 
 ## Bugs
 
-* Case-insensitive header
+* ~~Case-insensitive header~~
+    * Lower case for internal store
 
 
 ## Refactoring
 
+* Rename `abukuma` -> `abukuma-core` and move all packages under `core`
 * Builder -> Immutable copying object
-* Router Builder API
-* Public classes should be refactored to interfaces
-* Write tests
+* Flexible configuration (config for modules)
 * Single factory class for all?
 * Remove prefixes?
-* Config implementing Map
-* Content-type based dispatcher
+* Value classes
+    * Auto generation
+    * Config implementing Map
 * Fluent header API
-* Exception handler with type-based dispatch
+* `Request` should be lazy or not?
+* Write tests
 
 
 ## Ideas
 
-* Async Wrapper
-* Kotlin-friendly collections
+* Async Wrapper (`Future`)
+* Kotlin-friendliness (api, collection, helper...)
+* Integrated web framework
+* Netty backend
+    * Vert.x

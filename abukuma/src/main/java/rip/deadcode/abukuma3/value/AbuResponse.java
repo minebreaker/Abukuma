@@ -7,6 +7,9 @@ import java.util.function.Function;
 
 public interface AbuResponse {
 
+    /**
+     * This method can be called multiple times. Must be idempotent i.e. must return same object every time.
+     */
     public Object body();
 
     public AbuResponse body( Object body );

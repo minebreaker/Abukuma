@@ -1,17 +1,57 @@
 # Persistent collection
 
-Since Abukuma embraces immutability, we use thin wrapper of [Paguro](https://github.com/GlenKPeterson/Paguro) for our
-primary data structure.
+Since Abukuma embraces immutability, we use thin wrappers of [Paguro](https://github.com/GlenKPeterson/Paguro) for our
+primary data structures.
 In addition, we provide persistent
 [`ListMultimap`](https://github.com/google/guava/wiki/NewCollectionTypesExplained#multimap)
 of Google Guava.
 
 * All mutating operations will throw `UnsupportedOperationException`
 * Rejects `null` values
+* Clojure, the original implementation of Paguro, does not provide non-O(1) methods because of performance reasons,
+    but that is a little inconvenient.
+
+
+## Value type
+
+* Implements `Map`
+
+### Map-view type
+
+* It's a map, which are always expected to have same keys, can have more keys if you want to
+* All removing operations will return `Map`, since it no more has the type `T`
+
+### Map-with-convenience-method type
+
+* It's just a map, with few convenience methods, not expected to always have certain keys.
+* All modifying operations will return its type `T`
 
 
 ## Methods for `PersistentList`
+
+first(): V
+last(): V
+addFirst(V): List<V>
+addLast(V): List<V>
+
+    `[v1, v2].assoc(v3) -> [v1, v2, v3]`
+
+mayGet(int): Optional<V>
+
+insert(int, V): List<V>
+remove(int): List<V>
+
+concat(List<V>): List<V>
+
+    `[v1, v2].concat([v1, v2]) -> [v1, v2, v3, v4]`
+
+
 ## Methods for `PersistentMap`
+
+mayGet(K): Optional<V>
+set(K, V): T
+delete(K, V): T
+
 
 ## Methods for `PersistentListMultimap`
 
