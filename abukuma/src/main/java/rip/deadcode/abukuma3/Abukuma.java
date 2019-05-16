@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.filter.AbuFilter;
@@ -24,6 +25,7 @@ import rip.deadcode.abukuma3.value.AbuConfig;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.function.UnaryOperator;
 
@@ -219,12 +221,26 @@ public final class Abukuma {
         }
 
         private static AbuServer createServer( AbuExecutionContext context ) {
-            // Should use stream() for JDK9+
+
             ServiceLoader<ServerFactory> loader = ServiceLoader.load( ServerFactory.class );
-            ServerFactory factory = loader.iterator().next();  // TODO specify from configuration
-            AbuServer server = factory.provide( context );
-            logger.info( "Server implementation: " + server.getClass().getCanonicalName() );
-            return server;
+            Optional<String> requestedFactoryName = context.config().serverImplementation();
+
+            if ( requestedFactoryName.isPresent() ) {
+                String factoryName = requestedFactoryName.get();
+                // Should use stream() for JDK9+
+                return Streams.stream( loader )
+                              .filter( factory -> factory.getClass().getCanonicalName().equals( factoryName ) )
+                              .findFirst()
+                              .map( f -> f.provide( context ) )
+                              .orElseThrow( () -> new IllegalStateException(
+                                      "Could not find server implementation named '" + factoryName + "'. Recheck your configuration." ) );
+
+            } else {
+                ServerFactory factory = loader.iterator().next();
+                AbuServer server = factory.provide( context );
+                logger.info( "Auto selected server implementation: " + server.getClass().getCanonicalName() );
+                return server;
+            }
         }
     }
 }

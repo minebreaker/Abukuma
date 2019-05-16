@@ -20,7 +20,7 @@ public final class PojoConfig {
     }
 
     public AbuConfig toConfig() {
-        return new AbuConfigImpl( port, maxThreads, minThreads );
+        return new AbuConfigImpl( port, maxThreads, minThreads, null );
     }
 
     public int getPort() {
