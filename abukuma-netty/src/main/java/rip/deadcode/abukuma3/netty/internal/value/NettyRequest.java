@@ -42,9 +42,9 @@ public class NettyRequest implements AbuRequest {
         this.pathParams = pathParams;
     }
 
-    @Override
-    public <T> T body( Class<T> cls ) {
-//        buf.toString(buf.readerIndex(), buf.readableBytes(), charsetName)
+    @SuppressWarnings( "unchecked" )
+    @Override public <T> T body( Class<T> cls ) {
+
         ByteBuf buf = nettyRequest.content.content();
         byte[] arr = new byte[buf.readableBytes()];
         buf.getBytes( buf.readerIndex(), arr );
@@ -66,68 +66,55 @@ public class NettyRequest implements AbuRequest {
         }
     }
 
-    @Override
-    public AbuExecutionContext context() {
+    @Override public AbuExecutionContext context() {
         return context;
     }
 
-    @Override
-    public String method() {
+    @Override public String method() {
         return header.method();
     }
 
-    @Override
-    public URL url() {
+    @Override public URL url() {
         return header.url();
     }
 
-    @Override
-    public String requestUri() {
+    @Override public String requestUri() {
         return header.requestUri();
     }
 
-    @Override
-    public AbuRequestHeader header() {
+    @Override public AbuRequestHeader header() {
         return header;
     }
 
-    @Override
-    public Optional<String> pathParam( String key ) {
+    @Override public Optional<String> pathParam( String key ) {
         return Optional.ofNullable( pathParams.get( key ) );
     }
 
-    @Override
-    public Map<String, String> pathParams() {
+    @Override public Map<String, String> pathParams() {
         return pathParams;
     }
 
-    @Override
-    public Optional<String> queryParam( String key ) {
+    @Override public Optional<String> queryParam( String key ) {
         return Optional.empty();
     }
 
-    @Override
-    public Multimap<String, String> queryParams() {
+    @Override public Multimap<String, String> queryParams() {
         return null;
     }
 
-    @Override
-    public Optional<String> host() {
+    @Override public Optional<String> host() {
         return Optional.empty();
     }
 
-    @Override
-    public String remoteAddress() {
+    @Override public String remoteAddress() {
         return null;
     }
 
-    @Override
-    public NettyHandler.RequestAndContent rawRequest() {
+    @Override public NettyHandler.RequestAndContent rawRequest() {
         return nettyRequest;
     }
 
-    @Override
-    public ChannelHandlerContext rawResponse() {
+    @Override public ChannelHandlerContext rawResponse() {
         return rawResponse;
     }
 }
