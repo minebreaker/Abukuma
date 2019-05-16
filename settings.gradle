@@ -1,5 +1,6 @@
 include (
         'abukuma',
+        'abukuma-test',
         'abukuma-jetty',
         'abukuma-netty',
         'abukuma-gson',
