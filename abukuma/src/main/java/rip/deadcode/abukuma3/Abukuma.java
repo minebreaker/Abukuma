@@ -11,7 +11,6 @@ import rip.deadcode.abukuma3.internal.DefaultExceptionHandler;
 import rip.deadcode.abukuma3.internal.ExecutionContextImpl;
 import rip.deadcode.abukuma3.internal.Information;
 import rip.deadcode.abukuma3.internal.RegistryImpl;
-import rip.deadcode.abukuma3.internal.utils.MoreCollections;
 import rip.deadcode.abukuma3.parser.AbuParser;
 import rip.deadcode.abukuma3.parser.internal.InputStreamParser;
 import rip.deadcode.abukuma3.parser.internal.StringParser;
@@ -30,6 +29,7 @@ import java.util.ServiceLoader;
 import java.util.function.UnaryOperator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static rip.deadcode.abukuma3.internal.utils.MoreCollections.reduce;
 
 
 public final class Abukuma {
@@ -37,7 +37,7 @@ public final class Abukuma {
     private static final Logger logger = LoggerFactory.getLogger( Abukuma.class );
 
     private Abukuma() {
-        throw new AssertionError();
+        throw new Error();
     }
 
     public static AbuServerBuilder config( AbuConfig config ) {
@@ -59,7 +59,7 @@ public final class Abukuma {
         private List<AbuParser<?>> parsers = ImmutableList.of();
         private List<AbuRenderer> renderers = ImmutableList.of();
         private List<AbuFilter> filters = ImmutableList.of();
-        private AbuExceptionHandler exceptionHandler;
+        private AbuExceptionHandler exceptionHandler = new DefaultExceptionHandler();
         private List<Module> modules = ImmutableList.of();
 
         private AbuServerBuilder() {
@@ -182,20 +182,11 @@ public final class Abukuma {
             checkNotNull( router );
             checkNotNull( registry );
 
-            if ( parsers == null ) {
-                parsers = defaultParsers;
-            } else {
-                parsers = ImmutableList.<AbuParser<?>>builder()
-                        .addAll( parsers )
-                        .addAll( defaultParsers )
-                        .build();
-            }
-            if ( renderers == null ) {
-                renderers = ImmutableList.of( new CharSequenceRenderer(), new InputStreamRenderer() );
-            } else {
-                addRenderers( new CharSequenceRenderer(), new InputStreamRenderer() );
-            }
-            if ( exceptionHandler == null ) exceptionHandler = new DefaultExceptionHandler();
+            parsers = ImmutableList.<AbuParser<?>>builder()
+                    .addAll( parsers )
+                    .addAll( defaultParsers )
+                    .build();
+            addRenderers( new CharSequenceRenderer(), new InputStreamRenderer() );
         }
 
         public AbuServer build() {
@@ -205,16 +196,16 @@ public final class Abukuma {
                     registry,
                     config,
                     parsers.stream().reduce( AbuParser::ifFailed ).get(),
-                    renderers.stream().reduce( ( r, then ) -> r.ifFailed( then ) ).get(),
+                    renderers.stream().reduce( AbuRenderer::ifFailed ).get(),
                     filters.stream().reduce( AbuFilter::then ).orElseGet( AbuFilters::noop ),
                     router,
                     exceptionHandler
             );
 
-            AbuExecutionContext c = MoreCollections.reduce(
+            AbuExecutionContext c = reduce(
                     this.modules,
                     context,
-                    ( acc, m ) -> acc.applyModule( m )
+                    AbuExecutionContext::applyModule
             );
 
             return createServer( c );
@@ -233,7 +224,8 @@ public final class Abukuma {
                               .findFirst()
                               .map( f -> f.provide( context ) )
                               .orElseThrow( () -> new IllegalStateException(
-                                      "Could not find server implementation named '" + factoryName + "'. Recheck your configuration." ) );
+                                      "Could not find server implementation named '" + factoryName +
+                                      "'. Recheck your configuration." ) );
 
             } else {
                 ServerFactory factory = loader.iterator().next();
