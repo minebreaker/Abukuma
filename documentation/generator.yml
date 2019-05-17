@@ -3,7 +3,6 @@ name: TestValueImpl
 type: view  # `view` | `map`
 
 interface:
-  generate: true
   package: rip.deadcode.abukuma3.value
   name: TestValue
 
@@ -11,6 +10,9 @@ constructor:
   noArg: true
   requiredArg: true
   allArg: true
+  staticFactory: true
+    package: rip.deadcode.abukuma3.value
+    name: TestValues
 
 property:
   - name: field1
@@ -33,6 +35,7 @@ method:
 
 # Injects these lines as is
 extra:
+  imports:  # Extra imports
   interface: |  # For the interface
     public static void foo() {}
     public static void bar() {}

@@ -7,11 +7,8 @@ import org.organicdesign.fp.collections.PersistentVector;
 import java.util.List;
 import java.util.Optional;
 
-import static org.organicdesign.fp.StaticImports.vec;
 
-
-public abstract class AbstractPersistentList<T, R extends AbstractPersistentList<T, R>>
-        extends ForwardingList<T> implements PersistentList<T, R> {
+public abstract class AbstractPersistentList<T> extends ForwardingList<T> implements PersistentList<T> {
 
     private final ImList<T> delegate;
 
@@ -19,51 +16,57 @@ public abstract class AbstractPersistentList<T, R extends AbstractPersistentList
         this.delegate = PersistentVector.empty();
     }
 
-    protected AbstractPersistentList( Envelope<T> delegate ) {
-        this.delegate = delegate.load;
+    protected AbstractPersistentList( Envelope<T> envelope ) {
+        this.delegate = envelope.load;
     }
 
-    @Override
-    protected List<T> delegate() {
+    @Override protected List<T> delegate() {
         return delegate;
     }
 
     protected static final class Envelope<T> {
         private final ImList<T> load;
 
-        public Envelope( ImList<T> load ) {
+        private Envelope( ImList<T> load ) {
             this.load = load;
         }
     }
 
-    protected abstract R constructor( Envelope<T> delegate );
+    protected abstract PersistentList<T> constructor( Envelope<T> envelope );
 
-    private R constructor( ImList<T> delegate ) {
-        return constructor( new Envelope<>( delegate ) );
+    @Override public Optional<T> mayGet( int nth ) {
+        return Optional.ofNullable( delegate.get( nth ) );
     }
 
-    @Override
-    public Optional<T> first() {
-        return Optional.ofNullable( delegate.get( 0 ) );
+    @Override public T first() {
+        if ( delegate.isEmpty() ) {
+            throw new IndexOutOfBoundsException( "Empty list." );
+        }
+        return delegate.get( 0 );
     }
 
-    @Override
-    public Optional<T> last() {
-        return Optional.ofNullable( delegate.get( delegate.size() - 1 ) );
+    @Override public T last() {
+        if ( delegate.isEmpty() ) {
+            throw new IndexOutOfBoundsException( "Empty list." );
+        }
+        return delegate.get( delegate.size() - 1 );
     }
 
-    @Override
-    public R addFirst( T value ) {
-        return constructor( vec( value ).concat( delegate ) );
+    @Override public PersistentList<T> addFirst( T value ) {
+        return constructor( new Envelope<>(
+                PersistentVector.<T>emptyMutable().append( value ).concat( delegate ).immutable()
+        ) );
     }
 
-    @Override
-    public R addLast( T value ) {
-        return constructor( delegate.append( value ) );
+    @Override public PersistentList<T> addLast( T value ) {
+        return constructor( new Envelope<>(
+                delegate.append( value )
+        ) );
     }
 
-    @Override
-    public R concat( List<T> list ) {
-        return constructor( delegate.concat( list ) );
+    @Override public PersistentList<T> concat( Iterable<? extends T> list ) {
+        return constructor( new Envelope<>(
+                delegate.concat( list )
+        ) );
     }
 }

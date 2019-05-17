@@ -29,6 +29,8 @@ of Google Guava.
 
 ## Methods for `PersistentList`
 
+mayGet(int): Optional<V>
+
 first(): V
 last(): V
 addFirst(V): List<V>
@@ -36,12 +38,10 @@ addLast(V): List<V>
 
     `[v1, v2].assoc(v3) -> [v1, v2, v3]`
 
-mayGet(int): Optional<V>
-
 insert(int, V): List<V>
 remove(int): List<V>
 
-concat(List<V>): List<V>
+concat(Iterable<V>): List<V>
 
     `[v1, v2].concat([v1, v2]) -> [v1, v2, v3, v4]`
 

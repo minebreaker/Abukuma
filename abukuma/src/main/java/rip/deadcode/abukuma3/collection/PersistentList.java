@@ -4,15 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface PersistentList<T, R extends PersistentList<T, R>> extends List<T> {
+public interface PersistentList<T> extends List<T> {
 
-    public Optional<T> first();
+    public Optional<T> mayGet( int nth );
 
-    public Optional<T> last();
+    public T first();
 
-    public R addFirst( T value );
+    public T last();
 
-    public R addLast( T value );
+    public PersistentList<T> addFirst( T value );
 
-    public R concat( List<T> list );
+    public PersistentList<T> addLast( T value );
+
+    public PersistentList<T> concat( Iterable<? extends T> list );
 }
