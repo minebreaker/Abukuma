@@ -9,18 +9,30 @@ import javax.annotation.concurrent.NotThreadSafe;
 @NotThreadSafe
 public final class PojoConfig {
 
+    private String serverImplementation;
     private int port;
     private int maxThreads;
     private int minThreads;
 
-    public PojoConfig( int port, int maxThreads, int minThreads ) {
+    public PojoConfig() {}
+
+    public PojoConfig( int port, int maxThreads, int minThreads, String serverImplementation ) {
         this.port = port;
         this.maxThreads = maxThreads;
         this.minThreads = minThreads;
+        this.serverImplementation = serverImplementation;
     }
 
     public AbuConfig toConfig() {
-        return new AbuConfigImpl( port, maxThreads, minThreads, null );
+        return new AbuConfigImpl( port, maxThreads, minThreads, serverImplementation );
+    }
+
+    public String getServerImplementation() {
+        return serverImplementation;
+    }
+
+    public void setServerImplementation( String serverImplementation ) {
+        this.serverImplementation = serverImplementation;
     }
 
     public int getPort() {
