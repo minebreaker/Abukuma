@@ -15,7 +15,6 @@
 
 ## Refactoring
 
-* Rename `abukuma` -> `abukuma-core` and move all packages under `core`
 * Builder -> Immutable copying object
 * Flexible configuration (config for modules)
 * Single factory class for all?

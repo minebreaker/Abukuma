@@ -1,6 +1,6 @@
 dependencies {
     compile(
-            project(":abukuma"),
+            project(':abukuma'),
             'com.google.code.gson:gson:2.8.5'
     )
 }

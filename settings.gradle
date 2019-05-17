@@ -1,3 +1,5 @@
+rootProject.name = 'abukuma'
+
 include (
         'abukuma',
         'abukuma-test',
