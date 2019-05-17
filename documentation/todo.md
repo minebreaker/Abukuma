@@ -24,6 +24,7 @@
     * Config implementing Map
 * Fluent header API
 * `Request` should be lazy or not?
+* Specify server class (not factory) in config
 * Write tests
 
 
