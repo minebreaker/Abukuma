@@ -1,3 +1,6 @@
+//noinspection UnnecessaryQualifiedReference
+apply plugin: rip.deadcode.abukuma3.generator.GeneratorPlugin
+
 dependencies {
     compile(
             'org.organicdesign:Paguro:3.1.2',
