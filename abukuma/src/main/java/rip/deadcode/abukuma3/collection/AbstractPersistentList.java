@@ -22,7 +22,7 @@ public abstract class AbstractPersistentList<T> extends ForwardingList<T> implem
         this.delegate = envelope.load;
     }
 
-    @Override protected List<T> delegate() {
+    @Override protected final List<T> delegate() {
         return delegate;
     }
 

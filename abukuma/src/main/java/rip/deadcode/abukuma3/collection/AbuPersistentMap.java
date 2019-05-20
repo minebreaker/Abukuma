@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.collection;
 
 
-public class AbuPersistentMap<K, V> extends AbstractPersistentMap<K, V, AbuPersistentMap<K, V>> {
+public final class AbuPersistentMap<K, V> extends AbstractPersistentMap<K, V, AbuPersistentMap<K, V>> {
 
     private AbuPersistentMap() {
         super();

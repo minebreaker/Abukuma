@@ -21,8 +21,7 @@ public abstract class AbstractPersistentMap<K, V, T extends AbstractPersistentMa
         this.delegate = delegate.load;
     }
 
-    @Override
-    protected Map<K, V> delegate() {
+    @Override protected final Map<K, V> delegate() {
         return delegate;
     }
 
