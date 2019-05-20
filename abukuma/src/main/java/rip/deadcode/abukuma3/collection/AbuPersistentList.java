@@ -15,6 +15,11 @@ public final class AbuPersistentList<T> extends AbstractPersistentList<T> {
         return new AbuPersistentList<>();
     }
 
+    // TODO
+//    public static <T> AbuPersistentList<T> create(T first, T... rest) {
+//        return new AbuPersistentList<>();
+//    }
+
     @Override protected PersistentList<T> constructor( Envelope<T> envelope ) {
         return new AbuPersistentList<>( envelope );
     }

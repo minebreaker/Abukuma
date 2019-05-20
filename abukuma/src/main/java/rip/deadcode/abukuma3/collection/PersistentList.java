@@ -16,5 +16,11 @@ public interface PersistentList<T> extends List<T> {
 
     public PersistentList<T> addLast( T value );
 
+    public PersistentList<T> insert( int n, T value );
+
+    public PersistentList<T> replace( int n, T value );
+
+    public PersistentList<T> delete( int n );
+
     public PersistentList<T> concat( Iterable<? extends T> list );
 }

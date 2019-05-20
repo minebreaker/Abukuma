@@ -39,7 +39,8 @@ addLast(V): List<V>
     `[v1, v2].assoc(v3) -> [v1, v2, v3]`
 
 insert(int, V): List<V>
-remove(int): List<V>
+replace(int, V): List<V>
+delete(int): List<V>
 
 concat(Iterable<V>): List<V>
 

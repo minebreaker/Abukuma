@@ -7,6 +7,8 @@ import org.organicdesign.fp.collections.PersistentVector;
 import java.util.List;
 import java.util.Optional;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 
 public abstract class AbstractPersistentList<T> extends ForwardingList<T> implements PersistentList<T> {
 
@@ -35,6 +37,11 @@ public abstract class AbstractPersistentList<T> extends ForwardingList<T> implem
     protected abstract PersistentList<T> constructor( Envelope<T> envelope );
 
     @Override public Optional<T> mayGet( int nth ) {
+
+        if ( nth < 0 || nth >= delegate.size() ) {
+            return Optional.empty();
+        }
+
         return Optional.ofNullable( delegate.get( nth ) );
     }
 
@@ -53,14 +60,62 @@ public abstract class AbstractPersistentList<T> extends ForwardingList<T> implem
     }
 
     @Override public PersistentList<T> addFirst( T value ) {
+        checkNotNull( value );
+
         return constructor( new Envelope<>(
                 PersistentVector.<T>emptyMutable().append( value ).concat( delegate ).immutable()
         ) );
     }
 
     @Override public PersistentList<T> addLast( T value ) {
+        checkNotNull( value );
+
         return constructor( new Envelope<>(
                 delegate.append( value )
+        ) );
+    }
+
+    @Override public PersistentList<T> insert( int nth, T value ) {
+
+        checkNotNull( value );
+
+        if ( nth < 0 || nth > delegate.size() ) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return constructor( new Envelope<>(
+                PersistentVector.<T>emptyMutable()
+                        .concat( delegate.subList( 0, nth ) )
+                        .append( value )
+                        .concat( delegate.subList( nth, delegate.size() ) )
+                        .immutable()
+        ) );
+    }
+
+    @Override public PersistentList<T> replace( int nth, T value ) {
+
+        checkNotNull( value );
+
+        if ( nth < 0 || nth >= delegate.size() ) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return constructor( new Envelope<>(
+                delegate.replace( nth, value )
+        ) );
+    }
+
+    @Override public PersistentList<T> delete( int nth ) {
+
+        if ( nth < 0 || nth >= delegate.size() ) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return constructor( new Envelope<>(
+                PersistentVector.<T>emptyMutable()
+                        .concat( delegate.subList( 0, nth ) )
+                        .concat( delegate.subList( nth + 1, delegate.size() ) )
+                        .immutable()
         ) );
     }
 
