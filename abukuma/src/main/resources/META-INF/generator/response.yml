@@ -1,0 +1,52 @@
+package: rip.deadcode.abukuma3.value.internal
+name: AbuResponseImpl
+type: view
+
+interface:
+  package: rip.deadcode.abukuma3.value
+  name: AbuResponse
+
+import:
+  - rip.deadcode.abukuma3.value.*
+  - rip.deadcode.abukuma3.value.internal.*
+
+property:
+  - name: body
+    type: Object
+    javadoc: This method can be called multiple times. Must be idempotent i.e. must return same object every time.
+  - name: status
+    type: int
+  - name: header
+    type: AbuHeader
+  - name: cookie
+    type: PersistentList<Cookie>
+
+method:
+  - name: header
+    type: AbuResponse
+    argument: Function<AbuHeader, AbuHeader> header
+    implementation: |
+      AbuResponseImpl r = this.copy();
+      r.header = header.apply( this.header );
+      return r;
+  - name: cookie
+    type: Optional<Cookie>
+    argument: String key
+    implementation: |
+      return cookie.stream()
+                   .filter( c -> c.name().equals( key ) )
+                   .findAny();
+  - name: addCookie
+    type: AbuResponse
+    argument: Cookie cookie
+    implementation: |
+      AbuResponseImpl r = copy();
+      r.cookie = this.cookie.addLast( cookie );
+      return r;
+  - name: addCookie
+    type: AbuResponse
+    argument: Cookie first, Cookie... rest
+    implementation: |
+      AbuResponseImpl r = copy();
+      r.cookie = this.cookie.addLast( first ).concat( Arrays.asList( rest ) );
+      return r;

@@ -1,6 +1,0 @@
-package ${m.package};
-
-
-public final class ${m.name} {
-
-}

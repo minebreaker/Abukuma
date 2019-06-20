@@ -13,7 +13,6 @@ dependencies {
     compile(
             'org.jetbrains.kotlin:kotlin-stdlib-jdk8',
             'com.google.guava:guava:27.1-jre',
-            "org.apache.velocity:velocity-engine-core:2.1",
             "org.yaml:snakeyaml:1.24"
     )
     testCompile(

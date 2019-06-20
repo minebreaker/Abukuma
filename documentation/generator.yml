@@ -2,32 +2,37 @@ package: rip.deadcode.abukuma3.value
 name: TestValueImpl
 type: view  # `view` | `map`
 
+import:
+  - extra.import.Class
+
 interface:
-  package: rip.deadcode.abukuma3.value
-  name: TestValue
+    package: rip.deadcode.abukuma3.value
+    name: TestValue
 
 constructor:
-  noArg: true
-  requiredArg: true
-  allArg: true
-  staticFactory: true
-    package: rip.deadcode.abukuma3.value
-    name: TestValues
+    noArg: true
+    requiredArg: true
+    allArg: true
+    staticFactory:
+        generate: true
+        package: rip.deadcode.abukuma3.value
+        name: TestValues
 
 property:
-  - name: field1
-    type: String     # Return type
-    default: null    # Default value
-    required: false  #
-    nullable: true   # Setters will reject `null` if set true
-    optional: true   # Wraps the getter type to `Optional` if set true
+    - name: field1
+      type: String     # Return type
+      default: null    # Default value
+      required: false  #
+      nullable: true   # Setters will reject `null` if set true
+      optional: true   # Wraps the getter type to `Optional` if set true
 
 method:
-  # These methods will generate interface and implementation both
-  - name: field1
-    type: int
-    argument: String param1, boolean param2
-    implementation: return Integer.parseInt( field1 );
+    # These methods will be generated in interface and implementation both unless it's static
+    - name: field1
+      static: false
+      type: int
+      argument: String param1, boolean param2
+      implementation: return Integer.parseInt( field1 );
 
 # toString
 # equals
@@ -35,9 +40,8 @@ method:
 
 # Injects these lines as is
 extra:
-  imports:  # Extra imports
-  interface: |  # For the interface
-    public static void foo() {}
-    public static void bar() {}
-  implementation: |  # For the implementation
-    public void foo() {}
+    interface: |  # For the interface
+        public static void foo() {}
+        public static void bar() {}
+    implementation: |  # For the implementation
+        public void foo() {}

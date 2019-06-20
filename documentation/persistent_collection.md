@@ -18,12 +18,19 @@ of Google Guava.
 
 ### Map-view type
 
-* It's a map, which are always expected to have same keys, can have more keys if you want to
+* It's a map, which are always expected to have same keys
+* All modifying operations will return `Map`
+
+### Map-union type
+
+* It's a map, which are always expected to have same keys, can have extra keys if you want to
 * All removing operations will return `Map`, since it no more has the type `T`
+* Add/replaces will return `T`
+
 
 ### Map-with-convenience-method type
 
-* It's just a map, with few convenience methods, not expected to always have certain keys.
+* It's just a map, with property accessors, not expected to always have certain keys.
 * All modifying operations will return its type `T`
 
 
@@ -52,6 +59,7 @@ concat(Iterable<V>): List<V>
 mayGet(K): Optional<V>
 set(K, V): T
 delete(K, V): T
+merge(Map<K, V>)
 
 
 ## Methods for `PersistentListMultimap`
