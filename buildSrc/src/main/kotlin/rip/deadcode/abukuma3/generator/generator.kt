@@ -66,7 +66,9 @@ fun write(model: ViewClass, generatedSrcPath: Path) {
 fun write(string: String, destination: Path) {
 
     Files.createDirectories(destination.parent)
-    Files.writeString(destination, string)
+    Files.newBufferedWriter(destination).use {
+        it.write(string)
+    }
 }
 
 
