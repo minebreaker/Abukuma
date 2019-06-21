@@ -1,31 +1,35 @@
 package rip.deadcode.abukuma3.collection;
 
-import com.google.common.collect.ForwardingListMultimap;
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ListMultimap;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.Multisets;
 import org.organicdesign.fp.collections.ImList;
 import org.organicdesign.fp.collections.ImMap;
 import org.organicdesign.fp.collections.PersistentHashMap;
 import org.organicdesign.fp.collections.PersistentVector;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.organicdesign.fp.StaticImports.vec;
 
 
 public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentListMultimap<K, V, T>>
-        extends ForwardingListMultimap<K, V>
         implements PersistentListMultimap<K, V, T> {
 
     private final ImMap<K, ImList<V>> delegate;
-    private final AtomicReference<ListMultimap<K, V>> view = new AtomicReference<>();
 
     protected AbstractPersistentListMultimap() {
         this.delegate = PersistentHashMap.empty();
@@ -59,26 +63,61 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
         return constructor( new Envelope<>( delegate ) );
     }
 
-    @Override protected final ListMultimap<K, V> delegate() {
+    @Override public int size() {
+        //noinspection SimplifyStreamApiCallChains  // ImMap deprecating #values()
+        return delegate.entrySet().stream().mapToInt( e -> e.getValue().size() ).sum();
+    }
 
-        ListMultimap<K, V> current = view.get();
+    @Override public boolean isEmpty() {
+        return delegate.isEmpty();
+    }
 
-        if ( current == null ) {
-            ImmutableListMultimap.Builder<K, V> builder = ImmutableListMultimap.builder();
-            for ( Map.Entry<K, ImList<V>> e : delegate ) {
-                builder.putAll( e.getKey(), e.getValue() );
-            }
-            ListMultimap<K, V> newInstance = builder.build();
+    @Override public boolean containsKey( @Nullable Object key ) {
+        //noinspection SuspiciousMethodCalls
+        return delegate.containsKey( key );
+    }
 
-            if ( view.compareAndSet( null, newInstance ) ) {
-                return newInstance;
-            } else {
-                return delegate();
-            }
+    @Override public boolean containsValue( @Nullable Object value ) {
+        return delegate.entrySet().stream().anyMatch( e -> contains( e.getValue(), value ) );
+    }
 
-        } else {
-            return current;
-        }
+    @SuppressWarnings( "SuspiciousMethodCalls" )
+    @Override public boolean containsEntry( @Nullable Object key, @Nullable Object value ) {
+        return delegate.containsKey( key ) && contains( delegate.get( key ), value );
+    }
+
+    @Override public Set<K> keySet() {
+        return delegate.keySet();
+    }
+
+    @Override public Multiset<K> keys() {
+        //noinspection ResultOfMethodCallIgnored  // Flase positive?
+        return entries().stream()
+                        .collect( groupingBy( Map.Entry::getKey ) )
+                        .entrySet().stream()
+                        .collect(
+                                HashMultiset::create,
+                                ( acc, e ) -> acc.add(
+                                        e.getKey(),
+                                        e.getValue().size()
+                                ),
+                                Multisets::sum
+                        );
+    }
+
+    @Override public Collection<V> values() {
+        return delegate.entrySet().stream().flatMap( e -> e.getValue().stream() ).collect( toList() );
+    }
+
+    @Override public Collection<Map.Entry<K, V>> entries() {
+        return delegate.entrySet().stream()
+                       .flatMap( e -> e.getValue().stream().map( v -> Maps.immutableEntry( e.getKey(), v ) ) )
+                       .collect( toSet() );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    @Override public Map<K, Collection<V>> asMap() {
+        return ( (Map<K, Collection<V>>) (Object) delegate );
     }
 
     @Override
@@ -181,7 +220,6 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
         }
     }
 
-
     @Deprecated @Override public final void clear() {
         throw new UnsupportedOperationException();
     }
@@ -209,5 +247,14 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
     @Deprecated @Override
     public final List<V> replaceValues( @Nullable K key, @Nullable Iterable<? extends V> values ) {
         throw new UnsupportedOperationException();
+    }
+
+    private static boolean contains( ImList<?> list, Object value ) {
+        for ( Object e : list ) {
+            if ( Objects.equals( e, value ) ) {
+                return true;
+            }
+        }
+        return false;
     }
 }
