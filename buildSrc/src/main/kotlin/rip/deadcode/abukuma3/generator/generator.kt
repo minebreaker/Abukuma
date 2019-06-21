@@ -17,8 +17,9 @@ import java.nio.file.Path
 @Suppress("unused")
 open class GeneratorPlugin : Plugin<Project> {
     override fun apply(target: Project) {
-        target.tasks.create("generateDataClasses", GenerateDataClassTask::class.java)
-        target.tasks.getByName("compileJava").dependsOn("generateDataClasses")
+        val task = target.tasks.create("generateDataClasses", GenerateDataClassTask::class.java)
+        target.tasks.getByName("compileJava").dependsOn(task)
+        task.dependsOn("processResources")
     }
 }
 
