@@ -4,6 +4,8 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
 import org.yaml.snakeyaml.Yaml
@@ -25,16 +27,20 @@ open class GeneratorPlugin : Plugin<Project> {
 
 open class GenerateDataClassTask : DefaultTask() {
 
+    private val javaPlugin = project.convention.getPlugin(JavaPluginConvention::class.java)
+    private val sourceSet = javaPlugin.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
+
+    var input: List<File> = sourceSet.resources.srcDirs.map { it.resolve("META-INF/generator") }
+        @InputFiles get
+    var output: File = sourceSet.output.generatedSourcesDirs.singleFile
+        @OutputDirectory get
+
     @TaskAction
     fun run() {
 
-        val javaPlugin = project.convention.getPlugin(JavaPluginConvention::class.java)
-        val sourceSet = javaPlugin.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
-
-        val definitionRoots = sourceSet.resources.srcDirs.map { it.resolve("META-INF/generator") }
-        val definitionFiles = sourceSet.resources.filter { definitionRoots.contains(it.parentFile) }
+        val definitionFiles = sourceSet.resources.filter { input.contains(it.parentFile) }
         @Suppress("UnstableApiUsage")  // Beta but no alternative
-        val generatedSrcPath = sourceSet.output.generatedSourcesDirs.singleFile.toPath()
+        val generatedSrcPath = output.toPath()
 
         definitionFiles
                 .map { parse(it) }
