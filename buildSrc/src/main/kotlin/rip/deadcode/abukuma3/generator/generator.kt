@@ -32,6 +32,7 @@ open class GenerateDataClassTask : DefaultTask() {
 
     var input: List<File> = sourceSet.resources.srcDirs.map { it.resolve("META-INF/generator") }
         @InputFiles get
+    @Suppress("UnstableApiUsage")  // Beta but no alternative
     var output: File = sourceSet.output.generatedSourcesDirs.singleFile
         @OutputDirectory get
 
@@ -39,7 +40,6 @@ open class GenerateDataClassTask : DefaultTask() {
     fun run() {
 
         val definitionFiles = sourceSet.resources.filter { input.contains(it.parentFile) }
-        @Suppress("UnstableApiUsage")  // Beta but no alternative
         val generatedSrcPath = output.toPath()
 
         definitionFiles
