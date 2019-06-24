@@ -26,6 +26,7 @@
 * Fluent header API
 * `Request` should be lazy or not?
 * Write tests
+* Move collections to a new independent project
 
 
 ## Ideas
@@ -35,3 +36,4 @@
 * Integrated web framework
 * Netty backend
     * Vert.x
+* Graal VM Compatibility check

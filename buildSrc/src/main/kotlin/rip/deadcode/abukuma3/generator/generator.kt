@@ -9,8 +9,8 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
 import org.yaml.snakeyaml.Yaml
-import rip.deadcode.abukuma3.generator.renderer.renderViewClass
-import rip.deadcode.abukuma3.generator.renderer.renderViewClassInterface
+import rip.deadcode.abukuma3.generator.renderer.renderRecord
+import rip.deadcode.abukuma3.generator.renderer.renderRecordInterface
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -32,6 +32,7 @@ open class GenerateDataClassTask : DefaultTask() {
 
     var input: List<File> = sourceSet.resources.srcDirs.map { it.resolve("META-INF/generator") }
         @InputFiles get
+
     @Suppress("UnstableApiUsage")  // Beta but no alternative
     var output: File = sourceSet.output.generatedSourcesDirs.singleFile
         @OutputDirectory get
@@ -44,9 +45,12 @@ open class GenerateDataClassTask : DefaultTask() {
 
         definitionFiles
                 .map { parse(it) }
-                .map { mapToViewClass(it) }
-                // TODO Occasional build failure. Maybe specifying file output will solve that?
-                .forEach { write(it, generatedSrcPath) }
+                .forEach {
+                    when {
+                        it["type"] == "record" -> write(mapToRecord(it), generatedSrcPath)
+                        else -> throw RuntimeException()
+                    }
+                }
     }
 }
 
@@ -57,16 +61,16 @@ fun parse(file: File): Map<String, Any> {
     }
 }
 
-fun write(model: ViewClass, generatedSrcPath: Path) {
+fun write(model: Record, generatedSrcPath: Path) {
 
     // Class
     val classDestination = generatedSrcPath.resolve(model.`package`.asPath()).resolve(model.name + ".java")
-    write(renderViewClass(model), classDestination)
+    write(renderRecord(model), classDestination)
 
     // Interface
     val interfaceDestination =
             generatedSrcPath.resolve(model.`interface`.`package`.asPath()).resolve(model.`interface`.name + ".java")
-    write(renderViewClassInterface(model), interfaceDestination)
+    write(renderRecordInterface(model), interfaceDestination)
 }
 
 fun write(string: String, destination: Path) {

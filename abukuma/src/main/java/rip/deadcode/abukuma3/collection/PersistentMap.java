@@ -11,4 +11,6 @@ public interface PersistentMap<K, V, T extends PersistentMap<K, V, T>> extends M
     public T set( K key, V value );
 
     public T delete( K key );
+
+    public T merge( Map<K, V> map );
 }

@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.collection;
 
 import com.google.common.collect.ForwardingMap;
 import org.organicdesign.fp.collections.ImMap;
+import org.organicdesign.fp.collections.MutableMap;
 import org.organicdesign.fp.collections.PersistentHashMap;
 
 import java.util.Map;
@@ -21,7 +22,8 @@ public abstract class AbstractPersistentMap<K, V, T extends AbstractPersistentMa
         this.delegate = delegate.load;
     }
 
-    @Override protected final Map<K, V> delegate() {
+    @Override
+    protected final Map<K, V> delegate() {
         return delegate;
     }
 
@@ -52,5 +54,14 @@ public abstract class AbstractPersistentMap<K, V, T extends AbstractPersistentMa
     @Override
     public T delete( K key ) {
         return constructor( delegate.without( key ) );
+    }
+
+    @Override
+    public T merge( Map<K, V> other ) {
+        MutableMap<K, V> temp = delegate.mutable();
+        for ( Entry<K, V> e : other.entrySet() ) {
+            temp.assoc( e );
+        }
+        return constructor( temp.immutable() );
     }
 }

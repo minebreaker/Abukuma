@@ -1,6 +1,6 @@
 package: rip.deadcode.abukuma3.value.internal
 name: TestCookieImpl
-type: view
+type: record
 
 interface:
   package: rip.deadcode.abukuma3.value

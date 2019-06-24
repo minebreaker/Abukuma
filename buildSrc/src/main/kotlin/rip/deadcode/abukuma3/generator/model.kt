@@ -1,35 +1,35 @@
 package rip.deadcode.abukuma3.generator
 
 
-fun mapToViewClass(map: Map<String, Any>): ViewClass {
+fun mapToRecord(map: Map<String, Any>): Record {
     @Suppress("UNCHECKED_CAST")
-    return ViewClass(
+    return Record(
             map["package"].toString(),
             map["name"].toString(),
             map["import"] as List<String>? ?: listOf(),
-            mapToViewClassInterface(map["interface"] as Map<String, Any>),
-            mapViewClassConstructor(map["constructor"] as Map<String, Any>?),
-            (map["property"] as List<Map<String, Any>>).map { mapViewClassProperty(it) },
-            (map["method"] as List<Map<String, Any>>?)?.map { mapViewClassMethod(it) } ?: listOf()
+            mapToRecordInterface(map["interface"] as Map<String, Any>),
+            mapRecordConstructor(map["constructor"] as Map<String, Any>?),
+            (map["property"] as List<Map<String, Any>>).map { mapRecordProperty(it) },
+            (map["method"] as List<Map<String, Any>>?)?.map { mapRecordMethod(it) } ?: listOf()
     )
 }
 
-fun mapToViewClassInterface(map: Map<String, Any>): ViewClassInterface {
-    return ViewClassInterface(
+fun mapToRecordInterface(map: Map<String, Any>): RecordInterface {
+    return RecordInterface(
             map["package"].toString(),
             map["name"].toString()
     )
 }
 
-fun mapViewClassConstructor(map: Map<String, Any>?): ViewClassConstructor? {
-    return if (map == null) null else ViewClassConstructor(
+fun mapRecordConstructor(map: Map<String, Any>?): RecordConstructor? {
+    return if (map == null) null else RecordConstructor(
             map["noArg"].bool(),
             map["requiredArg"].bool(),
             map["allArg"].bool()
     )
 }
 
-fun mapViewClassProperty(map: Map<String, Any>): ViewClassProperty {
+fun mapRecordProperty(map: Map<String, Any>): RecordProperty {
     val optional = map["optional"].bool()
     val nullable = optional || map["nullable"].bool()
     val javadoc = when (val javadocObj = map["javadoc"]) {
@@ -52,12 +52,12 @@ fun mapViewClassProperty(map: Map<String, Any>): ViewClassProperty {
         is Map<*, *> -> {
             @Suppress("UNCHECKED_CAST")
             getterObj as Map<String, Any>
-            mapViewClassPropertyAccessor(getterObj)
+            mapRecordPropertyAccessor(getterObj)
         }
         else -> null
     }
 
-    return ViewClassProperty(
+    return RecordProperty(
             map["name"].toString(),
             map["type"].toString(),
             nullable,
@@ -68,16 +68,16 @@ fun mapViewClassProperty(map: Map<String, Any>): ViewClassProperty {
     )
 }
 
-fun mapViewClassPropertyAccessor(map: Map<String, Any>): ViewClassPropertyAccessor =
-        ViewClassPropertyAccessor(
+fun mapRecordPropertyAccessor(map: Map<String, Any>): RecordPropertyAccessor =
+        RecordPropertyAccessor(
                 map["name"]?.toString(),
                 map["type"]?.toString(),
                 map["argument"]?.toString(),
                 map["implementation"].toString()
         )
 
-fun mapViewClassMethod(map: Map<String, Any>): ViewClassMethod {
-    return ViewClassMethod(
+private fun mapRecordMethod(map: Map<String, Any>): RecordMethod {
+    return RecordMethod(
             map["name"].toString(),
             map["type"].toString(),
             map["argument"].toString(),
@@ -86,46 +86,46 @@ fun mapViewClassMethod(map: Map<String, Any>): ViewClassMethod {
     )
 }
 
-data class ViewClass(
+data class Record(
         val `package`: String,
         val name: String,
         val imports: List<String>,
-        val `interface`: ViewClassInterface,
-        val constructor: ViewClassConstructor?,
-        val properties: List<ViewClassProperty>,
-        val methods: List<ViewClassMethod>
+        val `interface`: RecordInterface,
+        val constructor: RecordConstructor?,
+        val properties: List<RecordProperty>,
+        val methods: List<RecordMethod>
 )
 
-data class ViewClassInterface(
+data class RecordInterface(
         val `package`: String,
         val name: String
 )
 
-data class ViewClassConstructor(
+data class RecordConstructor(
         val noArg: Boolean,
         val requiredArg: Boolean,
         val allArg: Boolean
 //        , val staticFactory:
 )
 
-data class ViewClassProperty(
+data class RecordProperty(
         val name: String,
         val type: String,
         val nullable: Boolean,
         val optional: Boolean,
         val default: String?,
-        val getter: ViewClassPropertyAccessor?,
+        val getter: RecordPropertyAccessor?,
         val javadoc: PropertyJavadoc?
 )
 
-data class ViewClassPropertyAccessor(
+data class RecordPropertyAccessor(
         val name: String?,
         val type: String?,
         val argument: String?,
         val implementation: String
 )
 
-data class ViewClassMethod(
+data class RecordMethod(
         val name: String,
         val type: String,
         val argument: String,

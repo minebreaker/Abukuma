@@ -7,7 +7,7 @@ In addition, we provide persistent
 of Google Guava.
 
 * All mutating operations will throw `UnsupportedOperationException`
-* Rejects `null` values
+* Rejects `null` keys but accepts `null` values  # TODO
 * Clojure, the original implementation of Paguro, does not provide non-O(1) methods because of performance reasons,
     but that is a little inconvenient.
 
@@ -16,17 +16,17 @@ of Google Guava.
 
 * Implements `Map`
 
-### Map-view type
+### Record type
 
 * It's a map, which are always expected to have same keys
 * All modifying operations will return `Map`
 
-### Map-union type
+### Map-view type
 
-* It's a map, which are always expected to have same keys, can have extra keys if you want to
-* All removing operations will return `Map`, since it no more has the type `T`
+* It's a map, which are always expected to have certain keys, can have extra keys if you want to
 * Add/replaces will return `T`
-
+* All removing operations will throw a runtime exception, since it does not have a type `T` anymore.
+    * Sadly we can't assure compile time due to limitations of the Java type system
 
 ### Map-with-convenience-method type
 
