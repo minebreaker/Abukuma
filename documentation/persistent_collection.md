@@ -21,12 +21,15 @@ of Google Guava.
 * It's a map, which are always expected to have same keys
 * All modifying operations will return `Map`
 
+<!--
+Isn't a plain Record enough?
 ### Map-view type
 
 * It's a map, which are always expected to have certain keys, can have extra keys if you want to
 * Add/replaces will return `T`
 * All removing operations will throw a runtime exception, since it does not have a type `T` anymore.
     * Sadly we can't assure compile time due to limitations of the Java type system
+-->
 
 ### Map-with-convenience-method type
 
