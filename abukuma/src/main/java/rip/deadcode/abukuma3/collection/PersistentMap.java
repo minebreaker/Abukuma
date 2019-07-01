@@ -9,9 +9,7 @@ import java.util.Optional;
 
 
 public interface PersistentMap<K, V, T extends PersistentMap<K, V, T>>
-        extends
-        Map<K, V>,
-        Pathable<T, V> {
+        extends Map<K, V>, Pathable<T, V> {
 
     public Optional<V> mayGet( K key );
 
