@@ -27,7 +27,7 @@ fun renderRecordInterface(model: Record) =
 fun renderRecordInterfaceProperty(model: Record, property: RecordProperty) =
         """
             ${property.javadoc.getter()}
-            ${nullable(property)}
+            ${annotateNullable(property)}
             public
             ${renderRecordInterfaceGetter(property)}
             
@@ -50,7 +50,10 @@ fun renderRecordInterfaceGetter(property: RecordProperty) =
         }
 
 fun renderRecordInterfaceMethod(method: RecordMethod) =
-        "public ${method.type} ${method.name}( ${method.argument} );"
+        if (method.`interface`)
+            "public ${method.annotation ?: ""} ${method.type} ${method.name}( ${method.argument} );"
+        else
+            ""
 
 
 fun renderRecord(model: Record) =
@@ -91,7 +94,7 @@ fun renderRequiredArgConstructor(model: Record) =
             public ${model.name}(
                 ${model.properties
                 .filter { !it.nullable && it.default == null }
-                .joinToString { it.type + " " + it.name }}
+                .joinToString { annotateNullable(it) + " " + it.type + " " + it.name }}
             ) {
                 ${model.properties
                 .filter { !it.nullable }
@@ -104,7 +107,7 @@ fun renderRequiredArgConstructor(model: Record) =
 fun renderAllArgConstructor(model: Record) =
         """
             public ${model.name}(
-                ${model.properties.joinToString { it.type + " " + it.name }}
+                ${model.properties.joinToString { annotateNullable(it) + " " + it.type + " " + it.name }}
             ) {
                 ${model.properties.joinToString("\n") { "this.${it.name} = ${checkNotNull(it)};" }}
             }
@@ -146,7 +149,7 @@ fun renderGetter(property: RecordProperty) =
                 }
             """.trimIndent()
             else -> """
-                @Override ${nullable(property)}
+                @Override ${if (property.nullable && !property.isPrimitive()) "@Nullable" else ""}
                 public ${property.type} ${property.name}() {
                     return ${property.name};
                 }
@@ -168,7 +171,8 @@ fun renderSetter(model: Record, property: RecordProperty) =
 
 fun renderMethod(method: RecordMethod) =
         """
-            @Override public ${method.type} ${method.name}( ${method.argument} ) {
+            ${if (method.`interface`) "@Override" else method.annotation ?: ""}
+            public ${method.type} ${method.name}( ${method.argument} ) {
                 ${method.implementation}
             }
         """.trimIndent()
@@ -290,14 +294,14 @@ fun renderRecordMapOverride(record: Record) =
         """.trimIndent()
 
 
-private fun nullable(property: RecordProperty) =
-        if (property.nullable && !property.isPrimitive() && !property.optional)
+private fun annotateNullable(property: RecordProperty) =
+        if (!property.acceptsNull())
             "@Nullable"
         else
             ""
 
 private fun checkNotNull(property: RecordProperty) =
-        if (!property.isPrimitive())
+        if (!property.acceptsNull())
             "checkNotNull( ${property.name} )"
         else
             property.name
@@ -307,6 +311,8 @@ private fun RecordProperty.isPrimitive() =
             "boolean", "short", "int", "long", "float", "double", "char", "byte" -> true
             else -> false
         }
+
+private fun RecordProperty.acceptsNull() = this.nullable || this.optional || this.isPrimitive()
 
 private fun PropertyJavadoc?.getter() =
         if (this != null && this.getter != null) javadoc(this.getter) else ""

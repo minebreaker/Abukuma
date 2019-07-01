@@ -80,6 +80,8 @@ private fun mapRecordMethod(map: Map<String, Any>): RecordMethod {
     return RecordMethod(
             map["name"].toString(),
             map["type"].toString(),
+            map["interface"] != "false",
+            map["annotation"]?.toString(),
             map["argument"].toString(),
             map["implementation"].toString(),
             map["javadoc"]?.toString()
@@ -128,6 +130,8 @@ data class RecordPropertyAccessor(
 data class RecordMethod(
         val name: String,
         val type: String,
+        val `interface`: Boolean,
+        val annotation: String?,
         val argument: String,
         val implementation: String,
         val javadoc: String?

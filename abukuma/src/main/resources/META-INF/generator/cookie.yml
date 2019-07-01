@@ -1,10 +1,10 @@
 package: rip.deadcode.abukuma3.value.internal
-name: TestCookieImpl
+name: CookieImpl
 type: record
 
 interface:
   package: rip.deadcode.abukuma3.value
-  name: TestCookie
+  name: Cookie
 
 import:
   - rip.deadcode.abukuma3.value.*
@@ -59,3 +59,11 @@ property:
       The value is assumed case-insensitive, but this method will return the value as-is.
       @return `SameSite` attribute.
       @see <a href="https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02">https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02</a>
+
+method:
+  - name: toString
+    type: String
+    interface: false
+    annotation: "@Override"
+    argument: ""
+    implementation: return SerializeCookie.serialize( this );
