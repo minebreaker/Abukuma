@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.collection.traverse;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
+import rip.deadcode.abukuma3.collection.traverse.internal.ListLens;
 
 import java.util.List;
 

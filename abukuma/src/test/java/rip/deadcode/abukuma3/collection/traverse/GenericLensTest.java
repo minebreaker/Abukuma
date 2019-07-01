@@ -3,6 +3,7 @@ package rip.deadcode.abukuma3.collection.traverse;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.Test;
+import rip.deadcode.abukuma3.collection.traverse.internal.GenericLens;
 
 import java.util.List;
 import java.util.Map;
