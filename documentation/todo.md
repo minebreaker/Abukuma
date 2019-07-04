@@ -37,3 +37,4 @@
 * Netty backend
     * Vert.x
 * Graal VM Compatibility check
+* JDK support - Oracle LTS lines?
