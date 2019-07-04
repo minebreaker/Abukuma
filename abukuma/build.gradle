@@ -1,3 +1,6 @@
+//noinspection UnnecessaryQualifiedReference
+apply plugin: rip.deadcode.abukuma3.generator.GeneratorPlugin
+
 dependencies {
     compile(
             'org.organicdesign:Paguro:3.1.2',
@@ -6,3 +9,13 @@ dependencies {
             'org.slf4j:slf4j-api:1.7.26',
     )
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "build/generated/sources/annotationProcessor/java/main"
+        }
+    }
+}
+
+compileJava.dependsOn(generateDataClasses)

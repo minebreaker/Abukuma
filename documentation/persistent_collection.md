@@ -7,7 +7,7 @@ In addition, we provide persistent
 of Google Guava.
 
 * All mutating operations will throw `UnsupportedOperationException`
-* Rejects `null` values
+* Rejects `null` keys but accepts `null` values  # TODO
 * Clojure, the original implementation of Paguro, does not provide non-O(1) methods because of performance reasons,
     but that is a little inconvenient.
 
@@ -16,18 +16,30 @@ of Google Guava.
 
 * Implements `Map`
 
+### Record type
+
+* It's a map, which are always expected to have same keys
+* All modifying operations will return `Map`
+
+<!--
+Isn't a plain Record enough?
 ### Map-view type
 
-* It's a map, which are always expected to have same keys, can have more keys if you want to
-* All removing operations will return `Map`, since it no more has the type `T`
+* It's a map, which are always expected to have certain keys, can have extra keys if you want to
+* Add/replaces will return `T`
+* All removing operations will throw a runtime exception, since it does not have a type `T` anymore.
+    * Sadly we can't assure compile time due to limitations of the Java type system
+-->
 
 ### Map-with-convenience-method type
 
-* It's just a map, with few convenience methods, not expected to always have certain keys.
+* It's just a map, with property accessors, not expected to always have certain keys.
 * All modifying operations will return its type `T`
 
 
 ## Methods for `PersistentList`
+
+mayGet(int): Optional<V>
 
 first(): V
 last(): V
@@ -36,12 +48,11 @@ addLast(V): List<V>
 
     `[v1, v2].assoc(v3) -> [v1, v2, v3]`
 
-mayGet(int): Optional<V>
-
 insert(int, V): List<V>
-remove(int): List<V>
+replace(int, V): List<V>
+delete(int): List<V>
 
-concat(List<V>): List<V>
+concat(Iterable<V>): List<V>
 
     `[v1, v2].concat([v1, v2]) -> [v1, v2, v3, v4]`
 
@@ -51,6 +62,7 @@ concat(List<V>): List<V>
 mayGet(K): Optional<V>
 set(K, V): T
 delete(K, V): T
+merge(Map<K, V>)
 
 
 ## Methods for `PersistentListMultimap`

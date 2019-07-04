@@ -11,7 +11,7 @@ import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 import rip.deadcode.abukuma3.value.AbuResponse;
-import rip.deadcode.abukuma3.value.internal.CookieImpl;
+import rip.deadcode.abukuma3.value.internal.SerializeCookie;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,7 +63,7 @@ public final class JettyHandler extends AbstractHandler {
                 // TODO duplicate cookie check
                 response.cookie().forEach( c -> {
                     // We don't use ServletResponse.addCookie() because it doesn't support SameSite.
-                    originalResponse.setHeader( HttpHeaders.SET_COOKIE, CookieImpl.serialize( c ) );
+                    originalResponse.setHeader( HttpHeaders.SET_COOKIE, SerializeCookie.serialize( c ) );
                 } );
 
                 renderingResult.rendering().accept( originalResponse.getOutputStream() );
