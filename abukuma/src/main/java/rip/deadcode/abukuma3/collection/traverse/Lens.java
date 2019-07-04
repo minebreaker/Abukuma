@@ -3,11 +3,30 @@ package rip.deadcode.abukuma3.collection.traverse;
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 
 public interface Lens<S, A> {
 
     public static <S, A> Lens<S, A> create( Getter<S, A> getter, Setter<S, A> setter ) {
+
+        if ( getter instanceof GetterStreamable ) {
+            GetterStreamable<S, A> g = (GetterStreamable<S, A>) getter;
+            return new Lens<S, A>() {
+
+                @Override public Getter<S, A> getter() {
+                    return g;
+                }
+
+                @Override public Stream<A> getAll( S object ) {
+                    return g.stream( object );
+                }
+
+                @Override public Setter<S, A> setter() {
+                    return setter;
+                }
+            };
+        }
 
         return new Lens<S, A>() {
             @Override public Getter<S, A> getter() {
@@ -29,6 +48,10 @@ public interface Lens<S, A> {
 
     public default Optional<A> mayGet( S object ) {
         return Optional.ofNullable( get( object ) );
+    }
+
+    public default Stream<A> getAll( S object ) {
+        return mayGet( object ).map( Stream::of ).orElseGet( Stream::empty );
     }
 
     public Setter<S, A> setter();

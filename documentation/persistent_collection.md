@@ -12,10 +12,6 @@ of Google Guava.
     but that is a little inconvenient.
 
 
-## Value type
-
-* Implements `Map`
-
 ### Record type
 
 * It's a map, which are always expected to have same keys

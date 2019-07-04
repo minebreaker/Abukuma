@@ -27,6 +27,10 @@ public final class PathedPersistentMapLens<K, V, T extends PersistentMap<K, V, T
         };
     }
 
+    // TODO stream for path
+//    @Override public Stream<V> getAll( T map ) {
+//    }
+
     @Override public Setter<T, V> setter() {
         return ( map, value ) -> {
             Optional<K> key = map.keySet().stream().filter( e -> Objects.equals( e.toString(), path ) ).findAny();
