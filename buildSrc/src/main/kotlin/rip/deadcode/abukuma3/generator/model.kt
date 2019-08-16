@@ -31,7 +31,7 @@ fun mapRecordConstructor(map: Map<String, Any>?): RecordConstructor? {
 
 fun mapRecordProperty(map: Map<String, Any>): RecordProperty {
     val optional = map["optional"].bool()
-    val nullable = optional || map["nullable"].bool()
+    val nullable = map["nullable"].bool()
     val javadoc = when (val javadocObj = map["javadoc"]) {
         is Map<*, *> -> {
             @Suppress("UNCHECKED_CAST")

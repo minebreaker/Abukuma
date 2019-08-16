@@ -93,13 +93,17 @@ fun renderRequiredArgConstructor(model: Record) =
         """
             public ${model.name}(
                 ${model.properties
-                .filter { !it.nullable && it.default == null }
+                .filter { 
+                    if (it.name == "value") {
+                        println(it)
+                    }
+                    !it.nullable && !it.optional && it.default == null }
                 .joinToString { annotateNullable(it) + " " + it.type + " " + it.name }}
             ) {
                 ${model.properties
-                .filter { !it.nullable }
+                .filter { !it.nullable && !it.optional }
                 .joinToString("\n") {
-                    "this.${it.name} = ${it.default ?: checkNotNull(it)};"
+                    "this.${it.name} = ${it.default ?: checkingNotNull(it)};"
                 }}
             }
         """.trimIndent()
@@ -109,7 +113,7 @@ fun renderAllArgConstructor(model: Record) =
             public ${model.name}(
                 ${model.properties.joinToString { annotateNullable(it) + " " + it.type + " " + it.name }}
             ) {
-                ${model.properties.joinToString("\n") { "this.${it.name} = ${checkNotNull(it)};" }}
+                ${model.properties.joinToString("\n") { "this.${it.name} = ${checkingNotNull(it)};" }}
             }
         """.trimIndent()
 
@@ -300,8 +304,8 @@ private fun annotateNullable(property: RecordProperty) =
         else
             ""
 
-private fun checkNotNull(property: RecordProperty) =
-        if (!property.acceptsNull())
+private fun checkingNotNull(property: RecordProperty) =
+        if (!property.isPrimitive() && !property.acceptsNull())
             "checkNotNull( ${property.name} )"
         else
             property.name
