@@ -28,6 +28,8 @@ public interface PersistentList<T> extends List<T>, Pathable<PersistentList<T>, 
 
     public PersistentList<T> concat( Iterable<? extends T> list );
 
+    public List<T> mutable();
+
     @Override public default Lens<PersistentList<T>, T> lens( String path ) {
         return new PersistentListLens<>( Integer.parseInt( path ) );
     }

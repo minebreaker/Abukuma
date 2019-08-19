@@ -4,6 +4,7 @@ import com.google.common.collect.ForwardingList;
 import org.organicdesign.fp.collections.ImList;
 import org.organicdesign.fp.collections.PersistentVector;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,5 +124,9 @@ public abstract class AbstractPersistentList<T> extends ForwardingList<T> implem
         return constructor( new Envelope<>(
                 delegate.concat( list )
         ) );
+    }
+
+    @Override public List<T> mutable() {
+        return new ArrayList<>( this );
     }
 }

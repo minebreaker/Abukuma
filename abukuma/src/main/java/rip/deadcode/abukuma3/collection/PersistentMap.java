@@ -19,6 +19,8 @@ public interface PersistentMap<K, V, T extends PersistentMap<K, V, T>>
 
     public T merge( Map<K, V> map );
 
+    public Map<K, V> mutable();
+
     @Override public default Lens<T, V> lens( String path ) {
         return new PathedPersistentMapLens<>( path );
     }

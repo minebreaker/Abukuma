@@ -2,6 +2,8 @@ package rip.deadcode.abukuma3.collection;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 
@@ -31,5 +33,14 @@ class AbuPersistentMapTest {
         AbuPersistentMap<String, String> param = AbuPersistentMap.<String, String>create()
                 .set( "k1", "v1" ).set( "k2", "v2" );
         assertThat( param.delete( "k2" ) ).containsExactly( "k1", "v1" );
+    }
+
+    @Test
+    void testMutable() {
+
+        Map<String, String> param = AbuPersistentMap.<String, String>create().set( "k1", "v1" ).mutable();
+        param.put( "k1", "replaced" );
+
+        assertThat( param ).containsExactly( "k1", "replaced" );
     }
 }

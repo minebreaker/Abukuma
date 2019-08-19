@@ -26,6 +26,8 @@ public interface PersistentListMultimap<K, V, T extends PersistentListMultimap<K
 
     public T delete( K key );
 
+    public ListMultimap<K, V> mutable();
+
     @Override public default Lens<T, List<V>> lens( String path ) {
         return new PathedPersistentListMultimapLens<>( path );
     }

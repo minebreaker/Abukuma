@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.collection;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import org.junit.jupiter.api.Test;
 
@@ -146,5 +147,15 @@ class AbuPersistentListMultimapTest {
                                              .add( "k1", "v2" )
                                              .add( "k2", "v3" ) )
                 .hasSize( 3 );
+    }
+
+    @Test
+    void testMutable() {
+
+        ListMultimap<String, String> param = AbuPersistentListMultimap.<String, String>create()
+                .add( "k1", "v1" ).mutable();
+        param.get( "k1" ).add( "v2" );
+
+        assertThat( param ).containsExactly( "k1", "v1", "k1", "v2" );
     }
 }

@@ -295,6 +295,10 @@ fun renderRecordMapOverride(record: Record) =
                                        .merge( this )
                                        .merge( map );
             }
+            
+            @Override public Map<String, Object> mutable() {
+                return new HashMap<>( this );
+            }
         """.trimIndent()
 
 

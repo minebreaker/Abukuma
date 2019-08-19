@@ -3,6 +3,8 @@ package rip.deadcode.abukuma3.collection;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static rip.deadcode.izvestia.Core.expect;
@@ -117,6 +119,15 @@ class AbuPersistentListTest {
         PersistentList<String> param = AbuPersistentList.<String>create()
                 .addLast( "foo" )
                 .concat( ImmutableList.of( "bar" ) );
+
+        assertThat( param ).containsExactly( "foo", "bar" ).inOrder();
+    }
+
+    @Test
+    void testMutable() {
+
+        List<String> param = AbuPersistentList.<String>create().addLast( "foo" ).mutable();
+        param.add( "bar" );
 
         assertThat( param ).containsExactly( "foo", "bar" ).inOrder();
     }

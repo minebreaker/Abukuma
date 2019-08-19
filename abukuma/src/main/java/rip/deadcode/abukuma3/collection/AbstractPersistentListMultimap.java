@@ -1,6 +1,8 @@
 package rip.deadcode.abukuma3.collection;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
@@ -256,5 +258,9 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
             }
         }
         return false;
+    }
+
+    @Override public ListMultimap<K, V> mutable() {
+        return ArrayListMultimap.create( this );
     }
 }

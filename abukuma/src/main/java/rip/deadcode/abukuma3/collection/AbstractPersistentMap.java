@@ -5,6 +5,7 @@ import org.organicdesign.fp.collections.ImMap;
 import org.organicdesign.fp.collections.MutableMap;
 import org.organicdesign.fp.collections.PersistentHashMap;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -63,5 +64,9 @@ public abstract class AbstractPersistentMap<K, V, T extends AbstractPersistentMa
             temp.assoc( e );
         }
         return constructor( temp.immutable() );
+    }
+
+    @Override public Map<K, V> mutable() {
+        return new HashMap<>( this );
     }
 }
