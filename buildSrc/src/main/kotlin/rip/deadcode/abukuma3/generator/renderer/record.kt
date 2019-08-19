@@ -94,9 +94,6 @@ fun renderRequiredArgConstructor(model: Record) =
             public ${model.name}(
                 ${model.properties
                 .filter { 
-                    if (it.name == "value") {
-                        println(it)
-                    }
                     !it.nullable && !it.optional && it.default == null }
                 .joinToString { annotateNullable(it) + " " + it.type + " " + it.name }}
             ) {
