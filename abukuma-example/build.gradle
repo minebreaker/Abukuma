@@ -13,6 +13,12 @@ dependencies {
 }
 
 jar {
+    manifest {
+        attributes(
+                'Main-Class': 'rip.deadcode.abukuma3.example.Main'
+        )
+    }
+
     // Fat jar
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
