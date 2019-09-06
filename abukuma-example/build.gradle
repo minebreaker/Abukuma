@@ -12,6 +12,12 @@ dependencies {
     )
 }
 
+jar {
+    // Fat jar
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+}
+
 jib {
     to.image = "minebreaker/${project.name}:${version}"
 }

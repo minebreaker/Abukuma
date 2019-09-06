@@ -27,6 +27,11 @@ subprojects {
         testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
     }
 
+    javadoc {
+        // Temporary suppress warnings
+        options.addStringOption("Xdoclint:none", "-quiet")
+    }
+
     task sourcesJar(type: Jar, dependsOn: classes) {
         archiveClassifier.set('sources')
         from sourceSets.main.allSource

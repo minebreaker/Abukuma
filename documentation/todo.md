@@ -5,6 +5,7 @@
 * Exception handler with type-based dispatch
 * Lens
     * Strict lens (Prism, Lens, Optional...) or more easy-to-use ones (`getIn()` `setIn()` things)?
+* SSL Cert
 
 
 ## Bugs
