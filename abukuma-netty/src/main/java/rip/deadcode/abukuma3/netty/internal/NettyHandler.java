@@ -17,6 +17,10 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.LastHttpContent;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.SslHandler;
+import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import rip.deadcode.abukuma3.AbuExecutionContext;
@@ -28,10 +32,13 @@ import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 import rip.deadcode.abukuma3.value.AbuResponse;
 
+import javax.net.ssl.KeyManagerFactory;
 import java.io.ByteArrayOutputStream;
+import java.security.KeyStore;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
 public final class NettyHandler extends ChannelInitializer<SocketChannel> {
@@ -98,7 +105,16 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
 
     @Override
     protected void initChannel( SocketChannel ch ) {
+        KeyStore keyStore = uncheck(() -> KeyStore.getInstance("JKS"));
+        KeyManagerFactory keyManagerFactory = uncheck(() -> KeyManagerFactory.getInstance("X509"));
+        uncheck(() -> keyManagerFactory.init(keyStore, "".toCharArray()));
+        SslContext sslCtx = uncheck(() ->
+                SslContextBuilder
+                .forServer(keyManagerFactory)
+                .build());
+
         ch.pipeline()
+          .addLast( new SslHandler(sslCtx.newEngine(ch.alloc())))
           .addLast( new HttpRequestDecoder() )
           .addLast( new HttpResponseEncoder() )
           .addLast( new HttpContentCompressor() )

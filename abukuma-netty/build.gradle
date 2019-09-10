@@ -1,6 +1,7 @@
 dependencies {
     compile(
             project(':abukuma'),
-            'io.netty:netty-codec-http:4.1.27.Final'
+            'io.netty:netty-codec-http:4.1.27.Final',
+            'io.netty:netty-handler:4.1.27.Final'
     )
 }
