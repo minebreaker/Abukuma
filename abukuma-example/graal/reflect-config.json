@@ -1,0 +1,201 @@
+[
+    {
+        "name": "ch.qos.logback.classic.encoder.PatternLayoutEncoder",
+        "allPublicMethods": true,
+        "methods": [
+            {
+                "name": "<init>",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "ch.qos.logback.classic.pattern.DateConverter",
+        "methods": [
+            {
+                "name": "<init>",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "ch.qos.logback.classic.pattern.LevelConverter",
+        "methods": [
+            {
+                "name": "<init>",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "ch.qos.logback.classic.pattern.LineSeparatorConverter",
+        "methods": [
+            {
+                "name": "<init>",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "ch.qos.logback.classic.pattern.LoggerConverter",
+        "methods": [
+            {
+                "name": "<init>",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "ch.qos.logback.classic.pattern.MessageConverter",
+        "methods": [
+            {
+                "name": "<init>",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "ch.qos.logback.classic.pattern.ThreadConverter",
+        "methods": [
+            {
+                "name": "<init>",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "ch.qos.logback.core.ConsoleAppender",
+        "allPublicMethods": true,
+        "methods": [
+            {
+                "name": "<init>",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.Boolean",
+        "methods": [
+            {
+                "name": "valueOf",
+                "parameterTypes": [
+                    "java.lang.String"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.Byte",
+        "methods": [
+            {
+                "name": "valueOf",
+                "parameterTypes": [
+                    "java.lang.String"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.Double",
+        "methods": [
+            {
+                "name": "valueOf",
+                "parameterTypes": [
+                    "java.lang.String"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.Float",
+        "methods": [
+            {
+                "name": "valueOf",
+                "parameterTypes": [
+                    "java.lang.String"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.Integer",
+        "methods": [
+            {
+                "name": "valueOf",
+                "parameterTypes": [
+                    "java.lang.String"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.Long",
+        "methods": [
+            {
+                "name": "valueOf",
+                "parameterTypes": [
+                    "java.lang.String"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.Short",
+        "methods": [
+            {
+                "name": "valueOf",
+                "parameterTypes": [
+                    "java.lang.String"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.Throwable",
+        "methods": [
+            {
+                "name": "getSuppressed",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.management.ManagementFactory",
+        "methods": [
+            {
+                "name": "getRuntimeMXBean",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "java.lang.management.RuntimeMXBean",
+        "methods": [
+            {
+                "name": "getUptime",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "javax.management.ObjectName"
+    },
+    {
+        "name": "org.eclipse.jetty.util.log.Slf4jLog",
+        "methods": [
+            {
+                "name": "<init>",
+                "parameterTypes": [ ]
+            }
+        ]
+    },
+    {
+        "name": "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+        "allDeclaredConstructors": true,
+        "allPublicConstructors": true,
+        "allDeclaredMethods": true,
+        "allPublicMethods": true,
+        "allDeclaredClasses": true,
+        "allPublicClasses": true
+    }
+]

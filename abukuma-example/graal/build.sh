@@ -1,0 +1,9 @@
+native-image \
+  --no-server \
+  --no-fallback \
+  --allow-incomplete-classpath \
+  --initialize-at-build-time=org.eclipse.jetty.util.thread.TryExecutor \
+  -H:IncludeResourceBundles=javax.servlet.LocalStrings \
+  -H:ReflectionConfigurationFiles=reflect-config.json \
+  -H:ResourceConfigurationFiles=resource-config.json \
+  -jar "${ABU_HOME}/abukuma-example/build/libs/abukuma-example-0.1.0-SNAPSHOT.jar"

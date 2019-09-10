@@ -1,0 +1,15 @@
+{
+    "resources": [
+        { "pattern": "META-INF/services/org.eclipse.jetty.http.HttpFieldPreEncoder" },
+        { "pattern": "META-INF/services/rip.deadcode.abukuma3.ServerFactory" },
+        { "pattern": "javax/servlet/LocalStrings.properties" },
+        { "pattern": "javax/servlet/LocalStrings_ja.properties" },
+        { "pattern": "org/eclipse/jetty/http/encoding.properties" },
+        { "pattern": "org/eclipse/jetty/http/mime.properties" },
+        { "pattern": "org/eclipse/jetty/version/build.properties" },
+        { "pattern": "org/slf4j/impl/StaticLoggerBinder.class" },
+        { "pattern": "logback.xml" },
+        { "pattern": "rip/deadcode/abukuma3/example/" },
+        { "pattern": "rip/deadcode/abukuma3/example/index.html" }
+    ]
+}
