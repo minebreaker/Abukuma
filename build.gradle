@@ -4,11 +4,15 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
+    apply plugin: 'maven-publish'
 
     repositories {
         mavenCentral()
         maven {
             url = "https://dl.bintray.com/minebreaker/test"
+        }
+        maven {
+            url = 'https://maven.pkg.github.com/minebreaker/Abukuma'
         }
     }
 
@@ -62,7 +66,7 @@ subprojects {
     test {
         useJUnitPlatform()
         systemProperties([
-                "junit.jupiter.execution.parallel.enabled": true,
+                "junit.jupiter.execution.parallel.enabled"     : true,
                 "junit.jupiter.execution.parallel.mode.default": "concurrent"
         ])
     }
@@ -71,6 +75,38 @@ subprojects {
         reports {
             xml.enabled = true
             html.enabled = true
+        }
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = "github"
+                url = 'https://maven.pkg.github.com/minebreaker/Abukuma'
+                credentials {
+                    username = project.hasProperty("GITHUB_USER") ? GITHUB_USER : ''
+                    password = project.hasProperty("GITHUB_TOKEN") ? GITHUB_TOKEN : ''
+                }
+            }
+        }
+
+        publications {
+            maven(MavenPublication) {
+                version '0.0.0.2-EXPLORING_GITHUB_REGISTRY'
+
+                pom {
+                    url = 'https://github.com/minebreaker/Abukuma'
+                    licenses {
+                        license {
+                            name = 'MIT'
+                        }
+                    }
+                }
+
+                from components.java
+//                artifact sourcesJar
+//                artifact javadocJar
+            }
         }
     }
 
