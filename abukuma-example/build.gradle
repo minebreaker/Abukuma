@@ -8,7 +8,6 @@ dependencies {
 //            project(':abukuma-gson'),
             'rip.deadcode.abukuma3:abukuma-jetty:0.0.0.2-EXPLORING_GITHUB_REGISTRY',
             'rip.deadcode.abukuma3:abukuma-gson:0.0.0.2-EXPLORING_GITHUB_REGISTRY',
-//            'rip.deadcode.ratpack:ratpack-basicauth:0.0.7-EXPLORING_GITHUB_REGISTRY',
 
             'org.slf4j:jul-to-slf4j:1.7.25', // Guava uses java.util.logging
             'ch.qos.logback:logback-classic:1.2.3'

@@ -13,6 +13,10 @@ subprojects {
         }
         maven {
             url = 'https://maven.pkg.github.com/minebreaker/Abukuma'
+            credentials {
+                username = project.hasProperty("GITHUB_USER") ? GITHUB_USER : ''
+                password = project.hasProperty("GITHUB_TOKEN") ? GITHUB_TOKEN : ''
+            }
         }
     }
 
@@ -92,20 +96,27 @@ subprojects {
 
         publications {
             maven(MavenPublication) {
-                version '0.0.0.2-EXPLORING_GITHUB_REGISTRY'
+                version '0.0.0.3-EXPLORING_GITHUB_REGISTRY'
 
                 pom {
                     url = 'https://github.com/minebreaker/Abukuma'
+
                     licenses {
                         license {
                             name = 'MIT'
                         }
                     }
+
+                    scm {
+                        connection = 'scm:git:https://github.com/minebreaker/Abukuma.git'
+                        developerConnection = 'scm:git:https://github.com/minebreaker/Abukuma.git'
+                        url = 'https://github.com/minebreaker/Abukuma'
+                    }
                 }
 
                 from components.java
-//                artifact sourcesJar
-//                artifact javadocJar
+                artifact sourcesJar
+                artifact javadocJar
             }
         }
     }
