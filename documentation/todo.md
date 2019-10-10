@@ -6,6 +6,7 @@
 * Lens
     * Strict lens (Prism, Lens, Optional...) or more easy-to-use ones (`getIn()` `setIn()` things)?
 * SSL Cert
+* Better DI and lifecycle hooks
 
 
 ## Bugs
