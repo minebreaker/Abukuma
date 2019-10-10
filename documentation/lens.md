@@ -2,7 +2,7 @@
 
 Actually it's more like a traversal.
 
-* `Pathable` is a object that supports `Lens`.
+* `Pathable` is an object that supports `Lens`.
 
 
 ## Path query syntax
