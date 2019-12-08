@@ -218,7 +218,7 @@ public final class Abukuma {
 
             if ( requestedFactoryName.isPresent() ) {
                 String factoryName = requestedFactoryName.get();
-                // Should use stream() for JDK9+
+                // Should use loader.stream() for JDK9+
                 return Streams.stream( loader )
                               .filter( factory -> factory.getClass().getCanonicalName().equals( factoryName ) )
                               .findFirst()
