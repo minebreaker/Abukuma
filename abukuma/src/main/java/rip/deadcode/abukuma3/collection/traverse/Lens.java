@@ -11,21 +11,7 @@ public interface Lens<S, A> {
     public static <S, A> Lens<S, A> create( Getter<S, A> getter, Setter<S, A> setter ) {
 
         if ( getter instanceof GetterStreamable ) {
-            GetterStreamable<S, A> g = (GetterStreamable<S, A>) getter;
-            return new Lens<S, A>() {
-
-                @Override public Getter<S, A> getter() {
-                    return g;
-                }
-
-                @Override public Stream<A> getAll( S object ) {
-                    return g.stream( object );
-                }
-
-                @Override public Setter<S, A> setter() {
-                    return setter;
-                }
-            };
+            return LensStreamable.create( (GetterStreamable<S, A>) getter, setter );
         }
 
         return new Lens<S, A>() {
