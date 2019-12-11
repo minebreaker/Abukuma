@@ -10,7 +10,6 @@ import rip.deadcode.abukuma3.router.RouterSpec;
 import javax.annotation.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Function;
 
@@ -69,7 +68,7 @@ public class RouterSpecImpl implements RouterSpec {
         return add( new MappingRouter(
                 mappingRoutePath,
                 root.toString(),
-                path -> new PathHandler( Paths.get( path ) )
+                path -> new PathHandler( root.getFileSystem().getPath( path ) )
         ) );
     }
 

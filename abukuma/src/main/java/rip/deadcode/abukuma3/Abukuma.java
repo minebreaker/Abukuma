@@ -20,6 +20,7 @@ import rip.deadcode.abukuma3.renderer.internal.CharSequenceRenderer;
 import rip.deadcode.abukuma3.renderer.internal.InputStreamRenderer;
 import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.router.RouterSpec;
+import rip.deadcode.abukuma3.utils.internal.DefaultModule;
 import rip.deadcode.abukuma3.value.AbuConfig;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -60,7 +61,7 @@ public final class Abukuma {
         private List<AbuRenderer> renderers = ImmutableList.of();
         private List<AbuFilter> filters = ImmutableList.of();
         private AbuExceptionHandler exceptionHandler = new DefaultExceptionHandler();
-        private List<Module> modules = ImmutableList.of();
+        private List<Module> modules = ImmutableList.of( new DefaultModule() );
 
         private AbuServerBuilder() {
             logger.info( Information.INFO_STRING );

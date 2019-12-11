@@ -29,6 +29,7 @@
 * Specify server class (not factory) in config
 * Write tests
 * Move collections to a new independent project
+* Replace Guava ImmutableCollection to Paguro
 
 
 ## Ideas
