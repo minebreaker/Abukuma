@@ -5,13 +5,12 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.internal.utils.Uncheck;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 import rip.deadcode.abukuma3.value.Cookie;
 import rip.deadcode.abukuma3.value.internal.CookieImpl;
 
 import javax.annotation.Nullable;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
+import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
 // TODO Should be integrated into the AbuHeader
@@ -41,11 +41,19 @@ public final class JettyRequestHeader implements AbuRequestHeader {
         return jettyRequest.getMethod();
     }
 
-    @Override public URL url() {
-        return Uncheck.uncheck( () -> new URL( jettyRequest.getRequestURL().toString() ) );
+    @Override public URI url() {
+        return uncheck( () -> new URI(
+                jettyRequest.getScheme(),
+                null,
+                jettyRequest.getServerName(),
+                jettyRequest.getServerPort(),
+                jettyRequest.getRequestURI(),
+                jettyRequest.getQueryString(),
+                null
+        ) );
     }
 
-    @Override public String requestUri() {
+    @Override public String urlString() {
         return jettyRequest.getRequestURI();
     }
 

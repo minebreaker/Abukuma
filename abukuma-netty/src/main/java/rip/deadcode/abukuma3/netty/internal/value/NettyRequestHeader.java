@@ -6,7 +6,7 @@ import rip.deadcode.abukuma3.value.AbuRequestHeader;
 import rip.deadcode.abukuma3.value.Cookie;
 
 import javax.annotation.Nullable;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
@@ -36,12 +36,12 @@ public class NettyRequestHeader implements AbuRequestHeader {
     }
 
     @Override
-    public URL url() {
-        return uncheck( () -> new URL( request.request.uri() ) );
+    public URI url() {
+        return uncheck( () -> new URI( request.request.uri() ) );
     }
 
     @Override
-    public String requestUri() {
+    public String urlString() {
         return request.request.uri();
     }
 

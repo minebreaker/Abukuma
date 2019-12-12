@@ -5,7 +5,7 @@ import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,11 +24,11 @@ public final class TestRequest implements AbuRequest {
         return null;
     }
 
-    @Override public URL url() {
+    @Override public URI url() {
         return null;
     }
 
-    @Override public String requestUri() {
+    @Override public String urlString() {
         return null;
     }
 

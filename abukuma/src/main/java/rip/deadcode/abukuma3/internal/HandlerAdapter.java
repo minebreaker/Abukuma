@@ -62,8 +62,8 @@ public abstract class HandlerAdapter<Q, R> {
         AbuRequestHeader header = createHeader( context, originalRequest );
         RoutingResult route = router.route( new RoutingContextImpl(
                 header,
-                header.requestUri(),
-                header.requestUri()
+                header.urlString(),
+                header.urlString()
         ) );
         checkNotNull( route, "No matching route found." );
 

@@ -19,7 +19,7 @@ public final class LoggingFilter implements AbuFilter {
     }
 
     @Override public AbuResponse filter( AbuRequest request, AbuHandler handler ) {
-        logger.info( "Request: {} {}", request.method(), request.requestUri() );  // TODO
+        logger.info( "Request: {} {}", request.method(), request.urlString() );  // TODO
         return handler.handle( request );
     }
 }

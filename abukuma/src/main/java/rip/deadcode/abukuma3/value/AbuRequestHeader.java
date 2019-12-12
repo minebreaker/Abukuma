@@ -5,7 +5,7 @@ import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
 
 import javax.annotation.Nullable;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +23,7 @@ public interface AbuRequestHeader {
      *
      * @return URL of the request
      */
-    public URL url();
+    public URI url();
 
     /**
      * Returns the URL {@link String} sent from the client.
@@ -31,7 +31,7 @@ public interface AbuRequestHeader {
      *
      * @return URL String
      */
-    public String requestUri();
+    public String urlString();
 
     @Nullable
     public String getValue( String headerName );

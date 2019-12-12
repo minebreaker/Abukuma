@@ -4,7 +4,7 @@ import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,9 +17,9 @@ public interface AbuRequest {
 
     public String method();
 
-    public URL url();
+    public URI url();
 
-    public String requestUri();
+    public String urlString();
 
     // TODO header can have multiple values, but only the last one should be used?
     public AbuRequestHeader header();

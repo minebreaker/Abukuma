@@ -12,7 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
@@ -74,12 +74,12 @@ public class NettyRequest implements AbuRequest {
         return header.method();
     }
 
-    @Override public URL url() {
+    @Override public URI url() {
         return header.url();
     }
 
-    @Override public String requestUri() {
-        return header.requestUri();
+    @Override public String urlString() {
+        return header.urlString();
     }
 
     @Override public AbuRequestHeader header() {
