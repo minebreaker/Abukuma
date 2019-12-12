@@ -2,7 +2,7 @@
 apply plugin: rip.deadcode.abukuma3.generator.GeneratorPlugin
 
 dependencies {
-    compile(
+    api(
             'org.organicdesign:Paguro:3.1.2',
             'javax.cache:cache-api:1.1.1',
 

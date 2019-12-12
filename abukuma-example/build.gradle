@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compile(
+    api(
             project(':abukuma-jetty'),
             project(':abukuma-gson'),
 

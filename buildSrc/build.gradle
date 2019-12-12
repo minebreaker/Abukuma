@@ -10,12 +10,12 @@ repositories {
 }
 
 dependencies {
-    compile(
+    implementation(
             'org.jetbrains.kotlin:kotlin-stdlib-jdk8',
             'com.google.guava:guava:28.1-jre',
             "org.yaml:snakeyaml:1.25"
     )
-    testCompile(
+    testImplementation(
             'org.junit.jupiter:junit-jupiter-api:5.5.2',
             'com.google.truth:truth:1.0',
             'com.google.truth.extensions:truth-java8-extension:1.0',
@@ -23,7 +23,7 @@ dependencies {
             'rip.deadcode:izvestia:0.3',
 //            'com.google.jimfs:jimfs:1.1'
     )
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 }
 
 test {
