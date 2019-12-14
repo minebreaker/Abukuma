@@ -17,11 +17,16 @@ public interface AbuRequest {
 
     public String method();
 
+    /**
+     * A convenience method for {@code header().url()}.
+     */
     public URI url();
 
+    /**
+     * A convenience method for {@code header().urlString()}
+     */
     public String urlString();
 
-    // TODO header can have multiple values, but only the last one should be used?
     public AbuRequestHeader header();
 
     public Optional<String> pathParam( String key );
@@ -30,7 +35,6 @@ public interface AbuRequest {
 
     public Optional<String> queryParam( String key );
 
-    // TODO Query param can have multiple values?
     public Multimap<String, String> queryParams();
 
     public Optional<String> host();
