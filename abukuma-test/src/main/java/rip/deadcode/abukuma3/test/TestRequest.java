@@ -1,7 +1,6 @@
 package rip.deadcode.abukuma3.test;
 
 import com.google.common.collect.Multimap;
-import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
 
@@ -13,10 +12,6 @@ import java.util.Optional;
 public final class TestRequest implements AbuRequest {
 
     @Override public <T> T body( Class<T> cls ) {
-        return null;
-    }
-
-    @Override public AbuExecutionContext context() {
         return null;
     }
 

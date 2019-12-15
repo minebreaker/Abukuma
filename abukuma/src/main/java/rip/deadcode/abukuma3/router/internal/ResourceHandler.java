@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.router.internal;
 
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.internal.utils.Resources;
 import rip.deadcode.abukuma3.value.AbuRequest;
@@ -17,12 +18,10 @@ public final class ResourceHandler implements AbuHandler {
         this.path = path;
     }
 
-    @Override
-    public AbuResponse handle( AbuRequest request ) {
+    @Override public AbuResponse handle( AbuExecutionContext context, AbuRequest request ) {
 
         // TODO may add `Content-Disposition: attachment; filename=`?
         // TODO cache
-
         return AbuResponses.create( Resources.grabResource( path ) )
                            .header( h -> h.contentType( guessMediaType( path ) ) );
     }

@@ -33,7 +33,6 @@ public final class JettyHandler extends AbstractHandler {
 
             @Override
             public AbuRequest createRequest(
-                    AbuExecutionContext context,
                     AbuRequestHeader header,
                     Request originalRequest,
                     HttpServletResponse originalResponse,

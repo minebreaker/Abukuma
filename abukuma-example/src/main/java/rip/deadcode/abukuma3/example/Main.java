@@ -15,19 +15,19 @@ public final class Main {
 
         Abukuma.config( AbuConfigs.create() )
                .router( AbuRouters.create()
-                                  .get( "/", req -> AbuResponses.create( "<h1>hello, world</h1>" )
-                                                                .header( h -> h.contentType( "text/html" ) ) )
-                                  .get( "/user/:name", req -> AbuResponses.create(
+                                  .get( "/", ( ctx, req ) -> AbuResponses.create( "<h1>hello, world</h1>" )
+                                                                         .header( h -> h.contentType( "text/html" ) ) )
+                                  .get( "/user/:name", ( ctx, req ) -> AbuResponses.create(
                                           String.format( "<h1>hello, %s!</h1>", req.pathParams().get( "name" ) ) )
-                                                                          .header( h -> h.contentType( "text/html" ) )
-                                  )
-                                  .post( "/post", req -> AbuResponses.create(
+                                                                                   .header( h -> h.contentType(
+                                                                                           "text/html" ) ) )
+                                  .post( "/post", ( ctx, req ) -> AbuResponses.create(
                                           String.format(
                                                   "<h1>hello, %s!</h1>",
                                                   req.body( UrlEncoded.class ).getValue( "name" )
                                           ) ) )
                                   .context( "context", r -> r
-                                          .path( "GET", "/nest", req ->
+                                          .path( "GET", "/nest", ( ctx, req ) ->
                                                   AbuResponses.create( "<h1>context</h1>" )
                                                               .header( h -> h.contentType( "text/html" ) ) ) )
                                   .file( "/file", Paths.get(
@@ -36,8 +36,8 @@ public final class Main {
                                           "./abukuma-example/src/main/resources/rip/deadcode/abukuma3/example" ) )
                                   .resource( "/resource", "rip/deadcode/abukuma3/example/index.html" )
                                   .resources( "/resources", "rip/deadcode/abukuma3/example" )
-                                  .notFound( req -> AbuResponses.create( "<h1>not found</h1>" )
-                                                                .header( h -> h.contentType( "text/html" ) ) ) )
+                                  .notFound( ( ctx, req ) -> AbuResponses.create( "<h1>not found</h1>" )
+                                                                         .header( h -> h.contentType( "text/html" ) ) ) )
                .build()
                .run();
     }

@@ -4,6 +4,7 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.Abukuma;
 import rip.deadcode.abukuma3.multipart.AbuFileItemIteratorParser;
 import rip.deadcode.abukuma3.router.AbuRouters;
@@ -30,7 +31,7 @@ public class Example {
                .run();
     }
 
-    private static AbuResponse handle( AbuRequest request ) {
+    private static AbuResponse handle( AbuExecutionContext context, AbuRequest request ) {
         try {
             FileItemIterator iter = request.body( FileItemIterator.class );
             while ( iter.hasNext() ) {

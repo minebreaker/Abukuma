@@ -63,10 +63,6 @@ public final class JettyRequest implements AbuRequest {
         }
     }
 
-    @Override public AbuExecutionContext context() {
-        return context;
-    }
-
     @Override public String method() {
         return header.method();
     }

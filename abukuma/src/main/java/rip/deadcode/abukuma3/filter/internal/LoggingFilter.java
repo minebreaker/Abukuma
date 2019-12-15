@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.filter.internal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.value.AbuRequest;
@@ -18,8 +19,8 @@ public final class LoggingFilter implements AbuFilter {
         this.logger = logger;
     }
 
-    @Override public AbuResponse filter( AbuRequest request, AbuHandler handler ) {
+    @Override public AbuResponse filter( AbuExecutionContext context, AbuRequest request, AbuHandler handler ) {
         logger.info( "Request: {} {}", request.method(), request.urlString() );  // TODO
-        return handler.handle( request );
+        return handler.handle( context, request );
     }
 }

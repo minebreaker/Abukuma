@@ -44,7 +44,6 @@ public abstract class HandlerAdapter<Q, R> {
     protected abstract AbuRequestHeader createHeader( AbuExecutionContext context, Q originalRequest );
 
     protected abstract AbuRequest createRequest(
-            AbuExecutionContext context,
             AbuRequestHeader header,
             Q originalRequest,
             R originalResponse,
@@ -68,7 +67,6 @@ public abstract class HandlerAdapter<Q, R> {
         checkNotNull( route, "No matching route found." );
 
         AbuRequest request = createRequest(
-                context,
                 header,
                 originalRequest,
                 originalResponse,
@@ -78,9 +76,9 @@ public abstract class HandlerAdapter<Q, R> {
         AbuHandler handler = route.handler();
 
         AbuResponse response = possibly(
-                () -> filter.filter( request, handler )
+                () -> filter.filter( context, request, handler )
         ).orElse(
-                e -> exceptionHandler.handleException( e, request )
+                e -> exceptionHandler.handleException( e, context, request )
         );
 
         try {

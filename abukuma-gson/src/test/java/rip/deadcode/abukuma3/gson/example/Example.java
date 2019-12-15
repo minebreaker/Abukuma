@@ -47,7 +47,7 @@ public final class Example {
                .addFilter( AbuFilters.antiCsrf() )
                .addModule( GsonModule.getInstance() )
                .router( AbuRouters.create()
-                                  .post( "/post", req -> {
+                                  .post( "/post", ( ctx, req ) -> {
                                       Request request = req.body( Request.class );
                                       Response response = new Response();
                                       response.setMessage( String.format(

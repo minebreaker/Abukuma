@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3.router.internal;
 
 
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.value.AbuRequest;
 import rip.deadcode.abukuma3.value.AbuResponse;
@@ -13,6 +14,7 @@ import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 import static rip.deadcode.abukuma3.router.internal.RoutingUtils.guessMediaType;
 
 
+// TODO remove this and create PathRenderer
 public final class PathHandler implements AbuHandler {
 
     private final Path path;
@@ -21,7 +23,7 @@ public final class PathHandler implements AbuHandler {
         this.path = path;
     }
 
-    @Override public AbuResponse handle( AbuRequest request ) {
+    @Override public AbuResponse handle( AbuExecutionContext context, AbuRequest request ) {
         // TODO file existence check
         // TODO may add `Content-Disposition: attachment; filename=`?
         // TODO cache

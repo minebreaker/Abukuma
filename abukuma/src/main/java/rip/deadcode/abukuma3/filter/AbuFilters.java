@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 public final class AbuFilters {
 
     public static AbuFilter noop() {
-        return ( r, h ) -> h.handle( r );
+        return ( c, r, h ) -> h.handle( c, r );
     }
 
     public static AbuFilter logging() {
@@ -21,7 +21,7 @@ public final class AbuFilters {
         return AntiCsrfHeaderFilter.singleton;
     }
 
-    public static AbuFilter basicAuth(Predicate<AuthRequest> accepts) {
-        return new BasicAuthFilter(accepts);
+    public static AbuFilter basicAuth( Predicate<AuthRequest> accepts ) {
+        return new BasicAuthFilter( accepts );
     }
 }

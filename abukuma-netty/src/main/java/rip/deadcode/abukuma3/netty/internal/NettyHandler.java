@@ -50,7 +50,6 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
 
             @Override
             protected AbuRequest createRequest(
-                    AbuExecutionContext context,
                     AbuRequestHeader header,
                     RequestAndContent originalRequest,
                     ChannelHandlerContext originalResponse,

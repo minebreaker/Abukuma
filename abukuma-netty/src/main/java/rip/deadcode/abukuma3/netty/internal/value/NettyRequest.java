@@ -54,7 +54,7 @@ public class NettyRequest implements AbuRequest {
             checkNotNull( result, "Could not find an appropriate parser for the type '%s'.", cls );
             checkState(
                     cls.isInstance( result ),
-                    "Illegal instance '%s' of type '%s' was returned by the parser for the request '%s'. This may be caused by a bug of the parsers.",
+                    "An illegal instance '%s' of type '%s' was returned by the parser for the request '%s'. This may be caused by a bug of the parsers.",
                     result,
                     result.getClass(),
                     cls
@@ -64,10 +64,6 @@ public class NettyRequest implements AbuRequest {
         } catch ( IOException e ) {
             throw new UncheckedIOException( e );
         }
-    }
-
-    @Override public AbuExecutionContext context() {
-        return context;
     }
 
     @Override public String method() {

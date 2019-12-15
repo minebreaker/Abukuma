@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.filter.internal;
 
+import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.handler.AbuHandler;
 import rip.deadcode.abukuma3.value.AbuRequest;
@@ -24,12 +25,14 @@ public final class AntiCsrfHeaderFilter implements AbuFilter {
         this.headerName = headerName;
     }
 
-    @Override public AbuResponse filter( AbuRequest request, AbuHandler handler ) {
+    @Override public AbuResponse filter( AbuExecutionContext context, AbuRequest request, AbuHandler handler ) {
 
-        if ( request.method().equals( "GET" ) || request.method().equals( "HEADER" ) || request.method().equals( "OPTIONS" )
+        if ( request.method().equals( "GET" )
+             || request.method().equals( "HEADER" )
+             || request.method().equals( "OPTIONS" )
              || request.header().mayGet( headerName ).isPresent() ) {
 
-            return handler.handle( request );
+            return handler.handle( context, request );
         }
 
         return errorResponse;
