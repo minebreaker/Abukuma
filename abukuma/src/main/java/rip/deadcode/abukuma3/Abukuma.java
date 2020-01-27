@@ -18,6 +18,7 @@ import rip.deadcode.abukuma3.parser.internal.UrlEncodedParser;
 import rip.deadcode.abukuma3.renderer.AbuRenderer;
 import rip.deadcode.abukuma3.renderer.internal.CharSequenceRenderer;
 import rip.deadcode.abukuma3.renderer.internal.InputStreamRenderer;
+import rip.deadcode.abukuma3.renderer.internal.PathRenderer;
 import rip.deadcode.abukuma3.router.AbuRouter;
 import rip.deadcode.abukuma3.router.RouterSpec;
 import rip.deadcode.abukuma3.utils.internal.DefaultModule;
@@ -52,6 +53,12 @@ public final class Abukuma {
                 new UrlEncodedParser(),
                 new StringParser(),
                 new InputStreamParser()
+        );
+
+        private static final List<AbuRenderer> defaultRenderers = ImmutableList.of(
+                new PathRenderer(),
+                new CharSequenceRenderer(),
+                new InputStreamRenderer()
         );
 
         private Registry registry = new RegistryImpl();
@@ -187,7 +194,7 @@ public final class Abukuma {
                     .addAll( parsers )
                     .addAll( defaultParsers )
                     .build();
-            addRenderers( new CharSequenceRenderer(), new InputStreamRenderer() );
+            addRenderers( defaultRenderers );
         }
 
         public AbuServer build() {
