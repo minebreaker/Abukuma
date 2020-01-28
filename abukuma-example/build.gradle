@@ -24,6 +24,12 @@ jar {
     exclude 'META-INF/LICENSE', 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/NOTICE*', 'about.html'
 }
 
+// Dependencies needed for the internal build process
+jar.dependsOn(
+        project(':abukuma-jetty').getTasksByName('jar', false),
+        project(':abukuma-gson').getTasksByName('jar', false)
+)
+
 jib {
     to.image = "minebreaker/${project.name}:${version}"
 }
