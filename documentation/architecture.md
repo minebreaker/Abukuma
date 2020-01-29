@@ -1,5 +1,10 @@
 # Architecture
 
+> interfaces and workflows that they liked and felt at ease with
+>
+> [*Steve Yegge*](https://gist.github.com/chitchcock/1281611)
+
+
 ## Flow
 
 1. A user sends a request.

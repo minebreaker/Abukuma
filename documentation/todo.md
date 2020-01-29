@@ -7,6 +7,7 @@
     * Strict lenses (Prism, Lens, Optional...) or more easy-to-use ones (`getIn()` `setIn()` things)?
 * SSL Cert
 * Better DI and lifecycle hooks
+* Memoizer
 
 
 ## Bugs
@@ -31,13 +32,12 @@
         * `rip.deadcode.abukuma3.utils.StaticImports`
 * Problem: Are `Abu` prefixes necessary?
     * Remove prefixes?
-* `Request` should be lazy or not?
 * Problem: Specifying server factory is odd
     * Specify server class (not factory) in config
 * Write tests
 * Move collections to a new independent project
 * Replace Guava ImmutableCollection to internal ones
-* Type hierarchy should be expressed as trees, not lists
+* ~~Type hierarchy should be expressed as trees, not lists~~ This is not as easy as it seems - need more considerations
     * e.g.) parsers, renderers...
     * Searching should be faster
 * Request body should be pre-parsed by the framework?
@@ -46,6 +46,7 @@
 * Request should be lazy?
     * Apparently this requires what to be parsed must be determined in advance.
       Required parameters should be configurable for the sake of performance.
+* Even data classes should be exposed as interfaces, not classes
 
 
 ## Ideas
