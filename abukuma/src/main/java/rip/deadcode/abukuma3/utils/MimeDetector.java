@@ -16,4 +16,11 @@ public interface MimeDetector {
      * @return A possible mime type string of the given file.
      */
     public String detectMime( String pathAsString, @Nullable Path path );
+
+    /**
+     * A convenience method for {@code detectMime(pathAsString, null)}
+     */
+    public default String detectMime( String pathAsString ) {
+        return detectMime( pathAsString, null );
+    }
 }
