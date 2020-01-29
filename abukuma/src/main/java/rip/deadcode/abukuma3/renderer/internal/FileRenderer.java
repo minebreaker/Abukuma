@@ -32,7 +32,7 @@ public final class FileRenderer implements AbuRenderer {
         MimeDetector mimeDetector = checkNotNull( context.get( MimeDetector.class ) );
         File body = (File) bodyObj;
 
-        String mime = mimeDetector.detectMime( body.toString(), null );
+        String mime = mimeDetector.detectMime( body.toString() );
 
         CacheManager cacheManager = context.get( CacheManager.class, "java.io.File" );
         if ( cacheManager != null ) {
@@ -40,7 +40,7 @@ public final class FileRenderer implements AbuRenderer {
 
             String key = body.getCanonicalPath();
             byte[] cached = cache.get( key );
-            if ( cache == null ) {
+            if ( cached == null ) {
                 byte[] file = ByteStreams.toByteArray( new FileInputStream( body ) );
                 cache.put( key, file );
                 return new AbuRenderingResult(
