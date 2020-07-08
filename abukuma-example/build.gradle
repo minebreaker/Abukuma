@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(
+            // TODO use remote repo instead of local projects
             project(':abukuma-jetty'),
             project(':abukuma-gson'),
 
@@ -24,7 +25,7 @@ jar {
     exclude 'META-INF/LICENSE', 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/NOTICE*', 'about.html'
 }
 
-// Dependencies needed for the internal build process
+// Dependencies needed for the internal build process, should be removed later
 jar.dependsOn(
         project(':abukuma-jetty').getTasksByName('jar', false),
         project(':abukuma-gson').getTasksByName('jar', false)

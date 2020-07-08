@@ -1,7 +1,7 @@
 dependencies {
     api(
             project(':abukuma'),
-            'com.github.ben-manes.caffeine:caffeine:2.8.0',
-            'com.github.ben-manes.caffeine:jcache:2.8.0'
+            'com.github.ben-manes.caffeine:caffeine:2.8.5',
+            'com.github.ben-manes.caffeine:jcache:2.8.5'
     )
 }

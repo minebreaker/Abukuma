@@ -1,6 +1,6 @@
 dependencies {
     api(
             project(':abukuma'),
-            'io.netty:netty-codec-http:4.1.43.Final'
+            'io.netty:netty-codec-http:4.1.50.Final'
     )
 }
