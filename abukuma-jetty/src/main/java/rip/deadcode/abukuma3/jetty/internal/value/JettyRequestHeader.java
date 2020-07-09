@@ -3,6 +3,7 @@ package rip.deadcode.abukuma3.jetty.internal.value;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
+import com.google.common.net.MediaType;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
@@ -100,7 +101,11 @@ public final class JettyRequestHeader implements AbuRequestHeader {
     }
 
     @Override public String contentType() {
-        return jettyRequest.getContentType();
+        return mediaType().withoutParameters().toString();
+    }
+
+    @Override public MediaType mediaType() {
+        return MediaType.parse( jettyRequest.getContentType() );
     }
 
     @Override public Optional<Charset> charset() {

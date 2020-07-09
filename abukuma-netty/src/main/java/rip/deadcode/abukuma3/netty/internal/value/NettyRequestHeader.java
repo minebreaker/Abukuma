@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.netty.internal.value;
 
+import com.google.common.net.MediaType;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.netty.internal.NettyHandler;
 import rip.deadcode.abukuma3.value.AbuRequestHeader;
@@ -73,6 +74,10 @@ public class NettyRequestHeader implements AbuRequestHeader {
 
     @Override
     public String contentType() {
+        return null;
+    }
+
+    @Override public MediaType mediaType() {
         return null;
     }
 

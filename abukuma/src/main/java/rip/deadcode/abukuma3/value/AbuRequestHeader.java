@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3.value;
 
 
+import com.google.common.net.MediaType;
 import rip.deadcode.abukuma3.AbuExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
 
@@ -44,8 +45,32 @@ public interface AbuRequestHeader {
 
     public Optional<Cookie> cookie( String cookieName );
 
+    /**
+     * The "Content-Type" header.
+     * The value is without any parameters.
+     * For example, if the value sent by client is
+     * "application/json; charset=utf-8",returned value is "application/json".
+     * <!-- If you need parameters, use the {@link #mediaType} method. -->
+     * <!-- If you need a raw value, use the {@code getValue("content-type")}. -->
+     * If you need a charset in the header, use {@link #charset()}
+     *
+     * @return The content type header
+     */
+    @Unsafe
     public String contentType();
 
+    /**
+     * The "Content-Type" header.
+     * @return String The content type header
+     */
+    public MediaType mediaType();
+
+    /**
+     * The charset of the request.
+     * The value can be, but not necessarily, the charset specified in the "Content-Type" header.
+     * The server implementation is allowed to choose the way to detect it.
+     * @return The charset of the request
+     */
     public Optional<Charset> charset();
 
     @Unsafe
