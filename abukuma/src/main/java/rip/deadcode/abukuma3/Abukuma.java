@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.filter.AbuFilter;
 import rip.deadcode.abukuma3.filter.AbuFilters;
 import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
-import rip.deadcode.abukuma3.internal.DefaultExceptionHandler;
+import rip.deadcode.abukuma3.handler.internal.DefaultExceptionHandler;
 import rip.deadcode.abukuma3.internal.ExecutionContextImpl;
 import rip.deadcode.abukuma3.internal.Information;
 import rip.deadcode.abukuma3.internal.RegistryImpl;
