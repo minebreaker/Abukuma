@@ -9,6 +9,10 @@ import java.util.function.Predicate;
 
 public final class AbuFilters {
 
+    private AbuFilters() {
+        throw new Error();
+    }
+
     public static AbuFilter noop() {
         return ( c, r, h ) -> h.handle( c, r );
     }

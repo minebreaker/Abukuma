@@ -6,6 +6,10 @@ import rip.deadcode.abukuma3.value.internal.AbuResponseImpl;
 
 public final class AbuResponses {
 
+    private AbuResponses() {
+        throw new Error();
+    }
+
     public static AbuResponse create( Object body ) {
         return new AbuResponseImpl( body, 200, AbuHeader.create(), AbuPersistentList.create() );
     }

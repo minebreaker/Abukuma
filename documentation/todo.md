@@ -47,6 +47,8 @@
     * Apparently this requires what to be parsed must be determined in advance.
       Required parameters should be configurable for the sake of performance.
 * Even data classes should be exposed as interfaces, not classes
+* Renderer/Parser chains should be special lists, since it's much easier to modify
+* Modular routing mechanism
 
 
 ## Ideas
