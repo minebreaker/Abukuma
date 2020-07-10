@@ -1,19 +1,19 @@
 package rip.deadcode.abukuma3.filter.internal;
 
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.filter.AbuFilter;
-import rip.deadcode.abukuma3.handler.AbuHandler;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuResponse;
-import rip.deadcode.abukuma3.value.AbuResponses;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.filter.Filter;
+import rip.deadcode.abukuma3.handler.Handler;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.Response;
+import rip.deadcode.abukuma3.value.Responses;
 
 
-public final class AntiCsrfHeaderFilter implements AbuFilter {
+public final class AntiCsrfHeaderFilter implements Filter {
 
-    public static final AbuFilter singleton = new AntiCsrfHeaderFilter();
+    public static final Filter singleton = new AntiCsrfHeaderFilter();
 
     private static final String defaultHeader = "X-Requested-With";
-    private static final AbuResponse errorResponse = AbuResponses.create( "" ).status( 400 );
+    private static final Response errorResponse = Responses.create( "" ).status( 400 );
 
     private final String headerName;
 
@@ -25,7 +25,7 @@ public final class AntiCsrfHeaderFilter implements AbuFilter {
         this.headerName = headerName;
     }
 
-    @Override public AbuResponse filter( AbuExecutionContext context, AbuRequest request, AbuHandler handler ) {
+    @Override public Response filter( ExecutionContext context, Request request, Handler handler ) {
 
         if ( request.method().equals( "GET" )
              || request.method().equals( "HEADER" )

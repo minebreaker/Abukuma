@@ -1,31 +1,31 @@
 package rip.deadcode.abukuma3.handler.internal;
 
 
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.collection.AbuPersistentMap;
-import rip.deadcode.abukuma3.handler.AbuHandler;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentMapImpl;
+import rip.deadcode.abukuma3.handler.Handler;
 import rip.deadcode.abukuma3.handler.TypeBasedDispatcher;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.Response;
 
 import javax.annotation.Nullable;
 
 
 public final class TypeBasedDispatcherImpl implements TypeBasedDispatcher {
 
-    private final AbuPersistentMap<String, AbuHandler> handlers;
-    @Nullable private final AbuHandler fallback;
+    private final PersistentMapImpl<String, Handler> handlers;
+    @Nullable private final Handler fallback;
 
-    public TypeBasedDispatcherImpl( AbuPersistentMap<String, AbuHandler> handlers, @Nullable AbuHandler fallback ) {
+    public TypeBasedDispatcherImpl( PersistentMapImpl<String, Handler> handlers, @Nullable Handler fallback ) {
         this.handlers = handlers;
         this.fallback = fallback;
     }
 
-    @Override public AbuResponse handle( AbuExecutionContext context, AbuRequest request ) {
+    @Override public Response handle( ExecutionContext context, Request request ) {
 
         String contentType = request.header().contentType();
 
-        AbuHandler handler = handlers.get( contentType );
+        Handler handler = handlers.get( contentType );
         if ( handler == null ) {
             if ( fallback == null ) {
                 throw new RuntimeException(
@@ -39,20 +39,20 @@ public final class TypeBasedDispatcherImpl implements TypeBasedDispatcher {
         return handler.handle( context, request );
     }
 
-    @Override public TypeBasedDispatcher json( AbuHandler handler ) {
+    @Override public TypeBasedDispatcher json( Handler handler ) {
         return new TypeBasedDispatcherImpl( handlers.set( "application/json", handler ), fallback );
     }
 
-    @Override public TypeBasedDispatcher xml( AbuHandler handler ) {
+    @Override public TypeBasedDispatcher xml( Handler handler ) {
         // TODO what about text/xml?
         return new TypeBasedDispatcherImpl( handlers.set( "application/xml", handler ), fallback );
     }
 
-    @Override public TypeBasedDispatcher text( AbuHandler handler ) {
+    @Override public TypeBasedDispatcher text( Handler handler ) {
         return new TypeBasedDispatcherImpl( handlers.set( "plain/text", handler ), fallback );
     }
 
-    @Override public TypeBasedDispatcher fallback( AbuHandler handler ) {
+    @Override public TypeBasedDispatcher fallback( Handler handler ) {
         return new TypeBasedDispatcherImpl( handlers, handler );
     }
 }

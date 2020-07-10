@@ -23,9 +23,9 @@ Its aim is to provide fluent routing functions and simple way to manipulate HTTP
 class Application {
 
     public static void main( String[] args ) {
-        Abukuma.config( AbuConfig.create() )
-               .router( AbuRouters.get("/", AbuResponses.create( "<h1>hello, world</h1>" )
-                                                        .header( h -> h.contentType( "text/html" ) ) ) )
+        Abukuma.config( Config.create() )
+               .router( Routers.get("/", Responses.create( "<h1>hello, world</h1>" )
+                                                  .header( h -> h.contentType( "text/html" ) ) ) )
                .build()
                .run();
     }

@@ -2,8 +2,8 @@ package rip.deadcode.abukuma3.router.internal;
 
 
 import com.google.common.collect.ImmutableMap;
-import rip.deadcode.abukuma3.handler.AbuHandler;
-import rip.deadcode.abukuma3.router.AbuRouter;
+import rip.deadcode.abukuma3.handler.Handler;
+import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.router.RoutingContext;
 import rip.deadcode.abukuma3.router.RoutingResult;
 
@@ -11,16 +11,16 @@ import javax.annotation.Nullable;
 import java.util.function.Function;
 
 
-public final class MappingRouter implements AbuRouter {
+public final class MappingRouter implements Router {
 
     private final String mappingRootPath;
     private final String resourceRootPath;
-    private final Function<String, AbuHandler> resourceProvider;
+    private final Function<String, Handler> resourceProvider;
 
     public MappingRouter(
             String mappingRootPath,
             String resourceRootPath,
-            Function<String, AbuHandler> resourceProvider
+            Function<String, Handler> resourceProvider
     ) {
         this.mappingRootPath = mappingRootPath.startsWith( "/" ) ? mappingRootPath.substring( 1 ) : mappingRootPath;
         this.resourceRootPath = resourceRootPath.endsWith( "/" ) ? resourceRootPath : resourceRootPath + "/";

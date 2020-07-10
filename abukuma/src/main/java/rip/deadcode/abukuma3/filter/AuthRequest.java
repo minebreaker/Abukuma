@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.filter;
 
-import rip.deadcode.abukuma3.value.AbuRequest;
+import rip.deadcode.abukuma3.value.Request;
 
 
 public interface AuthRequest {
@@ -9,5 +9,5 @@ public interface AuthRequest {
 
     public String password();
 
-    public AbuRequest request();
+    public Request request();
 }

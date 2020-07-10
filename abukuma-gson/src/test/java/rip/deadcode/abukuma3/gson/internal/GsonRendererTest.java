@@ -1,12 +1,11 @@
 package rip.deadcode.abukuma3.gson.internal;
 
-import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.gson.AbuGson;
-import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
-import rip.deadcode.abukuma3.value.AbuResponse;
-import rip.deadcode.abukuma3.value.AbuResponses;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.gson.Gson;
+import rip.deadcode.abukuma3.renderer.RenderingResult;
+import rip.deadcode.abukuma3.value.Response;
+import rip.deadcode.abukuma3.value.Responses;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -25,14 +24,14 @@ class GsonRendererTest {
         SamplePojo param = new SamplePojo();
         param.setFoo( "bar" );
 
-        AbuExecutionContext context = mock( AbuExecutionContext.class );
-        when( context.get( Gson.class ) ).thenReturn( new Gson() );
+        ExecutionContext context = mock( ExecutionContext.class );
+        when( context.get( com.google.gson.Gson.class ) ).thenReturn( new com.google.gson.Gson() );
 
-        AbuRenderingResult response = AbuGson.renderer().render( context, AbuResponses.create( param ) );
+        RenderingResult response = Gson.renderer().render( context, Responses.create( param ) );
 
         assertThat( response ).isNotNull();
 
-        AbuResponse rendered = response.modifying().get();
+        Response rendered = response.modifying().get();
         assertThat( rendered.header().contentType() ).isEqualTo( "application/json" );
         response.rendering().accept( os );
         assertThat( new String( os.toByteArray(), StandardCharsets.UTF_8 ) ).isEqualTo( "{\"foo\":\"bar\"}" );

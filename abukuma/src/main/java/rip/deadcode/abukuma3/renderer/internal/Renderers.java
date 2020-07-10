@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.renderer.internal;
 
 import com.google.common.net.HttpHeaders;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.Response;
 
 import java.util.Optional;
 
@@ -10,7 +10,7 @@ public final class Renderers {
 
     private Renderers() {}
 
-    static AbuResponse ifNotSet( AbuResponse base, String mime ) {
+    static Response ifNotSet( Response base, String mime ) {
 
         Optional<String> contentTypeSet = base.header().mayGet( HttpHeaders.CONTENT_TYPE );
 

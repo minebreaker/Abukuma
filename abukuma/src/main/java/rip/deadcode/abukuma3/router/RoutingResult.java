@@ -1,13 +1,13 @@
 package rip.deadcode.abukuma3.router;
 
-import rip.deadcode.abukuma3.handler.AbuHandler;
+import rip.deadcode.abukuma3.handler.Handler;
 
 import java.util.Map;
 
 
 public interface RoutingResult {
 
-    public AbuHandler handler();
+    public Handler handler();
 
     public Map<String, String> parameters();
 }

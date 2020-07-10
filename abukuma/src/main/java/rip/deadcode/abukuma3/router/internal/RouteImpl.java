@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.router.internal;
 
-import rip.deadcode.abukuma3.handler.AbuHandler;
+import rip.deadcode.abukuma3.handler.Handler;
 import rip.deadcode.abukuma3.router.Route;
 import rip.deadcode.abukuma3.router.RouteMatcher;
 
@@ -8,9 +8,9 @@ import rip.deadcode.abukuma3.router.RouteMatcher;
 public class RouteImpl implements Route {
 
     private final RouteMatcher matcher;
-    private final AbuHandler handler;
+    private final Handler handler;
 
-    public RouteImpl( RouteMatcher matcher, AbuHandler handler ) {
+    public RouteImpl( RouteMatcher matcher, Handler handler ) {
         this.matcher = matcher;
         this.handler = handler;
     }
@@ -21,7 +21,7 @@ public class RouteImpl implements Route {
     }
 
     @Override
-    public AbuHandler handler() {
+    public Handler handler() {
         return handler;
     }
 }

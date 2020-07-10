@@ -1,18 +1,18 @@
 package rip.deadcode.abukuma3.router.internal;
 
-import rip.deadcode.abukuma3.router.AbuRouter;
+import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.router.RoutingContext;
 import rip.deadcode.abukuma3.router.RoutingResult;
 
 import java.util.List;
 
 
-public final class ContextRouter implements AbuRouter {
+public final class ContextRouter implements Router {
 
     private final List<String> contextPathPattern;
-    private final AbuRouter delegate;
+    private final Router delegate;
 
-    public ContextRouter( String contextPathPattern, AbuRouter delegate ) {
+    public ContextRouter( String contextPathPattern, Router delegate ) {
         this.contextPathPattern = RoutingUtils.pathSplitter.splitToList( contextPathPattern );
         this.delegate = delegate;
     }

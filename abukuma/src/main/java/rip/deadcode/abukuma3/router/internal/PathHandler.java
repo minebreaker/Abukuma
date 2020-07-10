@@ -1,11 +1,11 @@
 package rip.deadcode.abukuma3.router.internal;
 
 
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.handler.AbuHandler;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuResponse;
-import rip.deadcode.abukuma3.value.AbuResponses;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.handler.Handler;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.Response;
+import rip.deadcode.abukuma3.value.Responses;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +15,7 @@ import static rip.deadcode.abukuma3.router.internal.RoutingUtils.guessMediaType;
 
 
 // TODO remove this and create PathRenderer
-public final class PathHandler implements AbuHandler {
+public final class PathHandler implements Handler {
 
     private final Path path;
 
@@ -23,11 +23,11 @@ public final class PathHandler implements AbuHandler {
         this.path = path;
     }
 
-    @Override public AbuResponse handle( AbuExecutionContext context, AbuRequest request ) {
+    @Override public Response handle( ExecutionContext context, Request request ) {
         // TODO file existence check
         // TODO may add `Content-Disposition: attachment; filename=`?
         // TODO cache
-        return AbuResponses.create( uncheck( () -> Files.newInputStream( path ) ) )
-                           .header( h -> h.contentType( guessMediaType( path.toString() ) ) );
+        return Responses.create( uncheck( () -> Files.newInputStream( path ) ) )
+                        .header( h -> h.contentType( guessMediaType( path.toString() ) ) );
     }
 }

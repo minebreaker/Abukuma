@@ -1,20 +1,20 @@
 package rip.deadcode.abukuma3.internal;
 
-import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Module;
 import rip.deadcode.abukuma3.Registry;
-import rip.deadcode.abukuma3.filter.AbuFilter;
-import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
-import rip.deadcode.abukuma3.parser.AbuParser;
-import rip.deadcode.abukuma3.renderer.AbuRenderer;
-import rip.deadcode.abukuma3.router.AbuRouter;
-import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.filter.Filter;
+import rip.deadcode.abukuma3.handler.ExceptionHandler;
+import rip.deadcode.abukuma3.parser.Parser;
+import rip.deadcode.abukuma3.renderer.Renderer;
+import rip.deadcode.abukuma3.router.Router;
+import rip.deadcode.abukuma3.value.Config;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 
-public final class ExecutionContextImpl implements AbuExecutionContext {
+public final class ExecutionContextImpl implements ExecutionContext {
 
     private final Registry registry;
 
@@ -24,44 +24,44 @@ public final class ExecutionContextImpl implements AbuExecutionContext {
 
     public ExecutionContextImpl(
             Registry registry,
-            AbuConfig config,
-            AbuParser<?> parserChain,
-            AbuRenderer renderer,
-            AbuFilter filterChain,
-            AbuRouter router,
-            AbuExceptionHandler exceptionHandler
+            Config config,
+            Parser<?> parserChain,
+            Renderer renderer,
+            Filter filterChain,
+            Router router,
+            ExceptionHandler exceptionHandler
     ) {
         this.registry = registry
-                .setSingleton( AbuConfig.class, config )
-                .setSingleton( AbuParser.class, parserChain )
-                .setSingleton( AbuRenderer.class, renderer )
-                .setSingleton( AbuFilter.class, filterChain )
-                .setSingleton( AbuRouter.class, router )
-                .setSingleton( AbuExceptionHandler.class, exceptionHandler );
+                .setSingleton( Config.class, config )
+                .setSingleton( Parser.class, parserChain )
+                .setSingleton( Renderer.class, renderer )
+                .setSingleton( Filter.class, filterChain )
+                .setSingleton( Router.class, router )
+                .setSingleton( ExceptionHandler.class, exceptionHandler );
     }
 
-    @Override public AbuConfig config() {
-        return registry.get( AbuConfig.class );
+    @Override public Config config() {
+        return registry.get( Config.class );
     }
 
-    @Override public AbuParser<?> parser() {
-        return registry.get( AbuParser.class );
+    @Override public Parser<?> parser() {
+        return registry.get( Parser.class );
     }
 
-    @Override public AbuRenderer renderer() {
-        return registry.get( AbuRenderer.class );
+    @Override public Renderer renderer() {
+        return registry.get( Renderer.class );
     }
 
-    @Override public AbuFilter filter() {
-        return registry.get( AbuFilter.class );
+    @Override public Filter filter() {
+        return registry.get( Filter.class );
     }
 
-    @Override public AbuRouter router() {
-        return registry.get( AbuRouter.class );
+    @Override public Router router() {
+        return registry.get( Router.class );
     }
 
-    @Override public AbuExceptionHandler exceptionHandler() {
-        return registry.get( AbuExceptionHandler.class );
+    @Override public ExceptionHandler exceptionHandler() {
+        return registry.get( ExceptionHandler.class );
     }
 
     @Override
@@ -75,12 +75,12 @@ public final class ExecutionContextImpl implements AbuExecutionContext {
     }
 
     @Override
-    public <T> AbuExecutionContext setSingleton( Class<T> cls, T instance ) {
+    public <T> ExecutionContext setSingleton( Class<T> cls, T instance ) {
         return new ExecutionContextImpl( registry.setSingleton( cls, instance ) );
     }
 
     @Override
-    public <T> AbuExecutionContext set( Class<T> cls, Supplier<? extends T> supplier ) {
+    public <T> ExecutionContext set( Class<T> cls, Supplier<? extends T> supplier ) {
         return new ExecutionContextImpl( registry.set( cls, supplier ) );
     }
 
@@ -89,7 +89,7 @@ public final class ExecutionContextImpl implements AbuExecutionContext {
     }
 
     @Override
-    public <T> AbuExecutionContext set( Class<T> cls, String name, Supplier<? extends T> supplier ) {
+    public <T> ExecutionContext set( Class<T> cls, String name, Supplier<? extends T> supplier ) {
         return new ExecutionContextImpl( registry.set( cls, name, supplier ) );
     }
 
@@ -97,7 +97,7 @@ public final class ExecutionContextImpl implements AbuExecutionContext {
         return new ExecutionContextImpl( registry.set( cls, name, generator ) );
     }
 
-    @Override public AbuExecutionContext applyModule( Module module ) {
+    @Override public ExecutionContext applyModule( Module module ) {
         return new ExecutionContextImpl( module.apply( this ) );
     }
 }

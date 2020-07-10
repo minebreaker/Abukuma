@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public interface AbuRequest {
+public interface Request {
 
     public <T> T body( Class<T> cls );
 
@@ -24,7 +24,7 @@ public interface AbuRequest {
      */
     public String urlString();
 
-    public AbuRequestHeader header();
+    public RequestHeader header();
 
     public Optional<String> pathParam( String key );
 

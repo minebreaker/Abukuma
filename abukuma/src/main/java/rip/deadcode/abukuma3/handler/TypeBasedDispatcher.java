@@ -1,13 +1,13 @@
 package rip.deadcode.abukuma3.handler;
 
 
-public interface TypeBasedDispatcher extends AbuHandler {
+public interface TypeBasedDispatcher extends Handler {
 
-    public TypeBasedDispatcher json( AbuHandler handler );
+    public TypeBasedDispatcher json( Handler handler );
 
-    public TypeBasedDispatcher xml( AbuHandler handler );
+    public TypeBasedDispatcher xml( Handler handler );
 
-    public TypeBasedDispatcher text( AbuHandler handler );
+    public TypeBasedDispatcher text( Handler handler );
 
-    public TypeBasedDispatcher fallback( AbuHandler handler );
+    public TypeBasedDispatcher fallback( Handler handler );
 }

@@ -14,7 +14,7 @@ import static com.google.common.truth.Truth8.assertThat;
 import static rip.deadcode.izvestia.Core.expect;
 
 
-class AbuPersistentListMultimapTest {
+class PersistentListImplMultimapTest {
 
     @Test
     void testGetValue() {
@@ -22,7 +22,7 @@ class AbuPersistentListMultimapTest {
         Multimap<String, String> params = ImmutableListMultimap.<String, String>builder()
                 .putAll( "k1", "v1", "v2" )
                 .build();
-        AbuPersistentListMultimap<String, String> s = AbuPersistentListMultimap.create( params );
+        PersistentListMultimapImpl<String, String> s = PersistentListMultimapImpl.create( params );
 
         assertThat( s.getValue( "k1" ) ).isEqualTo( "v1" );
 
@@ -41,7 +41,7 @@ class AbuPersistentListMultimapTest {
         Multimap<String, String> params = ImmutableListMultimap.<String, String>builder()
                 .putAll( "k1", "v1", "v2" )
                 .build();
-        AbuPersistentListMultimap<String, String> s = AbuPersistentListMultimap.create( params );
+        PersistentListMultimapImpl<String, String> s = PersistentListMultimapImpl.create( params );
 
         assertThat( s.get( "k1" ) ).containsExactly( "v1", "v2" ).inOrder();
         assertThat( s.get( "k2" ) ).isEmpty();
@@ -57,7 +57,7 @@ class AbuPersistentListMultimapTest {
         Multimap<String, String> params = ImmutableListMultimap.<String, String>builder()
                 .putAll( "k1", "v1", "v2" )
                 .build();
-        AbuPersistentListMultimap<String, String> s = AbuPersistentListMultimap.create( params );
+        PersistentListMultimapImpl<String, String> s = PersistentListMultimapImpl.create( params );
 
         assertThat( s.mayGet( "k1" ) ).hasValue( "v1" );
         assertThat( s.mayGet( "k2" ) ).isEmpty();
@@ -70,8 +70,8 @@ class AbuPersistentListMultimapTest {
     @Test
     void testAdd() {
 
-        AbuPersistentListMultimap<String, String> e = AbuPersistentListMultimap.create();
-        AbuPersistentListMultimap<String, String> s;
+        PersistentListMultimapImpl<String, String> e = PersistentListMultimapImpl.create();
+        PersistentListMultimapImpl<String, String> s;
 
         assertThat( e.add( "k1", "v1" ) ).containsEntry( "k1", "v1" );
         assertThat( e.add( "k1", "v1" ).add( "k1", "v2" ) )
@@ -99,8 +99,8 @@ class AbuPersistentListMultimapTest {
     @Test
     void testSet() {
 
-        AbuPersistentListMultimap<String, String> e = AbuPersistentListMultimap.create();
-        AbuPersistentListMultimap<String, String> s;
+        PersistentListMultimapImpl<String, String> e = PersistentListMultimapImpl.create();
+        PersistentListMultimapImpl<String, String> s;
 
         assertThat( e.set( "k1", "v1" ) ).containsEntry( "k1", "v1" );
         assertThat( e.set( "k1", "v1" ).set( "k1", "v2" ) )
@@ -128,31 +128,31 @@ class AbuPersistentListMultimapTest {
     @Test
     void testDelete() {
 
-        assertThat( AbuPersistentListMultimap.create().add( "k1", "v1" ).delete( "k1" ) ).isEmpty();
+        assertThat( PersistentListMultimapImpl.create().add( "k1", "v1" ).delete( "k1" ) ).isEmpty();
 
         expect( () -> {
-            AbuPersistentListMultimap.create().delete( "k1" );
+            PersistentListMultimapImpl.create().delete( "k1" );
         } ).throwsException( NoSuchElementException.class );
 
         expect( () -> {
-            AbuPersistentListMultimap.create().delete( null );
+            PersistentListMultimapImpl.create().delete( null );
         } ).throwsException( NullPointerException.class );
     }
 
     @Test
     void testDelegate() {
 
-        assertThat( AbuPersistentListMultimap.create()
-                                             .add( "k1", "v1" )
-                                             .add( "k1", "v2" )
-                                             .add( "k2", "v3" ) )
+        assertThat( PersistentListMultimapImpl.create()
+                                              .add( "k1", "v1" )
+                                              .add( "k1", "v2" )
+                                              .add( "k2", "v3" ) )
                 .hasSize( 3 );
     }
 
     @Test
     void testMutable() {
 
-        ListMultimap<String, String> param = AbuPersistentListMultimap.<String, String>create()
+        ListMultimap<String, String> param = PersistentListMultimapImpl.<String, String>create()
                 .add( "k1", "v1" ).mutable();
         param.get( "k1" ).add( "v2" );
 

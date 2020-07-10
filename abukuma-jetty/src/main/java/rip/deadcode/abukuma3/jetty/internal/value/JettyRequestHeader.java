@@ -5,8 +5,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.net.MediaType;
 import org.eclipse.jetty.server.Request;
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.Cookie;
 import rip.deadcode.abukuma3.value.internal.CookieImpl;
 
@@ -24,17 +24,17 @@ import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
 // TODO Should be integrated into the AbuHeader
-public final class JettyRequestHeader implements AbuRequestHeader {
+public final class JettyRequestHeader implements RequestHeader {
 
-    private final AbuExecutionContext context;
+    private final ExecutionContext context;
     private final Request jettyRequest;
 
-    public JettyRequestHeader( AbuExecutionContext context, Request jettyRequest ) {
+    public JettyRequestHeader( ExecutionContext context, Request jettyRequest ) {
         this.context = context;
         this.jettyRequest = jettyRequest;
     }
 
-    @Override public AbuExecutionContext context() {
+    @Override public ExecutionContext context() {
         return context;
     }
 

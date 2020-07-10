@@ -30,8 +30,6 @@
 * Problem: Static imports are tedious
     * Single factory class for all?
         * `rip.deadcode.abukuma3.utils.StaticImports`
-* Problem: Are `Abu` prefixes necessary?
-    * Remove prefixes?
 * Problem: Specifying server factory is odd
     * Specify server class (not factory) in config
 * Write tests
@@ -49,6 +47,7 @@
 * Even data classes should be exposed as interfaces, not classes
 * Renderer/Parser chains should be special lists, since it's much easier to modify
 * Modular routing mechanism
+* `MessageResolver` `ResourceBundleMessageResolver` for internal messages/logs
 
 
 ## Ideas

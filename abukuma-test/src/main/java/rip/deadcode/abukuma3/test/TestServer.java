@@ -1,12 +1,12 @@
 package rip.deadcode.abukuma3.test;
 
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.AbuServer;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.Server;
 import rip.deadcode.abukuma3.internal.HandlerAdapter;
-import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.renderer.RenderingResult;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
+import rip.deadcode.abukuma3.value.Response;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
@@ -15,21 +15,21 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 
-public final class TestServer implements AbuServer {
+public final class TestServer implements Server {
 
-    private final HandlerAdapter<AbuRequest, TestResultHolder> adapter;
+    private final HandlerAdapter<Request, TestResultHolder> adapter;
 
-    private TestServer( AbuExecutionContext context ) {
-        this.adapter = new HandlerAdapter<AbuRequest, TestResultHolder>( context ) {
+    private TestServer( ExecutionContext context ) {
+        this.adapter = new HandlerAdapter<Request, TestResultHolder>( context ) {
 
-            @Override protected AbuRequestHeader createHeader(
-                    AbuExecutionContext context, AbuRequest originalRequest ) {
+            @Override protected RequestHeader createHeader(
+                    ExecutionContext context, Request originalRequest ) {
                 return originalRequest.header();
             }
 
-            @Override protected AbuRequest createRequest(
-                    AbuRequestHeader header,
-                    AbuRequest originalRequest,
+            @Override protected Request createRequest(
+                    RequestHeader header,
+                    Request originalRequest,
                     TestResultHolder originalResponse,
                     Map<String, String> pathParams ) {
 
@@ -37,10 +37,10 @@ public final class TestServer implements AbuServer {
             }
 
             @Override protected void submitResponse(
-                    AbuExecutionContext context,
-                    AbuResponse response,
-                    AbuRenderingResult renderingResult,
-                    AbuRequest originalRequest,
+                    ExecutionContext context,
+                    Response response,
+                    RenderingResult renderingResult,
+                    Request originalRequest,
                     TestResultHolder originalResponse ) throws Exception {
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -48,7 +48,7 @@ public final class TestServer implements AbuServer {
                 byte[] body = baos.toByteArray();
                 originalResponse.result = new TestResult() {
 
-                    @Override public AbuResponse response() {
+                    @Override public Response response() {
                         return response;
                     }
 
@@ -76,11 +76,11 @@ public final class TestServer implements AbuServer {
         // NOP
     }
 
-    public static TestServer create( AbuExecutionContext context ) {
+    public static TestServer create( ExecutionContext context ) {
         return new TestServer( context );
     }
 
-    public TestResult send( AbuRequest request ) {
+    public TestResult send( Request request ) {
 
         TestResultHolder holder = new TestResultHolder();
         adapter.handle( request, holder );

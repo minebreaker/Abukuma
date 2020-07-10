@@ -1,12 +1,12 @@
 package rip.deadcode.abukuma3.gson.example;
 
 import rip.deadcode.abukuma3.Abukuma;
-import rip.deadcode.abukuma3.filter.AbuFilters;
+import rip.deadcode.abukuma3.filter.Filters;
 import rip.deadcode.abukuma3.gson.GsonModule;
 import rip.deadcode.abukuma3.gson.JsonBody;
-import rip.deadcode.abukuma3.router.AbuRouters;
-import rip.deadcode.abukuma3.value.AbuConfigs;
-import rip.deadcode.abukuma3.value.AbuResponses;
+import rip.deadcode.abukuma3.router.Routers;
+import rip.deadcode.abukuma3.value.Configs;
+import rip.deadcode.abukuma3.value.Responses;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
@@ -43,17 +43,17 @@ public final class Example {
 
     public static void main( String[] args ) {
 
-        Abukuma.config( AbuConfigs.create() )
-               .addFilter( AbuFilters.antiCsrf() )
+        Abukuma.config( Configs.create() )
+               .addFilter( Filters.antiCsrf() )
                .addModule( GsonModule.getInstance() )
-               .router( AbuRouters.create()
-                                  .post( "/post", ( ctx, req ) -> {
+               .router( Routers.create()
+                               .post( "/post", ( ctx, req ) -> {
                                       Request request = req.body( Request.class );
                                       Response response = new Response();
                                       response.setMessage( String.format(
                                               "hello, %s!", firstNonNull( request.getName(), "world" ) ) );
-                                      return AbuResponses.create( response )
-                                                         .header( h -> h.contentType( "application/json" ) );
+                                      return Responses.create( response )
+                                                      .header( h -> h.contentType( "application/json" ) );
                                   } ) )
                .build()
                .run();

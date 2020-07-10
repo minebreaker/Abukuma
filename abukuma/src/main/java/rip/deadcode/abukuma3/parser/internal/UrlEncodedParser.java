@@ -3,9 +3,9 @@ package rip.deadcode.abukuma3.parser.internal;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import rip.deadcode.abukuma3.parser.AbuParser;
+import rip.deadcode.abukuma3.parser.Parser;
 import rip.deadcode.abukuma3.parser.UrlEncoded;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
 import javax.annotation.Nullable;
 import java.io.BufferedInputStream;
@@ -17,14 +17,14 @@ import java.nio.charset.StandardCharsets;
 
 
 /**
- * {@link AbuParser} for application/x-www-form-urlencoded data.
+ * {@link Parser} for application/x-www-form-urlencoded data.
  *
  * @see <a href="https://url.spec.whatwg.org/#urlencoded-parsing">https://url.spec.whatwg.org/#urlencoded-parsing</a>
  */
-public final class UrlEncodedParser implements AbuParser<UrlEncoded> {
+public final class UrlEncodedParser implements Parser<UrlEncoded> {
 
     @Nullable @Override public UrlEncoded parse(
-            Class<?> convertTo, InputStream body, AbuRequestHeader header ) throws IOException {
+            Class<?> convertTo, InputStream body, RequestHeader header ) throws IOException {
 
         if ( !convertTo.equals( UrlEncoded.class ) ) {
             return null;

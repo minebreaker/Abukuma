@@ -1,20 +1,20 @@
 package rip.deadcode.abukuma3.renderer;
 
 import rip.deadcode.abukuma3.internal.utils.CheckedConsumer;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.Response;
 
 import java.io.OutputStream;
 import java.util.function.Supplier;
 
 
-public final class AbuRenderingResult {
+public final class RenderingResult {
 
     private CheckedConsumer<OutputStream, Exception> rendering;
-    private Supplier<AbuResponse> modifying;
+    private Supplier<Response> modifying;
 
-    public AbuRenderingResult(
+    public RenderingResult(
             CheckedConsumer<OutputStream, Exception> rendering,
-            Supplier<AbuResponse> modifying ) {
+            Supplier<Response> modifying ) {
         this.rendering = rendering;
         this.modifying = modifying;
     }
@@ -23,7 +23,7 @@ public final class AbuRenderingResult {
         return rendering;
     }
 
-    public Supplier<AbuResponse> modifying() {
+    public Supplier<Response> modifying() {
         return modifying;
     }
 }

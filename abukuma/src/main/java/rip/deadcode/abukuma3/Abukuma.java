@@ -4,25 +4,25 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rip.deadcode.abukuma3.filter.AbuFilter;
-import rip.deadcode.abukuma3.filter.AbuFilters;
-import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
+import rip.deadcode.abukuma3.filter.Filter;
+import rip.deadcode.abukuma3.filter.Filters;
+import rip.deadcode.abukuma3.handler.ExceptionHandler;
 import rip.deadcode.abukuma3.handler.internal.DefaultExceptionHandler;
 import rip.deadcode.abukuma3.internal.ExecutionContextImpl;
 import rip.deadcode.abukuma3.internal.Information;
 import rip.deadcode.abukuma3.internal.RegistryImpl;
-import rip.deadcode.abukuma3.parser.AbuParser;
+import rip.deadcode.abukuma3.parser.Parser;
 import rip.deadcode.abukuma3.parser.internal.InputStreamParser;
 import rip.deadcode.abukuma3.parser.internal.StringParser;
 import rip.deadcode.abukuma3.parser.internal.UrlEncodedParser;
-import rip.deadcode.abukuma3.renderer.AbuRenderer;
+import rip.deadcode.abukuma3.renderer.Renderer;
 import rip.deadcode.abukuma3.renderer.internal.CharSequenceRenderer;
 import rip.deadcode.abukuma3.renderer.internal.InputStreamRenderer;
 import rip.deadcode.abukuma3.renderer.internal.PathRenderer;
-import rip.deadcode.abukuma3.router.AbuRouter;
+import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.router.RouterSpec;
 import rip.deadcode.abukuma3.utils.internal.DefaultModule;
-import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.value.Config;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
@@ -42,39 +42,39 @@ public final class Abukuma {
         throw new Error();
     }
 
-    public static AbuServerBuilder config( AbuConfig config ) {
+    public static AbuServerBuilder config( Config config ) {
         return new AbuServerBuilder().config( config );
     }
 
     @NotThreadSafe
     public static final class AbuServerBuilder {
 
-        private static final List<AbuParser<?>> defaultParsers = ImmutableList.of(
+        private static final List<Parser<?>> defaultParsers = ImmutableList.of(
                 new UrlEncodedParser(),
                 new StringParser(),
                 new InputStreamParser()
         );
 
-        private static final List<AbuRenderer> defaultRenderers = ImmutableList.of(
+        private static final List<Renderer> defaultRenderers = ImmutableList.of(
                 new PathRenderer(),
                 new CharSequenceRenderer(),
                 new InputStreamRenderer()
         );
 
         private Registry registry = new RegistryImpl();
-        private AbuConfig config;
-        private AbuRouter router;
-        private List<AbuParser<?>> parsers = ImmutableList.of();
-        private List<AbuRenderer> renderers = ImmutableList.of();
-        private List<AbuFilter> filters = ImmutableList.of();
-        private AbuExceptionHandler exceptionHandler = new DefaultExceptionHandler();
+        private Config config;
+        private Router router;
+        private List<Parser<?>> parsers = ImmutableList.of();
+        private List<Renderer> renderers = ImmutableList.of();
+        private List<Filter> filters = ImmutableList.of();
+        private ExceptionHandler exceptionHandler = new DefaultExceptionHandler();
         private List<Module> modules = ImmutableList.of( new DefaultModule() );
 
         private AbuServerBuilder() {
             logger.info( Information.INFO_STRING );
         }
 
-        public AbuServerBuilder config( AbuConfig config ) {
+        public AbuServerBuilder config( Config config ) {
             this.config = config;
             return this;
         }
@@ -85,16 +85,16 @@ public final class Abukuma {
             return this;
         }
 
-        public AbuServerBuilder addParser( AbuParser<?> parser ) {
-            this.parsers = ImmutableList.<AbuParser<?>>builder()
+        public AbuServerBuilder addParser( Parser<?> parser ) {
+            this.parsers = ImmutableList.<Parser<?>>builder()
                     .add( parser )
                     .addAll( parsers )
                     .build();
             return this;
         }
 
-        public AbuServerBuilder addParsers( AbuParser<?>... parsers ) {
-            this.parsers = ImmutableList.<AbuParser<?>>builder()
+        public AbuServerBuilder addParsers( Parser<?>... parsers ) {
+            this.parsers = ImmutableList.<Parser<?>>builder()
                     .add( parsers )
                     .addAll( this.parsers )
                     .build();
@@ -102,24 +102,24 @@ public final class Abukuma {
         }
 
 
-        public AbuServerBuilder addParsers( List<AbuParser<?>> parsers ) {
-            this.parsers = ImmutableList.<AbuParser<?>>builder()
+        public AbuServerBuilder addParsers( List<Parser<?>> parsers ) {
+            this.parsers = ImmutableList.<Parser<?>>builder()
                     .addAll( parsers )
                     .addAll( this.parsers )
                     .build();
             return this;
         }
 
-        public AbuServerBuilder addRenderer( AbuRenderer renderer ) {
-            this.renderers = ImmutableList.<AbuRenderer>builder()
+        public AbuServerBuilder addRenderer( Renderer renderer ) {
+            this.renderers = ImmutableList.<Renderer>builder()
                     .addAll( renderers )
                     .add( renderer )
                     .build();
             return this;
         }
 
-        public AbuServerBuilder addRenderers( AbuRenderer... renderers ) {
-            this.renderers = ImmutableList.<AbuRenderer>builder()
+        public AbuServerBuilder addRenderers( Renderer... renderers ) {
+            this.renderers = ImmutableList.<Renderer>builder()
                     .addAll( this.renderers )
                     .add( renderers )
                     .build();
@@ -127,39 +127,39 @@ public final class Abukuma {
         }
 
 
-        public AbuServerBuilder addRenderers( List<AbuRenderer> renderers ) {
-            this.renderers = ImmutableList.<AbuRenderer>builder()
+        public AbuServerBuilder addRenderers( List<Renderer> renderers ) {
+            this.renderers = ImmutableList.<Renderer>builder()
                     .addAll( this.renderers )
                     .addAll( renderers )
                     .build();
             return this;
         }
 
-        public AbuServerBuilder addFilter( AbuFilter filter ) {
-            this.filters = ImmutableList.<AbuFilter>builder()
+        public AbuServerBuilder addFilter( Filter filter ) {
+            this.filters = ImmutableList.<Filter>builder()
                     .addAll( filters )
                     .add( filter )
                     .build();
             return this;
         }
 
-        public AbuServerBuilder addFilter( AbuFilter... filters ) {
-            this.filters = ImmutableList.<AbuFilter>builder()
+        public AbuServerBuilder addFilter( Filter... filters ) {
+            this.filters = ImmutableList.<Filter>builder()
                     .addAll( this.filters )
                     .add( filters )
                     .build();
             return this;
         }
 
-        public AbuServerBuilder addFilter( List<AbuFilter> filters ) {
-            this.filters = ImmutableList.<AbuFilter>builder()
+        public AbuServerBuilder addFilter( List<Filter> filters ) {
+            this.filters = ImmutableList.<Filter>builder()
                     .addAll( this.filters )
                     .addAll( filters )
                     .build();
             return this;
         }
 
-        public AbuServerBuilder exceptionHandler( AbuExceptionHandler exceptionHandler ) {
+        public AbuServerBuilder exceptionHandler( ExceptionHandler exceptionHandler ) {
             this.exceptionHandler = exceptionHandler;
             return this;
         }
@@ -190,36 +190,36 @@ public final class Abukuma {
             checkNotNull( router );
             checkNotNull( registry );
 
-            parsers = ImmutableList.<AbuParser<?>>builder()
+            parsers = ImmutableList.<Parser<?>>builder()
                     .addAll( parsers )
                     .addAll( defaultParsers )
                     .build();
             addRenderers( defaultRenderers );
         }
 
-        public AbuServer build() {
+        public Server build() {
             check();
             //noinspection OptionalGetWithoutIsPresent  should have at least one default implementations
-            AbuExecutionContext context = new ExecutionContextImpl(
+            ExecutionContext context = new ExecutionContextImpl(
                     registry,
                     config,
-                    parsers.stream().reduce( AbuParser::ifFailed ).get(),
-                    renderers.stream().reduce( AbuRenderer::ifFailed ).get(),
-                    filters.stream().reduce( AbuFilter::then ).orElseGet( AbuFilters::noop ),
+                    parsers.stream().reduce( Parser::ifFailed ).get(),
+                    renderers.stream().reduce( Renderer::ifFailed ).get(),
+                    filters.stream().reduce( Filter::then ).orElseGet( Filters::noop ),
                     router,
                     exceptionHandler
             );
 
-            AbuExecutionContext c = reduce(
+            ExecutionContext c = reduce(
                     this.modules,
                     context,
-                    AbuExecutionContext::applyModule
+                    ExecutionContext::applyModule
             );
 
             return createServer( c );
         }
 
-        private static AbuServer createServer( AbuExecutionContext context ) {
+        private static Server createServer( ExecutionContext context ) {
 
             ServiceLoader<ServerFactory> loader = ServiceLoader.load( ServerFactory.class );
             Optional<String> requestedFactoryName = context.config().serverImplementation();
@@ -237,7 +237,7 @@ public final class Abukuma {
 
             } else {
                 ServerFactory factory = loader.iterator().next();
-                AbuServer server = factory.provide( context );
+                Server server = factory.provide( context );
                 logger.info( "Auto selected server implementation: " + server.getClass().getCanonicalName() );
                 return server;
             }

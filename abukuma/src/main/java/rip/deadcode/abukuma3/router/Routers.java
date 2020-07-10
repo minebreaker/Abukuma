@@ -3,9 +3,9 @@ package rip.deadcode.abukuma3.router;
 import rip.deadcode.abukuma3.router.internal.RouterSpecImpl;
 
 
-public final class AbuRouters {
+public final class Routers {
 
-    private AbuRouters() {
+    private Routers() {
         throw new Error();
     }
 

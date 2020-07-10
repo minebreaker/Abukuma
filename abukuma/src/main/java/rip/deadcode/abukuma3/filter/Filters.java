@@ -7,25 +7,25 @@ import rip.deadcode.abukuma3.filter.internal.LoggingFilter;
 import java.util.function.Predicate;
 
 
-public final class AbuFilters {
+public final class Filters {
 
-    private AbuFilters() {
+    private Filters() {
         throw new Error();
     }
 
-    public static AbuFilter noop() {
+    public static Filter noop() {
         return ( c, r, h ) -> h.handle( c, r );
     }
 
-    public static AbuFilter logging() {
+    public static Filter logging() {
         return LoggingFilter.singleton;
     }
 
-    public static AbuFilter antiCsrf() {
+    public static Filter antiCsrf() {
         return AntiCsrfHeaderFilter.singleton;
     }
 
-    public static AbuFilter basicAuth( Predicate<AuthRequest> accepts ) {
+    public static Filter basicAuth( Predicate<AuthRequest> accepts ) {
         return new BasicAuthFilter( accepts );
     }
 }

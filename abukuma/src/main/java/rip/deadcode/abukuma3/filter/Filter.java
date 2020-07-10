@@ -1,9 +1,9 @@
 package rip.deadcode.abukuma3.filter;
 
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.handler.AbuHandler;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.handler.Handler;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.Response;
 
 import javax.annotation.Nonnull;
 
@@ -12,12 +12,12 @@ import javax.annotation.Nonnull;
  * If filter consumed the request body, filter MUST NOT invoke given handler.
  */
 @FunctionalInterface
-public interface AbuFilter {
+public interface Filter {
 
-    public AbuResponse filter( AbuExecutionContext context, AbuRequest request, AbuHandler handler );
+    public Response filter( ExecutionContext context, Request request, Handler handler );
 
     @Nonnull
-    public default AbuFilter then( AbuFilter downstream ) {
+    public default Filter then( Filter downstream ) {
         return ( context, request, handler ) ->
                 filter(
                         context,

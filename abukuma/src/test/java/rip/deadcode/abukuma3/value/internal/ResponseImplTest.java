@@ -3,10 +3,10 @@ package rip.deadcode.abukuma3.value.internal;
 
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.Test;
-import rip.deadcode.abukuma3.collection.AbuPersistentList;
+import rip.deadcode.abukuma3.collection.PersistentListImpl;
 import rip.deadcode.abukuma3.collection.PersistentList;
-import rip.deadcode.abukuma3.value.AbuHeader;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.Header;
+import rip.deadcode.abukuma3.value.Response;
 import rip.deadcode.abukuma3.value.Cookie;
 
 import java.util.Map;
@@ -18,13 +18,13 @@ import static java.util.stream.Collectors.toMap;
 import static rip.deadcode.izvestia.Core.expect;
 
 
-class AbuResponseImplTest {
+class ResponseImplTest {
 
     private static final String body = "test";
     private static final int status = 200;
-    private static final AbuHeader header = AbuHeader.create();
-    private static final PersistentList<Cookie> cookie = AbuPersistentList.create();
-    private static final AbuResponse param = new AbuResponseImpl(
+    private static final Header header = Header.create();
+    private static final PersistentList<Cookie> cookie = PersistentListImpl.create();
+    private static final Response param = new ResponseImpl(
             body, status, header, cookie );
 
     @Test
@@ -35,13 +35,13 @@ class AbuResponseImplTest {
         assertThat( param.cookie() ).isSameInstanceAs( cookie );
 
         expect( () -> {
-            new AbuResponseImpl( null, status, header, cookie );
+            new ResponseImpl( null, status, header, cookie );
         } ).throwsException( NullPointerException.class );
         expect( () -> {
-            new AbuResponseImpl( body, status, null, cookie );
+            new ResponseImpl( body, status, null, cookie );
         } ).throwsException( NullPointerException.class );
         expect( () -> {
-            new AbuResponseImpl( body, status, header, null );
+            new ResponseImpl( body, status, header, null );
         } ).throwsException( NullPointerException.class );
 
 
@@ -56,7 +56,7 @@ class AbuResponseImplTest {
         } ).throwsException( NullPointerException.class );
         expect( () -> {
             //noinspection ConstantConditions
-            param.header( (AbuHeader) null );
+            param.header( (Header) null );
         } ).throwsException( NullPointerException.class );
         expect( () -> {
             //noinspection ConstantConditions

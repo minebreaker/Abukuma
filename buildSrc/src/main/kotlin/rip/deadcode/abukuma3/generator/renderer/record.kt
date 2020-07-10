@@ -16,7 +16,7 @@ fun renderRecordInterface(model: Record) =
             
             
             public interface ${model.`interface`.name}
-            extends PersistentMap<String, Object, AbuPersistentMap<String, Object>> {
+            extends PersistentMap<String, Object, PersistentMapImpl<String, Object>> {
             
                 ${model.properties.joinToString("\n") { renderRecordInterfaceProperty(model, it) }}
                 
@@ -270,27 +270,27 @@ fun renderRecordMapOverride(record: Record) =
                 }
             }
             
-            @Override public AbuPersistentMap<String, Object> set( String key, Object value ) {
+            @Override public PersistentMapImpl<String, Object> set( String key, Object value ) {
                 checkNotNull( key );
-                return AbuPersistentMap.<String, Object>create()
-                                       .merge( this )
-                                       .set( key, value );
+                return PersistentMapImpl.<String, Object>create()
+                                        .merge( this )
+                                        .set( key, value );
             }
             
-            @Override public AbuPersistentMap<String, Object> delete( String key ) {
+            @Override public PersistentMapImpl<String, Object> delete( String key ) {
                 if ( containsKey( key ) ) {
-                    return AbuPersistentMap.<String, Object>create()
-                                           .merge( this )
-                                           .delete( key );
+                    return PersistentMapImpl.<String, Object>create()
+                                            .merge( this )
+                                            .delete( key );
                 } else {
                     throw new NoSuchElementException( key );
                 }
             }
             
-            @Override public AbuPersistentMap<String, Object> merge( Map<String, Object> map ) {
-                return AbuPersistentMap.<String, Object>create()
-                                       .merge( this )
-                                       .merge( map );
+            @Override public PersistentMapImpl<String, Object> merge( Map<String, Object> map ) {
+                return PersistentMapImpl.<String, Object>create()
+                                        .merge( this )
+                                        .merge( map );
             }
             
             @Override public Map<String, Object> mutable() {

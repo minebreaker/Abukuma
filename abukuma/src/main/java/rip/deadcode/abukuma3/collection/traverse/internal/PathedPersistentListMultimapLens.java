@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.collection.traverse.internal;
 
 
-import rip.deadcode.abukuma3.collection.AbuPersistentList;
+import rip.deadcode.abukuma3.collection.PersistentListImpl;
 import rip.deadcode.abukuma3.collection.PersistentListMultimap;
 import rip.deadcode.abukuma3.collection.traverse.Getter;
 import rip.deadcode.abukuma3.collection.traverse.Lens;
@@ -26,7 +26,7 @@ public final class PathedPersistentListMultimapLens<K, V, T extends PersistentLi
     @Override public Getter<T, List<V>> getter() {
         return multimap -> {
             Optional<K> key = multimap.keySet().stream().filter( e -> Objects.equals( e.toString(), path ) ).findAny();
-            return key.isPresent() ? multimap.get( key.get() ) : AbuPersistentList.create();
+            return key.isPresent() ? multimap.get( key.get() ) : PersistentListImpl.create();
         };
     }
 

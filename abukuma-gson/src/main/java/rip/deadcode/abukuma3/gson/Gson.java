@@ -1,11 +1,10 @@
 package rip.deadcode.abukuma3.gson;
 
-import com.google.gson.Gson;
 import rip.deadcode.abukuma3.gson.internal.GsonParser;
 import rip.deadcode.abukuma3.gson.internal.GsonRenderer;
-import rip.deadcode.abukuma3.parser.AbuParser;
-import rip.deadcode.abukuma3.renderer.AbuRenderer;
-import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.parser.Parser;
+import rip.deadcode.abukuma3.renderer.Renderer;
+import rip.deadcode.abukuma3.value.Config;
 import rip.deadcode.abukuma3.value.PojoConfig;
 
 import java.io.IOException;
@@ -16,19 +15,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 
-public final class AbuGson {
+public final class Gson {
 
-    public static AbuParser<Object> parser() {
+    public static Parser<Object> parser() {
         return new GsonParser();
     }
 
-    public static AbuRenderer renderer() {
+    public static Renderer renderer() {
         return new GsonRenderer();
     }
 
-    public static AbuConfig config( Path path ) {
+    public static Config config( Path path ) {
         try ( Reader r = Files.newBufferedReader( path, StandardCharsets.UTF_8 ) ) {
-            return new Gson().fromJson( r, PojoConfig.class ).toConfig();
+            return new com.google.gson.Gson().fromJson( r, PojoConfig.class ).toConfig();
 
         } catch ( IOException e ) {
             throw new UncheckedIOException( e );

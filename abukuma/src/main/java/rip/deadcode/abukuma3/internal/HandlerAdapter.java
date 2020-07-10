@@ -2,18 +2,18 @@ package rip.deadcode.abukuma3.internal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.filter.AbuFilter;
-import rip.deadcode.abukuma3.handler.AbuExceptionHandler;
-import rip.deadcode.abukuma3.handler.AbuHandler;
-import rip.deadcode.abukuma3.renderer.AbuRenderer;
-import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
-import rip.deadcode.abukuma3.router.AbuRouter;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.filter.Filter;
+import rip.deadcode.abukuma3.handler.ExceptionHandler;
+import rip.deadcode.abukuma3.handler.Handler;
+import rip.deadcode.abukuma3.renderer.Renderer;
+import rip.deadcode.abukuma3.renderer.RenderingResult;
+import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.router.RoutingResult;
 import rip.deadcode.abukuma3.router.internal.RoutingContextImpl;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
+import rip.deadcode.abukuma3.value.Response;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -27,13 +27,13 @@ public abstract class HandlerAdapter<Q, R> {
 
     private static final Logger logger = LoggerFactory.getLogger( HandlerAdapter.class );
 
-    private final AbuExecutionContext context;
-    private final AbuRouter router;
-    private final AbuExceptionHandler exceptionHandler;
-    private final AbuRenderer renderer;
-    private final AbuFilter filter;
+    private final ExecutionContext context;
+    private final Router router;
+    private final ExceptionHandler exceptionHandler;
+    private final Renderer renderer;
+    private final Filter filter;
 
-    protected HandlerAdapter( AbuExecutionContext context ) {
+    protected HandlerAdapter( ExecutionContext context ) {
         this.context = context;
         this.router = context.router();
         this.exceptionHandler = context.exceptionHandler();
@@ -41,24 +41,24 @@ public abstract class HandlerAdapter<Q, R> {
         this.filter = context.filter();
     }
 
-    protected abstract AbuRequestHeader createHeader( AbuExecutionContext context, Q originalRequest );
+    protected abstract RequestHeader createHeader( ExecutionContext context, Q originalRequest );
 
-    protected abstract AbuRequest createRequest(
-            AbuRequestHeader header,
+    protected abstract Request createRequest(
+            RequestHeader header,
             Q originalRequest,
             R originalResponse,
             Map<String, String> pathParams );
 
     protected abstract void submitResponse(
-            AbuExecutionContext context,
-            AbuResponse response,
-            AbuRenderingResult renderingResult,
+            ExecutionContext context,
+            Response response,
+            RenderingResult renderingResult,
             Q originalRequest,
             R originalResponse ) throws Exception;
 
     public void handle( Q originalRequest, R originalResponse ) {
 
-        AbuRequestHeader header = createHeader( context, originalRequest );
+        RequestHeader header = createHeader( context, originalRequest );
         RoutingResult route = router.route( new RoutingContextImpl(
                 header,
                 header.urlString(),
@@ -66,25 +66,25 @@ public abstract class HandlerAdapter<Q, R> {
         ) );
         checkNotNull( route, "No matching route found." );
 
-        AbuRequest request = createRequest(
+        Request request = createRequest(
                 header,
                 originalRequest,
                 originalResponse,
                 route.parameters()
         );
 
-        AbuHandler handler = route.handler();
+        Handler handler = route.handler();
 
-        AbuResponse response = possibly(
+        Response response = possibly(
                 () -> filter.filter( context, request, handler )
         ).orElse(
                 e -> exceptionHandler.handleException( e, context, request )
         );
 
         try {
-            AbuRenderingResult renderingResult = renderer.render( context, response );
+            RenderingResult renderingResult = renderer.render( context, response );
             checkNotNull( renderingResult );
-            AbuResponse renderedResponse = renderingResult.modifying().get();
+            Response renderedResponse = renderingResult.modifying().get();
 
             submitResponse( context, renderedResponse, renderingResult, originalRequest, originalResponse );
 

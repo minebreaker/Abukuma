@@ -1,9 +1,9 @@
 package rip.deadcode.abukuma3.netty.internal.value;
 
 import com.google.common.net.MediaType;
-import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.netty.internal.NettyHandler;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.Cookie;
 
 import javax.annotation.Nullable;
@@ -16,18 +16,18 @@ import java.util.Set;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
-public class NettyRequestHeader implements AbuRequestHeader {
+public class NettyRequestHeader implements RequestHeader {
 
-    private final AbuExecutionContext context;
+    private final ExecutionContext context;
     private final NettyHandler.RequestAndContent request;
 
-    public NettyRequestHeader( AbuExecutionContext context, NettyHandler.RequestAndContent request ) {
+    public NettyRequestHeader( ExecutionContext context, NettyHandler.RequestAndContent request ) {
         this.context = context;
         this.request = request;
     }
 
     @Override
-    public AbuExecutionContext context() {
+    public ExecutionContext context() {
         return context;
     }
 

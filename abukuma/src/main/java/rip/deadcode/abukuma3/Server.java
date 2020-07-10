@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3;
 
-public interface AbuServer {
+public interface Server {
 
     /**
      * Runs the server.

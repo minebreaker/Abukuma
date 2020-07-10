@@ -2,13 +2,13 @@ package rip.deadcode.abukuma3.value.internal;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.value.Config;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 
-public final class AbuConfigImpl implements AbuConfig, Map<String, Object> {
+public final class ConfigImpl implements Config, Map<String, Object> {
 
     private int port;
     private int maxThreads;
@@ -16,21 +16,21 @@ public final class AbuConfigImpl implements AbuConfig, Map<String, Object> {
     @Nullable
     private String serverImplementation;
 
-    public AbuConfigImpl() {
+    public ConfigImpl() {
         this.port = 8080;
         this.maxThreads = 128;
         this.minThreads = 8;
     }
 
-    public AbuConfigImpl( int port, int maxThreads, int minThreads, @Nullable String serverImplementation ) {
+    public ConfigImpl( int port, int maxThreads, int minThreads, @Nullable String serverImplementation ) {
         this.port = port;
         this.maxThreads = maxThreads;
         this.minThreads = minThreads;
         this.serverImplementation = serverImplementation;
     }
 
-    private AbuConfigImpl copy() {
-        return new AbuConfigImpl( port, maxThreads, minThreads, serverImplementation );
+    private ConfigImpl copy() {
+        return new ConfigImpl( port, maxThreads, minThreads, serverImplementation );
     }
 
     @Override
@@ -39,8 +39,8 @@ public final class AbuConfigImpl implements AbuConfig, Map<String, Object> {
     }
 
     @Override
-    public AbuConfigImpl serverImplementation( String serverImplementation ) {
-        AbuConfigImpl c = copy();
+    public ConfigImpl serverImplementation( String serverImplementation ) {
+        ConfigImpl c = copy();
         c.serverImplementation = serverImplementation;
         return c;
     }
@@ -51,8 +51,8 @@ public final class AbuConfigImpl implements AbuConfig, Map<String, Object> {
     }
 
     @Override
-    public AbuConfigImpl port(int port) {
-        AbuConfigImpl c = copy();
+    public ConfigImpl port( int port) {
+        ConfigImpl c = copy();
         c.port = port;
         return c;
     }
@@ -63,8 +63,8 @@ public final class AbuConfigImpl implements AbuConfig, Map<String, Object> {
     }
 
     @Override
-    public AbuConfigImpl maxThreads(int maxThreads) {
-        AbuConfigImpl c = copy();
+    public ConfigImpl maxThreads( int maxThreads) {
+        ConfigImpl c = copy();
         c.maxThreads = maxThreads;
         return c;
     }
@@ -75,8 +75,8 @@ public final class AbuConfigImpl implements AbuConfig, Map<String, Object> {
     }
 
     @Override
-    public AbuConfigImpl minThreads(int minThreads) {
-        AbuConfigImpl c = copy();
+    public ConfigImpl minThreads( int minThreads) {
+        ConfigImpl c = copy();
         c.minThreads = minThreads;
         return c;
     }

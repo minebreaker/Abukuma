@@ -4,11 +4,10 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.net.HttpHeaders;
-import org.eclipse.jetty.server.Request;
-import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,18 +22,18 @@ import static com.google.common.base.Preconditions.checkState;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.mayFirst;
 
 
-public final class JettyRequest implements AbuRequest {
+public final class JettyRequest implements Request {
 
-    private final AbuExecutionContext context;
-    private final AbuRequestHeader header;
-    private final Request jettyRequest;
+    private final ExecutionContext context;
+    private final RequestHeader header;
+    private final org.eclipse.jetty.server.Request jettyRequest;
     private final HttpServletResponse servletResponse;
     private final Map<String, String> pathParams;
 
     public JettyRequest(
-            AbuExecutionContext context,
-            AbuRequestHeader header,
-            Request jettyRequest,
+            ExecutionContext context,
+            RequestHeader header,
+            org.eclipse.jetty.server.Request jettyRequest,
             HttpServletResponse servletResponse,
             Map<String, String> pathParams ) {
         this.context = context;
@@ -75,7 +74,7 @@ public final class JettyRequest implements AbuRequest {
         return header.urlString();
     }
 
-    @Override public AbuRequestHeader header() {
+    @Override public RequestHeader header() {
         return header;
     }
 
@@ -112,7 +111,7 @@ public final class JettyRequest implements AbuRequest {
 
     @Unsafe
     @Override
-    public Request rawRequest() {
+    public org.eclipse.jetty.server.Request rawRequest() {
         return jettyRequest;
     }
 

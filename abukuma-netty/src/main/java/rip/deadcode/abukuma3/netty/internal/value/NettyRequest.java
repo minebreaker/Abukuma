@@ -3,10 +3,10 @@ package rip.deadcode.abukuma3.netty.internal.value;
 import com.google.common.collect.Multimap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.netty.internal.NettyHandler;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,17 +20,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 
-public class NettyRequest implements AbuRequest {
+public class NettyRequest implements Request {
 
-    private final AbuExecutionContext context;
-    private final AbuRequestHeader header;
+    private final ExecutionContext context;
+    private final RequestHeader header;
     private final NettyHandler.RequestAndContent nettyRequest;
     private final ChannelHandlerContext rawResponse;
     private final Map<String, String> pathParams;
 
     public NettyRequest(
-            AbuExecutionContext context,
-            AbuRequestHeader header,
+            ExecutionContext context,
+            RequestHeader header,
             NettyHandler.RequestAndContent nettyRequest,
             ChannelHandlerContext rawResponse,
             Map<String, String> pathParams ) {
@@ -78,7 +78,7 @@ public class NettyRequest implements AbuRequest {
         return header.urlString();
     }
 
-    @Override public AbuRequestHeader header() {
+    @Override public RequestHeader header() {
         return header;
     }
 

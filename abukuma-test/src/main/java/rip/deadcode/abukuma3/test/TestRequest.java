@@ -1,15 +1,15 @@
 package rip.deadcode.abukuma3.test;
 
 import com.google.common.collect.Multimap;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
 import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
 
-public final class TestRequest implements AbuRequest {
+public final class TestRequest implements Request {
 
     @Override public <T> T body( Class<T> cls ) {
         return null;
@@ -27,7 +27,7 @@ public final class TestRequest implements AbuRequest {
         return null;
     }
 
-    @Override public AbuRequestHeader header() {
+    @Override public RequestHeader header() {
         return null;
     }
 

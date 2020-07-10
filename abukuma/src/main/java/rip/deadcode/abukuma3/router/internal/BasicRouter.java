@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.router.internal;
 
-import rip.deadcode.abukuma3.router.AbuRouter;
+import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.router.Route;
 import rip.deadcode.abukuma3.router.RoutingContext;
 import rip.deadcode.abukuma3.router.RoutingResult;
@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 
-public final class BasicRouter implements AbuRouter {
+public final class BasicRouter implements Router {
 
     private final Route route;
 
