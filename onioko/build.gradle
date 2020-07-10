@@ -1,0 +1,7 @@
+dependencies {
+    api(
+            'org.organicdesign:Paguro:3.1.2',
+//            'org.organicdesign:Paguro:3.2.0',  // requires Java 11
+            'com.google.guava:guava:29.0-jre',
+    )
+}
