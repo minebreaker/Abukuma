@@ -33,7 +33,6 @@
 * Problem: Specifying server factory is odd
     * Specify server class (not factory) in config
 * Write tests
-* Move collections to a new independent project
 * Replace Guava ImmutableCollection to internal ones
 * ~~Type hierarchy should be expressed as trees, not lists~~ This is not as easy as it seems - need more considerations
     * e.g.) parsers, renderers...

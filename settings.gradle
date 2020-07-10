@@ -12,4 +12,5 @@ include (
         'abukuma-test',
         'abukuma-thymeleaf',
         'abukuma-yaml',
+        'onioko',
 )
