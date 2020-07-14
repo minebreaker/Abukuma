@@ -6,7 +6,7 @@ import rip.deadcode.abukuma3.collection.traverse.Lens;
 import rip.deadcode.abukuma3.collection.traverse.Setter;
 
 
-public final class PersistentListLens<T> implements Lens<PersistentList<T>, T> {
+public final class PersistentListLens<L extends PersistentList<T, L>, T> implements Lens<L, T> {
 
     private final int index;
 
@@ -14,11 +14,11 @@ public final class PersistentListLens<T> implements Lens<PersistentList<T>, T> {
         this.index = index;
     }
 
-    @Override public Getter<PersistentList<T>, T> getter() {
+    @Override public Getter<L, T> getter() {
         return list -> list.get( index );
     }
 
-    @Override public Setter<PersistentList<T>, T> setter() {
+    @Override public Setter<L, T> setter() {
         return ( list, value ) -> list.replace( index, value );
     }
 }

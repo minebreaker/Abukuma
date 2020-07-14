@@ -1,27 +1,36 @@
 package rip.deadcode.abukuma3.collection;
 
 
+import com.google.common.collect.ImmutableList;
+
+import java.util.List;
+
+
 // TODO better name as a public interface?
-public final class PersistentListImpl<T> extends AbstractPersistentList<T> {
+public final class PersistentListImpl<V> extends AbstractPersistentList<V, PersistentListImpl<V>> {
 
     private PersistentListImpl() {
         super();
     }
 
-    private PersistentListImpl( Envelope<T> envelope ) {
+    private PersistentListImpl( Envelope<V> envelope ) {
         super( envelope );
     }
 
-    public static <T> PersistentListImpl<T> create() {
+    public static <V> PersistentListImpl<V> create() {
         return new PersistentListImpl<>();
     }
 
-    // TODO
-//    public static <T> AbuPersistentList<T> create(T first, T... rest) {
-//        return new AbuPersistentList<>();
-//    }
+    @SafeVarargs
+    public static <V, T> PersistentListImpl<V> create( V first, V... rest ) {
+        return new PersistentListImpl<V>().addLast( first ).concat( ImmutableList.copyOf( rest ) );
+    }
 
-    @Override protected PersistentList<T> constructor( Envelope<T> envelope ) {
+    public static <V, T> PersistentListImpl<V> wrap( List<V> list ) {
+        return new PersistentListImpl<V>().concat( list );
+    }
+
+    @Override protected PersistentListImpl<V> constructor( Envelope<V> envelope ) {
         return new PersistentListImpl<>( envelope );
     }
 }

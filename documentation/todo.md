@@ -30,8 +30,6 @@
 * Problem: Static imports are tedious
     * Single factory class for all?
         * `rip.deadcode.abukuma3.utils.StaticImports`
-* Problem: Specifying server factory is odd
-    * Specify server class (not factory) in config
 * Write tests
 * Replace Guava ImmutableCollection to internal ones
 * ~~Type hierarchy should be expressed as trees, not lists~~ This is not as easy as it seems - need more considerations

@@ -8,29 +8,29 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface PersistentList<T> extends List<T>, Pathable<PersistentList<T>, T> {
+public interface PersistentList<V, T extends PersistentList<V, T>> extends List<V>, Pathable<T, V> {
 
-    public Optional<T> mayGet( int nth );
+    public Optional<V> mayGet( int nth );
 
-    public T first();
+    public V first();
 
-    public T last();
+    public V last();
 
-    public PersistentList<T> addFirst( T value );
+    public T addFirst( V value );
 
-    public PersistentList<T> addLast( T value );
+    public T addLast( V value );
 
-    public PersistentList<T> insert( int n, T value );
+    public T insert( int n, V value );
 
-    public PersistentList<T> replace( int n, T value );
+    public T replace( int n, V value );
 
-    public PersistentList<T> delete( int n );
+    public T delete( int n );
 
-    public PersistentList<T> concat( Iterable<? extends T> list );
+    public T concat( Iterable<? extends V> list );
 
-    public List<T> mutable();
+    public List<V> mutable();
 
-    @Override public default Lens<PersistentList<T>, T> lens( String path ) {
+    @Override public default Lens<T, V> lens( String path ) {
         return new PersistentListLens<>( Integer.parseInt( path ) );
     }
 }
