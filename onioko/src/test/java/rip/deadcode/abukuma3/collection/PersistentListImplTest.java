@@ -16,7 +16,7 @@ class PersistentListImplTest {
     @Test
     void testMayGet() {
 
-        PersistentList<String, ?> param = PersistentListImpl.<String>create().addFirst( "foo" );
+        PersistentList<String> param = PersistentListImpl.<String>create().addFirst( "foo" );
         assertThat( param.mayGet( 0 ) ).hasValue( "foo" );
         assertThat( param.mayGet( -1 ) ).isEmpty();
         assertThat( param.mayGet( 1 ) ).isEmpty();
@@ -25,7 +25,7 @@ class PersistentListImplTest {
     @Test
     void testFirst() {
 
-        PersistentList<String, ?> param = PersistentListImpl.<String>create().addFirst( "bar" ).addFirst( "foo" );
+        PersistentList<String> param = PersistentListImpl.<String>create().addFirst( "bar" ).addFirst( "foo" );
         assertThat( param ).containsExactly( "foo", "bar" ).inOrder();
         assertThat( param.first() ).isEqualTo( "foo" );
 
@@ -41,7 +41,7 @@ class PersistentListImplTest {
     @Test
     void testLast() {
 
-        PersistentList<String, ?> param = PersistentListImpl.<String>create().addLast( "foo" ).addLast( "bar" );
+        PersistentList<String> param = PersistentListImpl.<String>create().addLast( "foo" ).addLast( "bar" );
         assertThat( param ).containsExactly( "foo", "bar" ).inOrder();
         assertThat( param.last() ).isEqualTo( "bar" );
 
@@ -57,7 +57,7 @@ class PersistentListImplTest {
     @Test
     void testInsert() {
 
-        PersistentList<String, ?> param = PersistentListImpl.<String>create().addLast( "foo" ).addLast( "bar" );
+        PersistentList<String> param = PersistentListImpl.<String>create().addLast( "foo" ).addLast( "bar" );
 
         assertThat( param.insert( 0, "buz" ) ).containsExactly( "buz", "foo", "bar" ).inOrder();
         assertThat( param.insert( 1, "buz" ) ).containsExactly( "foo", "buz", "bar" ).inOrder();
@@ -79,7 +79,7 @@ class PersistentListImplTest {
     @Test
     void testReplace() {
 
-        PersistentList<String, ?> param = PersistentListImpl.<String>create().addLast( "foo" ).addLast( "bar" );
+        PersistentList<String> param = PersistentListImpl.<String>create().addLast( "foo" ).addLast( "bar" );
 
         assertThat( param.replace( 0, "buz" ) ).containsExactly( "buz", "bar" ).inOrder();
         assertThat( param.replace( 1, "buz" ) ).containsExactly( "foo", "buz" ).inOrder();
@@ -100,7 +100,7 @@ class PersistentListImplTest {
     @Test
     void testDelete() {
 
-        PersistentList<String, ?> param = PersistentListImpl.<String>create().addLast( "foo" ).addLast( "bar" );
+        PersistentList<String> param = PersistentListImpl.<String>create().addLast( "foo" ).addLast( "bar" );
         assertThat( param.delete( 0 ) ).containsExactly( "bar" );
         assertThat( param.delete( 1 ) ).containsExactly( "foo" );
 
@@ -116,7 +116,7 @@ class PersistentListImplTest {
     @Test
     void testConcat() {
 
-        PersistentList<String, ?> param = PersistentListImpl.<String>create()
+        PersistentList<String> param = PersistentListImpl.<String>create()
                 .addLast( "foo" )
                 .concat( ImmutableList.of( "bar" ) );
 

@@ -11,8 +11,8 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkState;
 
 
-public final class PathedPersistentMapLens<K, V, T extends PersistentMap<K, V, T>>
-        implements Lens<T, V> {
+public final class PathedPersistentMapLens<K, V>
+        implements Lens<PersistentMap<K, V>, V> {
 
     private String path;
 
@@ -20,7 +20,7 @@ public final class PathedPersistentMapLens<K, V, T extends PersistentMap<K, V, T
         this.path = path;
     }
 
-    @Override public Getter<T, V> getter() {
+    @Override public Getter<PersistentMap<K, V>, V> getter() {
         return map -> {
             Optional<K> key = map.keySet().stream().filter( e -> Objects.equals( e.toString(), path ) ).findAny();
             return key.map( map::get ).orElse( null );
@@ -31,7 +31,7 @@ public final class PathedPersistentMapLens<K, V, T extends PersistentMap<K, V, T
 //    @Override public Stream<V> getAll( T map ) {
 //    }
 
-    @Override public Setter<T, V> setter() {
+    @Override public Setter<PersistentMap<K, V>, V> setter() {
         return ( map, value ) -> {
             Optional<K> key = map.keySet().stream().filter( e -> Objects.equals( e.toString(), path ) ).findAny();
             checkState( key.isPresent() );

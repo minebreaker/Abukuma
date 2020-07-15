@@ -16,6 +16,7 @@ constructor:
 property:
   - name: name
     type: String
+    # FIXME: nullability
   - name: value
     type: String
     javadoc: |

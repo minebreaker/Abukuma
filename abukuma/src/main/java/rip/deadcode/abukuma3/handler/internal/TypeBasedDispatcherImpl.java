@@ -2,7 +2,7 @@ package rip.deadcode.abukuma3.handler.internal;
 
 
 import rip.deadcode.abukuma3.ExecutionContext;
-import rip.deadcode.abukuma3.collection.PersistentMapImpl;
+import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.handler.Handler;
 import rip.deadcode.abukuma3.handler.TypeBasedDispatcher;
 import rip.deadcode.abukuma3.value.Request;
@@ -13,10 +13,10 @@ import javax.annotation.Nullable;
 
 public final class TypeBasedDispatcherImpl implements TypeBasedDispatcher {
 
-    private final PersistentMapImpl<String, Handler> handlers;
+    private final PersistentMap<String, Handler> handlers;
     @Nullable private final Handler fallback;
 
-    public TypeBasedDispatcherImpl( PersistentMapImpl<String, Handler> handlers, @Nullable Handler fallback ) {
+    public TypeBasedDispatcherImpl( PersistentMap<String, Handler> handlers, @Nullable Handler fallback ) {
         this.handlers = handlers;
         this.fallback = fallback;
     }

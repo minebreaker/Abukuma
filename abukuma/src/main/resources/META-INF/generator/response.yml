@@ -19,6 +19,7 @@ property:
   - name: header
     type: Header
   - name: cookie
+    # TODO: Should accept List<Cookie>
     type: PersistentList<Cookie>
 
 method:

@@ -16,11 +16,13 @@ fun renderRecordInterface(model: Record) =
             
             
             public interface ${model.`interface`.name}
-            extends PersistentMap<String, Object, PersistentMapImpl<String, Object>> {
+            extends PersistentMap<String, Object> {
             
                 ${model.properties.joinToString("\n") { renderRecordInterfaceProperty(model, it) }}
                 
                 ${model.methods.joinToString("\n") { renderRecordInterfaceMethod(it) }}
+                
+                ${renderRecordInterfacePredefinedMethods(model)}
             }
         """.trimIndent()
 
@@ -55,6 +57,13 @@ fun renderRecordInterfaceMethod(method: RecordMethod) =
         else
             ""
 
+fun renderRecordInterfacePredefinedMethods(model: Record) =
+    """
+        public static ${model.`interface`.name} cast( Map<String, Object> map ) {
+            return ${model.name}.cast( map );
+        }
+    """.trimIndent()
+
 
 fun renderRecord(model: Record) =
         """
@@ -79,6 +88,8 @@ fun renderRecord(model: Record) =
                 ${model.methods.joinToString("\n") { renderMethod(it) }}
                 
                 ${renderRecordMapOverride(model)}
+                
+                ${renderRecordPredefinedMethods(model)}
             }
         """.trimIndent()
 
@@ -270,14 +281,14 @@ fun renderRecordMapOverride(record: Record) =
                 }
             }
             
-            @Override public PersistentMapImpl<String, Object> set( String key, Object value ) {
+            @Override public PersistentMap<String, Object> set( String key, Object value ) {
                 checkNotNull( key );
                 return PersistentMapImpl.<String, Object>create()
                                         .merge( this )
                                         .set( key, value );
             }
             
-            @Override public PersistentMapImpl<String, Object> delete( String key ) {
+            @Override public PersistentMap<String, Object> delete( String key ) {
                 if ( containsKey( key ) ) {
                     return PersistentMapImpl.<String, Object>create()
                                             .merge( this )
@@ -287,7 +298,7 @@ fun renderRecordMapOverride(record: Record) =
                 }
             }
             
-            @Override public PersistentMapImpl<String, Object> merge( Map<String, Object> map ) {
+            @Override public PersistentMap<String, Object> merge( Map<String, Object> map ) {
                 return PersistentMapImpl.<String, Object>create()
                                         .merge( this )
                                         .merge( map );
@@ -297,6 +308,18 @@ fun renderRecordMapOverride(record: Record) =
                 return new HashMap<>( this );
             }
         """.trimIndent()
+
+fun renderRecordPredefinedMethods(model: Record) =
+    """
+        public static ${model.name} cast( Map<String, Object> map ) {
+            
+            ${model.properties.joinToString("\n") {
+        """${it.type} ${it.name} = (${it.type}) map.get( "${it.name}" );"""
+    }}
+            
+            return new ${model.name} ( ${model.properties.joinToString { it.name }} );
+        }
+    """.trimIndent()
 
 
 private fun annotateNullable(property: RecordProperty) =

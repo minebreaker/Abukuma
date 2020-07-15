@@ -11,21 +11,21 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 
-public abstract class AbstractPersistentList<V, T extends AbstractPersistentList<V, T>>
-        extends ForwardingList<V>
-        implements PersistentList<V, T> {
+public abstract class AbstractPersistentList<T>
+        extends ForwardingList<T>
+        implements PersistentList<T> {
 
-    private final ImList<V> delegate;
+    private final ImList<T> delegate;
 
     protected AbstractPersistentList() {
         this.delegate = PersistentVector.empty();
     }
 
-    protected AbstractPersistentList( Envelope<V> envelope ) {
+    protected AbstractPersistentList( Envelope<T> envelope ) {
         this.delegate = envelope.load;
     }
 
-    @Override protected final List<V> delegate() {
+    @Override protected final List<T> delegate() {
         return delegate;
     }
 
@@ -37,9 +37,12 @@ public abstract class AbstractPersistentList<V, T extends AbstractPersistentList
         }
     }
 
-    protected abstract T constructor( Envelope<V> envelope );
+    /**
+     * To encapsulate the internal data structure.
+     */
+    protected abstract PersistentList<T> constructor( Envelope<T> envelope );
 
-    @Override public Optional<V> mayGet( int nth ) {
+    @Override public Optional<T> mayGet( int nth ) {
 
         if ( nth < 0 || nth >= delegate.size() ) {
             return Optional.empty();
@@ -48,29 +51,29 @@ public abstract class AbstractPersistentList<V, T extends AbstractPersistentList
         return Optional.ofNullable( delegate.get( nth ) );
     }
 
-    @Override public V first() {
+    @Override public T first() {
         if ( delegate.isEmpty() ) {
             throw new IndexOutOfBoundsException( "Empty list." );
         }
         return delegate.get( 0 );
     }
 
-    @Override public V last() {
+    @Override public T last() {
         if ( delegate.isEmpty() ) {
             throw new IndexOutOfBoundsException( "Empty list." );
         }
         return delegate.get( delegate.size() - 1 );
     }
 
-    @Override public T addFirst( V value ) {
+    @Override public PersistentList<T> addFirst( T value ) {
         checkNotNull( value );
 
         return constructor( new Envelope<>(
-                PersistentVector.<V>emptyMutable().append( value ).concat( delegate ).immutable()
+                PersistentVector.<T>emptyMutable().append( value ).concat( delegate ).immutable()
         ) );
     }
 
-    @Override public T addLast( V value ) {
+    @Override public PersistentList<T> addLast( T value ) {
         checkNotNull( value );
 
         return constructor( new Envelope<>(
@@ -78,7 +81,7 @@ public abstract class AbstractPersistentList<V, T extends AbstractPersistentList
         ) );
     }
 
-    @Override public T insert( int nth, V value ) {
+    @Override public PersistentList<T> insert( int nth, T value ) {
 
         checkNotNull( value );
 
@@ -87,7 +90,7 @@ public abstract class AbstractPersistentList<V, T extends AbstractPersistentList
         }
 
         return constructor( new Envelope<>(
-                PersistentVector.<V>emptyMutable()
+                PersistentVector.<T>emptyMutable()
                         .concat( delegate.subList( 0, nth ) )
                         .append( value )
                         .concat( delegate.subList( nth, delegate.size() ) )
@@ -95,7 +98,7 @@ public abstract class AbstractPersistentList<V, T extends AbstractPersistentList
         ) );
     }
 
-    @Override public T replace( int nth, V value ) {
+    @Override public PersistentList<T> replace( int nth, T value ) {
 
         checkNotNull( value );
 
@@ -108,27 +111,27 @@ public abstract class AbstractPersistentList<V, T extends AbstractPersistentList
         ) );
     }
 
-    @Override public T delete( int nth ) {
+    @Override public PersistentList<T> delete( int nth ) {
 
         if ( nth < 0 || nth >= delegate.size() ) {
             throw new IndexOutOfBoundsException();
         }
 
         return constructor( new Envelope<>(
-                PersistentVector.<V>emptyMutable()
+                PersistentVector.<T>emptyMutable()
                         .concat( delegate.subList( 0, nth ) )
                         .concat( delegate.subList( nth + 1, delegate.size() ) )
                         .immutable()
         ) );
     }
 
-    @Override public T concat( Iterable<? extends V> list ) {
+    @Override public PersistentList<T> concat( Iterable<? extends T> list ) {
         return constructor( new Envelope<>(
                 delegate.concat( list )
         ) );
     }
 
-    @Override public List<V> mutable() {
+    @Override public List<T> mutable() {
         return new ArrayList<>( this );
     }
 }

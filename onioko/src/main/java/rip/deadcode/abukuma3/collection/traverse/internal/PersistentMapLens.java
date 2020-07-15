@@ -6,8 +6,7 @@ import rip.deadcode.abukuma3.collection.traverse.Lens;
 import rip.deadcode.abukuma3.collection.traverse.Setter;
 
 
-public final class PersistentMapLens<K, V, T extends PersistentMap<K, V, T>>
-        implements Lens<T, V> {
+public final class PersistentMapLens<K, V> implements Lens<PersistentMap<K, V>, V> {
 
     private final K key;
 
@@ -15,11 +14,11 @@ public final class PersistentMapLens<K, V, T extends PersistentMap<K, V, T>>
         this.key = key;
     }
 
-    @Override public Getter<T, V> getter() {
+    @Override public Getter<PersistentMap<K, V>, V> getter() {
         return map -> map.get( key );
     }
 
-    @Override public Setter<T, V> setter() {
+    @Override public Setter<PersistentMap<K, V>, V> setter() {
         return ( map, value ) -> map.set( key, value );
     }
 }

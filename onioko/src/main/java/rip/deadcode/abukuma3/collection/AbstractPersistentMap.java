@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public abstract class AbstractPersistentMap<K, V, T extends AbstractPersistentMap<K, V, T>>
-        extends ForwardingMap<K, V> implements PersistentMap<K, V, T> {
+public abstract class AbstractPersistentMap<K, V>
+        extends ForwardingMap<K, V> implements PersistentMap<K, V> {
 
     private final ImMap<K, V> delegate;
 
@@ -36,9 +36,9 @@ public abstract class AbstractPersistentMap<K, V, T extends AbstractPersistentMa
         }
     }
 
-    protected abstract T constructor( Envelope<K, V> delegate );
+    protected abstract PersistentMap<K, V> constructor( Envelope<K, V> delegate );
 
-    private T constructor( ImMap<K, V> delegate ) {
+    private PersistentMap<K, V> constructor( ImMap<K, V> delegate ) {
         return constructor( new Envelope<>( delegate ) );
     }
 
@@ -48,17 +48,17 @@ public abstract class AbstractPersistentMap<K, V, T extends AbstractPersistentMa
     }
 
     @Override
-    public T set( K key, V value ) {
+    public PersistentMap<K, V> set( K key, V value ) {
         return constructor( delegate.assoc( key, value ) );
     }
 
     @Override
-    public T delete( K key ) {
+    public PersistentMap<K, V> delete( K key ) {
         return constructor( delegate.without( key ) );
     }
 
     @Override
-    public T merge( Map<K, V> other ) {
+    public PersistentMap<K, V> merge( Map<K, V> other ) {
         MutableMap<K, V> temp = delegate.mutable();
         for ( Entry<K, V> e : other.entrySet() ) {
             temp.assoc( e );

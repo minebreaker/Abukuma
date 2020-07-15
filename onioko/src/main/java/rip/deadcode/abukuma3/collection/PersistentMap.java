@@ -8,20 +8,20 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public interface PersistentMap<K, V, T extends PersistentMap<K, V, T>>
-        extends Map<K, V>, Pathable<T, V> {
+public interface PersistentMap<K, V>
+        extends Map<K, V>, Pathable<PersistentMap<K, V>, V> {
 
     public Optional<V> mayGet( K key );
 
-    public T set( K key, V value );
+    public PersistentMap<K, V> set( K key, V value );
 
-    public T delete( K key );
+    public PersistentMap<K, V> delete( K key );
 
-    public T merge( Map<K, V> map );
+    public PersistentMap<K, V> merge( Map<K, V> map );
 
     public Map<K, V> mutable();
 
-    @Override public default Lens<T, V> lens( String path ) {
+    @Override public default Lens<PersistentMap<K, V>, V> lens( String path ) {
         return new PathedPersistentMapLens<>( path );
     }
 }

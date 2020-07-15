@@ -21,7 +21,7 @@ class PersistentMapImplTest {
     @Test
     void testSet() {
 
-        PersistentMapImpl<String, String> param = PersistentMapImpl.<String, String>create()
+        PersistentMap<String, String> param = PersistentMapImpl.<String, String>create()
                 .set( "k1", "v1" ).set( "k2", "v2" );
         assertThat( param ).containsExactly( "k1", "v1", "k2", "v2" );
         assertThat( param.set( "k2", "replaced" ) ).containsExactly( "k1", "v1", "k2", "replaced" );
@@ -30,7 +30,7 @@ class PersistentMapImplTest {
     @Test
     void testDelete() {
 
-        PersistentMapImpl<String, String> param = PersistentMapImpl.<String, String>create()
+        PersistentMap<String, String> param = PersistentMapImpl.<String, String>create()
                 .set( "k1", "v1" ).set( "k2", "v2" );
         assertThat( param.delete( "k2" ) ).containsExactly( "k1", "v1" );
     }

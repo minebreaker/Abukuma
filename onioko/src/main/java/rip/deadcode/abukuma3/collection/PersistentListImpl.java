@@ -7,7 +7,7 @@ import java.util.List;
 
 
 // TODO better name as a public interface?
-public final class PersistentListImpl<V> extends AbstractPersistentList<V, PersistentListImpl<V>> {
+public final class PersistentListImpl<V> extends AbstractPersistentList<V> {
 
     private PersistentListImpl() {
         super();
@@ -22,11 +22,11 @@ public final class PersistentListImpl<V> extends AbstractPersistentList<V, Persi
     }
 
     @SafeVarargs
-    public static <V, T> PersistentListImpl<V> create( V first, V... rest ) {
+    public static <V> PersistentList<V> create( V first, V... rest ) {
         return new PersistentListImpl<V>().addLast( first ).concat( ImmutableList.copyOf( rest ) );
     }
 
-    public static <V, T> PersistentListImpl<V> wrap( List<V> list ) {
+    public static <V> PersistentList<V> wrap( List<V> list ) {
         return new PersistentListImpl<V>().concat( list );
     }
 
