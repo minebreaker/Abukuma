@@ -5,7 +5,7 @@ import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
 
 
-public final class UrlEncoded extends AbstractPersistentMultimap<String, String, UrlEncoded> {
+public final class UrlEncoded extends AbstractPersistentMultimap<String, String> {
 
     private UrlEncoded( Multimap<String, String> delegate ) {
         super( delegate );
@@ -19,7 +19,7 @@ public final class UrlEncoded extends AbstractPersistentMultimap<String, String,
         return new UrlEncoded( delegate );
     }
 
-    @Override public UrlEncoded constructor( Envelope<String, String> delegate ) {
+    @Override protected UrlEncoded constructor( Envelope<String, String> delegate ) {
         return new UrlEncoded( delegate );
     }
 }

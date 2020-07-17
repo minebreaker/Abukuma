@@ -1,13 +1,18 @@
 package rip.deadcode.abukuma3.value;
 
+import com.google.common.collect.Multimap;
 import com.google.common.net.HttpHeaders;
 import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
 
 
-public final class Header extends AbstractPersistentMultimap<String, String, Header> {
+public final class Header extends AbstractPersistentMultimap<String, String> {
 
     private Header() {
         super();
+    }
+
+    private Header( Multimap<String, String> delegate ) {
+        super( delegate );
     }
 
     private Header( Envelope<String, String> delegate ) {
@@ -18,7 +23,11 @@ public final class Header extends AbstractPersistentMultimap<String, String, Hea
         return new Header();
     }
 
-    @Override public Header constructor( Envelope<String, String> delegate ) {
+    public static Header create( Multimap<String, String> delegate ) {
+        return new Header( delegate );
+    }
+
+    @Override protected Header constructor( Envelope<String, String> delegate ) {
         return new Header( delegate );
     }
 
@@ -27,6 +36,6 @@ public final class Header extends AbstractPersistentMultimap<String, String, Hea
     }
 
     public Header contentType( String value ) {
-        return set( HttpHeaders.CONTENT_TYPE, value );
+        return new Header( set( HttpHeaders.CONTENT_TYPE, value ) );
     }
 }
