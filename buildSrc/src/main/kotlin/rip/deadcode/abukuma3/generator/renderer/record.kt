@@ -7,7 +7,7 @@ import rip.deadcode.abukuma3.generator.RecordProperty
 
 
 fun renderRecordInterface(model: Record) =
-        """
+    """
             package ${model.`interface`.`package`};
             
             ${defaultImports}
@@ -27,7 +27,7 @@ fun renderRecordInterface(model: Record) =
         """.trimIndent()
 
 fun renderRecordInterfaceProperty(model: Record, property: RecordProperty) =
-        """
+    """
             ${property.javadoc.getter()}
             ${annotateNullable(property)}
             public
@@ -38,24 +38,24 @@ fun renderRecordInterfaceProperty(model: Record, property: RecordProperty) =
         """.trimIndent()
 
 fun renderRecordInterfaceGetter(property: RecordProperty) =
-        when {
-            property.getter != null -> {
-                val g = property.getter
-                "${g.type ?: property.type} ${g.name ?: property.name}( ${g.argument ?: ""} );"
-            }
-            property.optional -> {
-                "Optional<${property.type}> ${property.name}();"
-            }
-            else -> {
-                "${property.type} ${property.name}();"
-            }
+    when {
+        property.getter != null -> {
+            val g = property.getter
+            "${g.type ?: property.type} ${g.name ?: property.name}( ${g.argument ?: ""} );"
         }
+        property.optional -> {
+            "Optional<${property.type}> ${property.name}();"
+        }
+        else -> {
+            "${property.type} ${property.name}();"
+        }
+    }
 
 fun renderRecordInterfaceMethod(method: RecordMethod) =
-        if (method.`interface`)
-            "public ${method.annotation ?: ""} ${method.type} ${method.name}( ${method.argument} );"
-        else
-            ""
+    if (method.`interface`)
+        "public ${method.annotation ?: ""} ${method.type} ${method.name}( ${method.argument} );"
+    else
+        ""
 
 fun renderRecordInterfacePredefinedMethods(model: Record) =
     """
@@ -66,7 +66,7 @@ fun renderRecordInterfacePredefinedMethods(model: Record) =
 
 
 fun renderRecord(model: Record) =
-        """
+    """
             package ${model.`package`};
             
             ${defaultImports}
@@ -94,30 +94,31 @@ fun renderRecord(model: Record) =
         """.trimIndent()
 
 fun renderConstructors(model: Record) =
-        """
+    """
             ${if (model.constructor?.requiredArg == true) renderRequiredArgConstructor(model) else ""}
             
             ${renderAllArgConstructor(model)}
         """.trimIndent()
 
 fun renderRequiredArgConstructor(model: Record) =
-        """
+    """
             public ${model.name}(
                 ${model.properties
-                .filter { 
-                    !it.nullable && !it.optional && it.default == null }
-                .joinToString { annotateNullable(it) + " " + it.type + " " + it.name }}
+        .filter {
+            !it.nullable && !it.optional && it.default == null
+        }
+        .joinToString { annotateNullable(it) + " " + it.type + " " + it.name }}
             ) {
                 ${model.properties
-                .filter { !it.nullable && !it.optional }
-                .joinToString("\n") {
-                    "this.${it.name} = ${it.default ?: checkingNotNull(it)};"
-                }}
+        .filter { !it.nullable && !it.optional }
+        .joinToString("\n") {
+            "this.${it.name} = ${it.default ?: checkingNotNull(it)};"
+        }}
             }
         """.trimIndent()
 
 fun renderAllArgConstructor(model: Record) =
-        """
+    """
             public ${model.name}(
                 ${model.properties.joinToString { annotateNullable(it) + " " + it.type + " " + it.name }}
             ) {
@@ -127,14 +128,14 @@ fun renderAllArgConstructor(model: Record) =
 
 
 fun renderCopy(model: Record) =
-        """
+    """
             private ${model.name} copy() {
                 return new ${model.name}( ${model.properties.joinToString { it.name }} );
             }
         """.trimIndent()
 
 fun renderProperty(model: Record, property: RecordProperty) =
-        """
+    """
             ${if (property.nullable && !property.isPrimitive()) "@Nullable" else ""}
             private ${property.type} ${property.name};
             
@@ -144,32 +145,32 @@ fun renderProperty(model: Record, property: RecordProperty) =
         """.trimIndent()
 
 fun renderGetter(property: RecordProperty) =
-        when {
-            property.getter != null -> {
-                val g = property.getter
-                """
+    when {
+        property.getter != null -> {
+            val g = property.getter
+            """
                     @Override
                     public ${g.type ?: property.type} ${g.name ?: property.name}( ${g.argument ?: ""} ) {
                         ${g.implementation}
                     }
                 """.trimIndent()
-            }
-            property.optional -> """
+        }
+        property.optional -> """
                 @Override
                 public Optional<${property.type}> ${property.name}() {
                     return Optional.ofNullable( ${property.name} );
                 }
             """.trimIndent()
-            else -> """
+        else -> """
                 @Override ${if (property.nullable && !property.isPrimitive()) "@Nullable" else ""}
                 public ${property.type} ${property.name}() {
                     return ${property.name};
                 }
             """.trimIndent()
-        }
+    }
 
 fun renderSetter(model: Record, property: RecordProperty) =
-        """
+    """
             @Override
             public ${model.name} ${property.name}(
                 ${if (property.nullable) "@Nullable" else ""} ${property.type} ${property.name}
@@ -182,7 +183,7 @@ fun renderSetter(model: Record, property: RecordProperty) =
         """.trimIndent()
 
 fun renderMethod(method: RecordMethod) =
-        """
+    """
             ${if (method.`interface`) "@Override" else method.annotation ?: ""}
             public ${method.type} ${method.name}( ${method.argument} ) {
                 ${method.implementation}
@@ -191,14 +192,14 @@ fun renderMethod(method: RecordMethod) =
 
 
 fun renderRecordMapOverride(record: Record) =
-        // number of properties
-        """
+    // number of properties
+    """
             @Override public int size() {
                 return ${record.properties.size};
             }
         """ +
-                // always false (even if all properties are null, considers it has a key of the property with null value)
-                """
+            // always false (even if all properties are null, considers it has a key of the property with null value)
+            """
             @Override public boolean isEmpty() {
                 return false;
             }
@@ -213,12 +214,12 @@ fun renderRecordMapOverride(record: Record) =
             
             @Nullable @Override public Object get( Object key ) {
                 if ${record.properties.joinToString(" else if ") {
-                    """
+                """
                         ( Objects.equals( key, "${it.name}" ) ) {
                             return ${it.name};
                     }
                      """.trimIndent()
-                }} else {
+            }} else {
                     return null;
                 }
             }
@@ -257,8 +258,8 @@ fun renderRecordMapOverride(record: Record) =
                 return o instanceof Map
                         && ( (Map) o ).size() == ${record.properties.size}
                         && ${record.properties.joinToString("&& ") {
-                    """Objects.equals( ${it.name}, ( (Map) o ).get( "${it.name}" ) )"""
-                }};
+                """Objects.equals( ${it.name}, ( (Map) o ).get( "${it.name}" ) )"""
+            }};
             }
             
             @Override public int hashCode() {
@@ -267,16 +268,16 @@ fun renderRecordMapOverride(record: Record) =
             
             @Override public Optional<Object> mayGet( String key ) {
                 if ${record.properties.joinToString(" else if ") {
-                    """
+                """
                         ( Objects.equals( key, "${it.name}" ) ) {
                             ${if (!it.nullable || it.isPrimitive()) {
-                        """return Optional.of( ${it.name} );"""
-                    } else {
-                        """return Optional.ofNullable( ${it.name} );"""
-                    }}
+                    """return Optional.of( ${it.name} );"""
+                } else {
+                    """return Optional.ofNullable( ${it.name} );"""
+                }}
                     }
                      """.trimIndent()
-                }} else {
+            }} else {
                     return Optional.empty();
                 }
             }
@@ -323,33 +324,33 @@ fun renderRecordPredefinedMethods(model: Record) =
 
 
 private fun annotateNullable(property: RecordProperty) =
-        if (!property.acceptsNull())
-            "@Nullable"
-        else
-            ""
+    if (!property.acceptsNull())
+        "@Nullable"
+    else
+        ""
 
 private fun checkingNotNull(property: RecordProperty) =
-        if (!property.isPrimitive() && !property.acceptsNull())
-            "checkNotNull( ${property.name} )"
-        else
-            property.name
+    if (!property.isPrimitive() && !property.acceptsNull())
+        "checkNotNull( ${property.name} )"
+    else
+        property.name
 
 private fun RecordProperty.isPrimitive() =
-        when (this.type) {
-            "boolean", "short", "int", "long", "float", "double", "char", "byte" -> true
-            else -> false
-        }
+    when (this.type) {
+        "boolean", "short", "int", "long", "float", "double", "char", "byte" -> true
+        else -> false
+    }
 
 private fun RecordProperty.acceptsNull() = this.nullable || this.optional || this.isPrimitive()
 
 private fun PropertyJavadoc?.getter() =
-        if (this != null && this.getter != null) javadoc(this.getter) else ""
+    if (this != null && this.getter != null) javadoc(this.getter) else ""
 
 private fun PropertyJavadoc?.setter() =
-        if (this != null && this.setter != null) javadoc(this.setter) else ""
+    if (this != null && this.setter != null) javadoc(this.setter) else ""
 
 private fun javadoc(doc: String) =
-        doc.lines().joinToString("\n", prefix = "/**\n", postfix = "\n */") { " * ${it}" }
+    doc.lines().joinToString("\n", prefix = "/**\n", postfix = "\n */") { " * ${it}" }
 
 
 private val defaultImports = """

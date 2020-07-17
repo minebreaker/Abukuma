@@ -44,13 +44,13 @@ open class GenerateDataClassTask : DefaultTask() {
         val generatedSrcPath = output.toPath()
 
         definitionFiles
-                .map { parse(it) }
-                .forEach {
-                    when {
-                        it["type"] == "record" -> write(mapToRecord(it), generatedSrcPath)
-                        else -> throw RuntimeException()
-                    }
+            .map { parse(it) }
+            .forEach {
+                when {
+                    it["type"] == "record" -> write(mapToRecord(it), generatedSrcPath)
+                    else -> throw RuntimeException()
                 }
+            }
     }
 }
 
@@ -69,7 +69,7 @@ fun write(model: Record, generatedSrcPath: Path) {
 
     // Interface
     val interfaceDestination =
-            generatedSrcPath.resolve(model.`interface`.`package`.asPath()).resolve(model.`interface`.name + ".java")
+        generatedSrcPath.resolve(model.`interface`.`package`.asPath()).resolve(model.`interface`.name + ".java")
     write(renderRecordInterface(model), interfaceDestination)
 }
 
