@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.value;
 
-import rip.deadcode.abukuma3.collection.internal.PersistentListImpl;
+import rip.deadcode.abukuma3.collection.PersistentCollections;
 import rip.deadcode.abukuma3.value.internal.ResponseImpl;
 
 
@@ -11,6 +11,6 @@ public final class Responses {
     }
 
     public static Response create( Object body ) {
-        return new ResponseImpl( body, 200, Header.create(), PersistentListImpl.create() );
+        return new ResponseImpl( body, 200, Header.create(), PersistentCollections.createList() );
     }
 }

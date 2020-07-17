@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.internal;
 
 import com.google.common.collect.ImmutableMap;
 import rip.deadcode.abukuma3.Registry;
+import rip.deadcode.abukuma3.collection.PersistentCollections;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -16,7 +17,7 @@ public final class RegistryImpl implements Registry {
     private Map<Class<?>, Map<String, Function<Registry, ?>>> holder;
 
     public RegistryImpl() {
-        holder = ImmutableMap.of();
+        holder = PersistentCollections.createMap();
     }
 
     private RegistryImpl( Map<Class<?>, Map<String, Function<Registry, ?>>> holder ) {

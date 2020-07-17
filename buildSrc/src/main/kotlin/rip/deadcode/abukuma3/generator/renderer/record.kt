@@ -284,25 +284,25 @@ fun renderRecordMapOverride(record: Record) =
             
             @Override public PersistentMap<String, Object> set( String key, Object value ) {
                 checkNotNull( key );
-                return PersistentMapImpl.<String, Object>create()
-                                        .merge( this )
-                                        .set( key, value );
+                return PersistentCollections.<String, Object>create()
+                                            .merge( this )
+                                            .set( key, value );
             }
             
             @Override public PersistentMap<String, Object> delete( String key ) {
                 if ( containsKey( key ) ) {
-                    return PersistentMapImpl.<String, Object>create()
-                                            .merge( this )
-                                            .delete( key );
+                    return PersistentCollections.<String, Object>create()
+                                                .merge( this )
+                                                .delete( key );
                 } else {
                     throw new NoSuchElementException( key );
                 }
             }
             
             @Override public PersistentMap<String, Object> merge( Map<String, Object> map ) {
-                return PersistentMapImpl.<String, Object>create()
-                                        .merge( this )
-                                        .merge( map );
+                return PersistentCollections.<String, Object>create()
+                                            .merge( this )
+                                            .merge( map );
             }
             
             @Override public Map<String, Object> mutable() {

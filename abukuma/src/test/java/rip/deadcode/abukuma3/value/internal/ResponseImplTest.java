@@ -3,11 +3,11 @@ package rip.deadcode.abukuma3.value.internal;
 
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.Test;
-import rip.deadcode.abukuma3.collection.internal.PersistentListImpl;
+import rip.deadcode.abukuma3.collection.PersistentCollections;
 import rip.deadcode.abukuma3.collection.PersistentList;
+import rip.deadcode.abukuma3.value.Cookie;
 import rip.deadcode.abukuma3.value.Header;
 import rip.deadcode.abukuma3.value.Response;
-import rip.deadcode.abukuma3.value.Cookie;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -23,7 +23,7 @@ class ResponseImplTest {
     private static final String body = "test";
     private static final int status = 200;
     private static final Header header = Header.create();
-    private static final PersistentList<Cookie> cookie = PersistentListImpl.create();
+    private static final PersistentList<Cookie> cookie = PersistentCollections.createList();
     private static final Response param = new ResponseImpl(
             body, status, header, cookie );
 
