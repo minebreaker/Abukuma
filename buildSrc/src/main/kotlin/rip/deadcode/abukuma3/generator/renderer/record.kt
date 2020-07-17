@@ -284,14 +284,14 @@ fun renderRecordMapOverride(record: Record) =
             
             @Override public PersistentMap<String, Object> set( String key, Object value ) {
                 checkNotNull( key );
-                return PersistentCollections.<String, Object>create()
+                return PersistentCollections.<String, Object>createMap()
                                             .merge( this )
                                             .set( key, value );
             }
             
             @Override public PersistentMap<String, Object> delete( String key ) {
                 if ( containsKey( key ) ) {
-                    return PersistentCollections.<String, Object>create()
+                    return PersistentCollections.<String, Object>createMap()
                                                 .merge( this )
                                                 .delete( key );
                 } else {
@@ -300,7 +300,7 @@ fun renderRecordMapOverride(record: Record) =
             }
             
             @Override public PersistentMap<String, Object> merge( Map<String, Object> map ) {
-                return PersistentCollections.<String, Object>create()
+                return PersistentCollections.<String, Object>createMap()
                                             .merge( this )
                                             .merge( map );
             }
