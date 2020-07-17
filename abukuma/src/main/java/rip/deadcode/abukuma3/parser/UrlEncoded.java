@@ -2,10 +2,10 @@ package rip.deadcode.abukuma3.parser;
 
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
-import rip.deadcode.abukuma3.collection.AbstractPersistentListMultimap;
+import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
 
 
-public final class UrlEncoded extends AbstractPersistentListMultimap<String, String, UrlEncoded> {
+public final class UrlEncoded extends AbstractPersistentMultimap<String, String, UrlEncoded> {
 
     private UrlEncoded( Multimap<String, String> delegate ) {
         super( delegate );

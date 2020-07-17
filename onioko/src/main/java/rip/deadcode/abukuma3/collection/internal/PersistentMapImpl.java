@@ -1,4 +1,7 @@
-package rip.deadcode.abukuma3.collection;
+package rip.deadcode.abukuma3.collection.internal;
+
+
+import rip.deadcode.abukuma3.collection.AbstractPersistentMap;
 
 
 public final class PersistentMapImpl<K, V> extends AbstractPersistentMap<K, V> {

@@ -28,21 +28,21 @@ import static java.util.stream.Collectors.toSet;
 import static org.organicdesign.fp.StaticImports.vec;
 
 
-public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentListMultimap<K, V, T>>
-        implements PersistentListMultimap<K, V, T> {
+public abstract class AbstractPersistentMultimap<K, V>
+        implements PersistentMultimap<K, V> {
 
     private final ImMap<K, ImList<V>> delegate;
 
-    protected AbstractPersistentListMultimap() {
+    protected AbstractPersistentMultimap() {
         this.delegate = PersistentHashMap.empty();
     }
 
-    protected AbstractPersistentListMultimap( Envelope<K, V> envelope ) {
+    protected AbstractPersistentMultimap( Envelope<K, V> envelope ) {
         this.delegate = envelope.load;
     }
 
     @SuppressWarnings( "unchecked" )
-    protected AbstractPersistentListMultimap( Multimap<K, V> copy ) {
+    protected AbstractPersistentMultimap( Multimap<K, V> copy ) {
         this.delegate = copy.asMap().entrySet().stream().reduce(
                 PersistentHashMap.empty(),
                 ( acc, e ) -> acc.assoc( e.getKey(), PersistentVector.ofIter( e.getValue() ) ),
@@ -59,9 +59,9 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
         }
     }
 
-    protected abstract T constructor( Envelope<K, V> delegate );
+    protected abstract PersistentMultimap<K, V> constructor( Envelope<K, V> delegate );
 
-    private T constructor( ImMap<K, ImList<V>> delegate ) {
+    private PersistentMultimap<K, V> constructor( ImMap<K, ImList<V>> delegate ) {
         return constructor( new Envelope<>( delegate ) );
     }
 
@@ -161,7 +161,7 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
     }
 
     @Override
-    public T add( K key, V value ) {
+    public PersistentMultimap<K, V> add( K key, V value ) {
         checkNotNull( key );
         checkNotNull( value );
 
@@ -174,7 +174,7 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
     }
 
     @Override
-    public T add( K key, Iterable<? extends V> values ) {
+    public PersistentMultimap<K, V> add( K key, Iterable<? extends V> values ) {
         checkNotNull( key );
         checkNotNull( values );
 
@@ -187,7 +187,7 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
     }
 
     @Override
-    public T set( K key, V value ) {
+    public PersistentMultimap<K, V> set( K key, V value ) {
         checkNotNull( key );
         checkNotNull( value );
 
@@ -203,7 +203,7 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
 
     @SuppressWarnings( "unchecked" )
     @Override
-    public T set( K key, Iterable<? extends V> values ) {
+    public PersistentMultimap<K, V> set( K key, Iterable<? extends V> values ) {
         checkNotNull( key );
         checkNotNull( values );
 
@@ -212,7 +212,7 @@ public abstract class AbstractPersistentListMultimap<K, V, T extends PersistentL
     }
 
     @Override
-    public T delete( K key ) {
+    public PersistentMultimap<K, V> delete( K key ) {
         checkNotNull( key );
 
         if ( delegate.containsKey( key ) ) {

@@ -4,14 +4,14 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.fileupload.FileItem;
-import rip.deadcode.abukuma3.collection.AbstractPersistentListMultimap;
+import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
 
 import java.util.List;
 import java.util.Map;
 
 
 // TODO `FIleItem` should be wrapped
-public final class Multipart extends AbstractPersistentListMultimap<String, FileItem, Multipart> {
+public final class Multipart extends AbstractPersistentMultimap<String, FileItem, Multipart> {
 
     private Multipart( Envelope<String, FileItem> envelope ) {
         super( envelope );

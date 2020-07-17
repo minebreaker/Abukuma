@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.handler;
 
 
-import rip.deadcode.abukuma3.collection.PersistentMapImpl;
+import rip.deadcode.abukuma3.collection.internal.PersistentMapImpl;
 import rip.deadcode.abukuma3.handler.internal.TypeBasedDispatcherImpl;
 
 

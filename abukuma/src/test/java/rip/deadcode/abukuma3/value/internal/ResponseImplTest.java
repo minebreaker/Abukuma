@@ -3,7 +3,7 @@ package rip.deadcode.abukuma3.value.internal;
 
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.Test;
-import rip.deadcode.abukuma3.collection.PersistentListImpl;
+import rip.deadcode.abukuma3.collection.internal.PersistentListImpl;
 import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.value.Header;
 import rip.deadcode.abukuma3.value.Response;

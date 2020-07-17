@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.collection.traverse.internal;
 
-import rip.deadcode.abukuma3.collection.PersistentListMultimap;
+import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.collection.traverse.Getter;
 import rip.deadcode.abukuma3.collection.traverse.Lens;
 import rip.deadcode.abukuma3.collection.traverse.Setter;
@@ -8,7 +8,7 @@ import rip.deadcode.abukuma3.collection.traverse.Setter;
 import java.util.List;
 
 
-public final class PersistentListMultimapLens<K, V, T extends PersistentListMultimap<K, V, T>>
+public final class PersistentListMultimapLens<K, V, T extends PersistentMultimap<K, V, T>>
         implements Lens<T, List<V>> {
 
     private K key;

@@ -1,8 +1,8 @@
 package rip.deadcode.abukuma3.collection.traverse.internal;
 
 
-import rip.deadcode.abukuma3.collection.PersistentListImpl;
-import rip.deadcode.abukuma3.collection.PersistentListMultimap;
+import rip.deadcode.abukuma3.collection.internal.PersistentListImpl;
+import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.collection.traverse.Getter;
 import rip.deadcode.abukuma3.collection.traverse.Lens;
 import rip.deadcode.abukuma3.collection.traverse.Setter;
@@ -14,7 +14,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkState;
 
 
-public final class PathedPersistentListMultimapLens<K, V, T extends PersistentListMultimap<K, V, T>>
+public final class PathedPersistentListMultimapLens<K, V, T extends PersistentMultimap<K, V, T>>
         implements Lens<T, List<V>> {
 
     private String path;

@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.value;
 
-import rip.deadcode.abukuma3.collection.PersistentListImpl;
+import rip.deadcode.abukuma3.collection.internal.PersistentListImpl;
 import rip.deadcode.abukuma3.value.internal.ResponseImpl;
 
 

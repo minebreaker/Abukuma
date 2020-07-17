@@ -1,10 +1,10 @@
 package rip.deadcode.abukuma3.value;
 
 import com.google.common.net.HttpHeaders;
-import rip.deadcode.abukuma3.collection.AbstractPersistentListMultimap;
+import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
 
 
-public final class Header extends AbstractPersistentListMultimap<String, String, Header> {
+public final class Header extends AbstractPersistentMultimap<String, String, Header> {
 
     private Header() {
         super();

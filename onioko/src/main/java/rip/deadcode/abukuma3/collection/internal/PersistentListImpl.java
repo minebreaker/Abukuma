@@ -1,7 +1,9 @@
-package rip.deadcode.abukuma3.collection;
+package rip.deadcode.abukuma3.collection.internal;
 
 
 import com.google.common.collect.ImmutableList;
+import rip.deadcode.abukuma3.collection.AbstractPersistentList;
+import rip.deadcode.abukuma3.collection.PersistentList;
 
 import java.util.List;
 
