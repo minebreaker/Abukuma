@@ -15,7 +15,7 @@ import static com.google.common.truth.Truth8.assertThat;
 import static rip.deadcode.izvestia.Core.expect;
 
 
-class PersistentListImplMultimapTest {
+class PersistentMultimapTest {
 
     @Test
     void testGetValue() {
@@ -71,8 +71,8 @@ class PersistentListImplMultimapTest {
     @Test
     void testAdd() {
 
-        PersistentMultimapImpl<String, String> e = PersistentMultimapImpl.create();
-        PersistentMultimapImpl<String, String> s;
+        PersistentMultimap<String, String> e = PersistentMultimapImpl.create();
+        PersistentMultimap<String, String> s;
 
         assertThat( e.add( "k1", "v1" ) ).containsEntry( "k1", "v1" );
         assertThat( e.add( "k1", "v1" ).add( "k1", "v2" ) )
@@ -100,8 +100,8 @@ class PersistentListImplMultimapTest {
     @Test
     void testSet() {
 
-        PersistentMultimapImpl<String, String> e = PersistentMultimapImpl.create();
-        PersistentMultimapImpl<String, String> s;
+        PersistentMultimap<String, String> e = PersistentMultimapImpl.create();
+        PersistentMultimap<String, String> s;
 
         assertThat( e.set( "k1", "v1" ) ).containsEntry( "k1", "v1" );
         assertThat( e.set( "k1", "v1" ).set( "k1", "v2" ) )

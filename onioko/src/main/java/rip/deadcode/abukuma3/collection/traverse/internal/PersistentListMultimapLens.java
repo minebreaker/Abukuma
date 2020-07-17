@@ -8,8 +8,8 @@ import rip.deadcode.abukuma3.collection.traverse.Setter;
 import java.util.List;
 
 
-public final class PersistentListMultimapLens<K, V, T extends PersistentMultimap<K, V, T>>
-        implements Lens<T, List<V>> {
+public final class PersistentListMultimapLens<K, V>
+        implements Lens<PersistentMultimap<K, V>, List<V>> {
 
     private K key;
 
@@ -17,11 +17,11 @@ public final class PersistentListMultimapLens<K, V, T extends PersistentMultimap
         this.key = key;
     }
 
-    @Override public Getter<T, List<V>> getter() {
+    @Override public Getter<PersistentMultimap<K, V>, List<V>> getter() {
         return multimap -> multimap.get( key );
     }
 
-    @Override public Setter<T, List<V>> setter() {
+    @Override public Setter<PersistentMultimap<K, V>, List<V>> setter() {
         return ( multimap, values ) -> multimap.set( key, values );
     }
 }
