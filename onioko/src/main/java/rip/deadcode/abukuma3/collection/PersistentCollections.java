@@ -15,6 +15,10 @@ public final class PersistentCollections {
         return PersistentListImpl.create();
     }
 
+    public static <T> PersistentList<T> createList( T first, T... rest ) {
+        return PersistentListImpl.create( first, rest );
+    }
+
     public static <K, V> PersistentMap<K, V> createMap() {
         return PersistentMapImpl.create();
     }
@@ -22,4 +26,6 @@ public final class PersistentCollections {
     public static <K, V> PersistentMultimap<K, V> createMultimap() {
         return PersistentMultimapImpl.create();
     }
+
+    // TODO add other factory methods
 }

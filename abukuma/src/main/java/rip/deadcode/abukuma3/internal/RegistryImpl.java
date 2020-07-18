@@ -50,6 +50,7 @@ public final class RegistryImpl implements Registry {
     }
 
     @Override public <T> Registry set( Class<T> cls, String name, Function<Registry, ? extends T> generator ) {
+        // TODO
         Map<String, Function<Registry, ?>> current = holder.get( cls );
         Map<String, Function<Registry, ?>> newInstanceMap =
                 current == null
