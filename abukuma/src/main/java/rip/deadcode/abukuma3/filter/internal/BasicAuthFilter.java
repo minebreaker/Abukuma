@@ -3,10 +3,9 @@ package rip.deadcode.abukuma3.filter.internal;
 import com.google.common.base.Splitter;
 import com.google.common.net.HttpHeaders;
 import rip.deadcode.abukuma3.ExecutionContext;
-import rip.deadcode.abukuma3.filter.Filter;
 import rip.deadcode.abukuma3.filter.AuthRequest;
+import rip.deadcode.abukuma3.filter.Filter;
 import rip.deadcode.abukuma3.handler.Handler;
-import rip.deadcode.abukuma3.value.Header;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.Response;
 import rip.deadcode.abukuma3.value.Responses;
@@ -94,10 +93,9 @@ public class BasicAuthFilter implements Filter {
 
     private Response unauthorized( Request request ) {
         return unauthorized
-                // FIXME Header.create
-                .header( h -> Header.create( h.add(
+                .header( h -> h.add(
                         HttpHeaders.WWW_AUTHENTICATE,
                         "Basic realm=\"" + calcRealm.apply( request ) + "\""
-                ) ) );
+                ) );
     }
 }

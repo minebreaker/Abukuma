@@ -5,7 +5,7 @@ import com.google.common.net.HttpHeaders;
 import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
 
 
-public final class Header extends AbstractPersistentMultimap<String, String> {
+public final class Header extends AbstractPersistentMultimap<String, String, Header> {
 
     private Header() {
         super();
@@ -36,6 +36,6 @@ public final class Header extends AbstractPersistentMultimap<String, String> {
     }
 
     public Header contentType( String value ) {
-        return new Header( set( HttpHeaders.CONTENT_TYPE, value ) );
+        return set( HttpHeaders.CONTENT_TYPE, value );
     }
 }

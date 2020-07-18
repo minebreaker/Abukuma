@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 // TODO `FIleItem` should be wrapped
-public final class Multipart extends AbstractPersistentMultimap<String, FileItem> {
+public final class Multipart extends AbstractPersistentMultimap<String, FileItem, Multipart> {
 
     private Multipart( Envelope<String, FileItem> envelope ) {
         super( envelope );
@@ -21,7 +21,7 @@ public final class Multipart extends AbstractPersistentMultimap<String, FileItem
         super( delegate );
     }
 
-    static Multipart create( Map<String, List<FileItem>> items ) {
+    public static Multipart create( Map<String, List<FileItem>> items ) {
 
         ListMultimap<String, FileItem> temp = items
                 .entrySet()

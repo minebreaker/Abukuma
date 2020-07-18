@@ -28,8 +28,8 @@ import static java.util.stream.Collectors.toSet;
 import static org.organicdesign.fp.StaticImports.vec;
 
 
-public abstract class AbstractPersistentMultimap<K, V>
-        implements PersistentMultimap<K, V> {
+public abstract class AbstractPersistentMultimap<K, V, T extends AbstractPersistentMultimap<K, V, T>>
+        implements PersistentMultimapView<K, V, T> {
 
     private final ImMap<K, ImList<V>> delegate;
 
@@ -59,9 +59,9 @@ public abstract class AbstractPersistentMultimap<K, V>
         }
     }
 
-    protected abstract PersistentMultimap<K, V> constructor( Envelope<K, V> delegate );
+    protected abstract T constructor( Envelope<K, V> delegate );
 
-    private PersistentMultimap<K, V> constructor( ImMap<K, ImList<V>> delegate ) {
+    private T constructor( ImMap<K, ImList<V>> delegate ) {
         return constructor( new Envelope<>( delegate ) );
     }
 
@@ -161,7 +161,7 @@ public abstract class AbstractPersistentMultimap<K, V>
     }
 
     @Override
-    public PersistentMultimap<K, V> add( K key, V value ) {
+    public T add( K key, V value ) {
         checkNotNull( key );
         checkNotNull( value );
 
@@ -174,7 +174,7 @@ public abstract class AbstractPersistentMultimap<K, V>
     }
 
     @Override
-    public PersistentMultimap<K, V> add( K key, Iterable<? extends V> values ) {
+    public T add( K key, Iterable<? extends V> values ) {
         checkNotNull( key );
         checkNotNull( values );
 
@@ -187,7 +187,7 @@ public abstract class AbstractPersistentMultimap<K, V>
     }
 
     @Override
-    public PersistentMultimap<K, V> set( K key, V value ) {
+    public T set( K key, V value ) {
         checkNotNull( key );
         checkNotNull( value );
 
@@ -203,7 +203,7 @@ public abstract class AbstractPersistentMultimap<K, V>
 
     @SuppressWarnings( "unchecked" )
     @Override
-    public PersistentMultimap<K, V> set( K key, Iterable<? extends V> values ) {
+    public T set( K key, Iterable<? extends V> values ) {
         checkNotNull( key );
         checkNotNull( values );
 
@@ -212,7 +212,7 @@ public abstract class AbstractPersistentMultimap<K, V>
     }
 
     @Override
-    public PersistentMultimap<K, V> delete( K key ) {
+    public T delete( K key ) {
         checkNotNull( key );
 
         if ( delegate.containsKey( key ) ) {

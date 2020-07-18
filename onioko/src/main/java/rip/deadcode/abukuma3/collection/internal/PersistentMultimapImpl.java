@@ -5,7 +5,7 @@ import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
 
 
 public final class PersistentMultimapImpl<K, V>
-        extends AbstractPersistentMultimap<K, V> {
+        extends AbstractPersistentMultimap<K, V, PersistentMultimapImpl<K, V>> {
 
     private PersistentMultimapImpl() {
         super();
