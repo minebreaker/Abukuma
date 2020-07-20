@@ -1,26 +1,19 @@
 package rip.deadcode.abukuma3.multipart;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.fileupload.FileItem;
-import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
+import rip.deadcode.abukuma3.collection.PersistentMultimapView;
+import rip.deadcode.abukuma3.multipart.internal.MultipartImpl;
 
 import java.util.List;
 import java.util.Map;
 
 
 // TODO `FIleItem` should be wrapped
-public final class Multipart extends AbstractPersistentMultimap<String, FileItem, Multipart> {
+public interface Multipart extends PersistentMultimapView<String, FileItem, Multipart> {
 
-    private Multipart( Envelope<String, FileItem> envelope ) {
-        super( envelope );
-    }
-
-    private Multipart( ListMultimap<String, FileItem> delegate ) {
-        super( delegate );
-    }
-
+    // TODO: necessary?
     public static Multipart create( Map<String, List<FileItem>> items ) {
 
         ListMultimap<String, FileItem> temp = items
@@ -31,10 +24,10 @@ public final class Multipart extends AbstractPersistentMultimap<String, FileItem
                         ( acc, entry ) -> acc.putAll( entry.getKey(), entry.getValue() ),
                         ( acc, other ) -> acc.putAll( other )
                 );
-        return new Multipart( ImmutableListMultimap.copyOf( temp ) );
+        return MultipartImpl.create( temp );
     }
 
-    @Override protected Multipart constructor( Envelope<String, FileItem> delegate ) {
-        return new Multipart( delegate );
+    public static Multipart create( ListMultimap<String, FileItem> items ) {
+        return MultipartImpl.create( items );
     }
 }

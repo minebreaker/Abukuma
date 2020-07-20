@@ -28,7 +28,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.organicdesign.fp.StaticImports.vec;
 
 
-public abstract class AbstractPersistentMultimap<K, V, T extends AbstractPersistentMultimap<K, V, T>>
+public abstract class AbstractPersistentMultimap<K, V, T extends PersistentMultimapView<K, V, T>>
         implements PersistentMultimapView<K, V, T> {
 
     private final ImMap<K, ImList<V>> delegate;

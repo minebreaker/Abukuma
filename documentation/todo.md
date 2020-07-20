@@ -31,7 +31,9 @@
     * Single factory class for all?
         * `rip.deadcode.abukuma3.utils.StaticImports`
 * Write tests
-* Replace Guava ImmutableCollection to internal ones
+* Replace Collections to internal PersistentCollections
+    * Replace Guava immutable collections
+    * Replace java.util collections
 * ~~Type hierarchy should be expressed as trees, not lists~~ This is not as easy as it seems - need more considerations
     * e.g.) parsers, renderers...
     * Searching should be faster
@@ -45,6 +47,7 @@
 * Renderer/Parser chains should be special lists, since it's much easier to modify
 * Modular routing mechanism
 * `MessageResolver` `ResourceBundleMessageResolver` for internal messages/logs
+* Documentation for the generator plugin
 
 
 ## Ideas

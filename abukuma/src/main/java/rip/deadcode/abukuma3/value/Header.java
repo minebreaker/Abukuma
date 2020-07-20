@@ -1,41 +1,22 @@
 package rip.deadcode.abukuma3.value;
 
 import com.google.common.collect.Multimap;
-import com.google.common.net.HttpHeaders;
-import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
+import rip.deadcode.abukuma3.collection.PersistentMultimapView;
+import rip.deadcode.abukuma3.value.internal.HeaderImpl;
 
 
-public final class Header extends AbstractPersistentMultimap<String, String, Header> {
+public interface Header extends PersistentMultimapView<String, String, Header> {
 
-    private Header() {
-        super();
-    }
-
-    private Header( Multimap<String, String> delegate ) {
-        super( delegate );
-    }
-
-    private Header( Envelope<String, String> delegate ) {
-        super( delegate );
-    }
-
+    // FIXME: common factory class?
     public static Header create() {
-        return new Header();
+        return HeaderImpl.create();
     }
 
     public static Header create( Multimap<String, String> delegate ) {
-        return new Header( delegate );
+        return HeaderImpl.create( delegate );
     }
 
-    @Override protected Header constructor( Envelope<String, String> delegate ) {
-        return new Header( delegate );
-    }
+    public String contentType();
 
-    public String contentType() {
-        return getValue( HttpHeaders.CONTENT_TYPE );
-    }
-
-    public Header contentType( String value ) {
-        return set( HttpHeaders.CONTENT_TYPE, value );
-    }
+    public Header contentType( String value );
 }

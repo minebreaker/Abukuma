@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.collection;
 
-public interface PersistentMultimapView<K, V, T extends PersistentMultimapView<K, V, T>>
+public interface PersistentMultimapView<K, V, T extends PersistentMultimap<K, V>>
         extends PersistentMultimap<K, V> {
 
     @Override public T add( K key, V value );
