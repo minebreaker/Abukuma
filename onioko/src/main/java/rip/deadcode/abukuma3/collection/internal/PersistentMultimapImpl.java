@@ -11,11 +11,11 @@ public final class PersistentMultimapImpl<K, V>
         super();
     }
 
-    PersistentMultimapImpl( Envelope<K, V> delegate ) {
+    private PersistentMultimapImpl( Multimap<K, V> delegate ) {
         super( delegate );
     }
 
-    private PersistentMultimapImpl( Multimap<K, V> delegate ) {
+    private PersistentMultimapImpl( Envelope<K, V> delegate ) {
         super( delegate );
     }
 
@@ -23,7 +23,7 @@ public final class PersistentMultimapImpl<K, V>
         return new PersistentMultimapImpl<>();
     }
 
-    public static <K, V> PersistentMultimapImpl<K, V> create( Multimap<K, V> delegate ) {
+    public static <K, V> PersistentMultimapImpl<K, V> wrap( Multimap<K, V> delegate ) {
         return new PersistentMultimapImpl<>( delegate );
     }
 

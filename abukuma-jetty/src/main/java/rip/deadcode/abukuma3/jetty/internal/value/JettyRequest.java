@@ -1,11 +1,13 @@
 package rip.deadcode.abukuma3.jetty.internal.value;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.net.HttpHeaders;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
+import rip.deadcode.abukuma3.collection.PersistentCollections;
+import rip.deadcode.abukuma3.collection.PersistentMap;
+import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
 
@@ -14,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
-import java.util.Map;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -28,14 +29,14 @@ public final class JettyRequest implements Request {
     private final RequestHeader header;
     private final org.eclipse.jetty.server.Request jettyRequest;
     private final HttpServletResponse servletResponse;
-    private final Map<String, String> pathParams;
+    private final PersistentMap<String, String> pathParams;
 
     public JettyRequest(
             ExecutionContext context,
             RequestHeader header,
             org.eclipse.jetty.server.Request jettyRequest,
             HttpServletResponse servletResponse,
-            Map<String, String> pathParams ) {
+            PersistentMap<String, String> pathParams ) {
         this.context = context;
         this.header = header;
         this.jettyRequest = jettyRequest;
@@ -82,7 +83,7 @@ public final class JettyRequest implements Request {
         return Optional.ofNullable( pathParams.get( key ) );
     }
 
-    @Override public Map<String, String> pathParams() {
+    @Override public PersistentMap<String, String> pathParams() {
         return pathParams;
     }
 
@@ -90,7 +91,8 @@ public final class JettyRequest implements Request {
         return mayFirst( jettyRequest.getQueryParameters().getValues( key ) );
     }
 
-    @Override public Multimap<String, String> queryParams() {
+    @Override public PersistentMultimap<String, String> queryParams() {
+        // TODO: use PersistentMultimap directly
         Multimap<String, String> params =
                 jettyRequest.getQueryParameters().entrySet().stream()
                             .collect(
@@ -98,7 +100,7 @@ public final class JettyRequest implements Request {
                                     ( map, e ) -> map.putAll( e.getKey(), e.getValue() ),
                                     Multimap::putAll
                             );
-        return ImmutableListMultimap.copyOf( params );
+        return PersistentCollections.wrapMultimap( params );
     }
 
     @Override public Optional<String> host() {

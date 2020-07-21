@@ -1,9 +1,10 @@
 package rip.deadcode.abukuma3.netty.internal.value;
 
-import com.google.common.collect.Multimap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentMap;
+import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.netty.internal.NettyHandler;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
-import java.util.Map;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -26,14 +26,14 @@ public class NettyRequest implements Request {
     private final RequestHeader header;
     private final NettyHandler.RequestAndContent nettyRequest;
     private final ChannelHandlerContext rawResponse;
-    private final Map<String, String> pathParams;
+    private final PersistentMap<String, String> pathParams;
 
     public NettyRequest(
             ExecutionContext context,
             RequestHeader header,
             NettyHandler.RequestAndContent nettyRequest,
             ChannelHandlerContext rawResponse,
-            Map<String, String> pathParams ) {
+            PersistentMap<String, String> pathParams ) {
 
         this.context = context;
         this.header = header;
@@ -86,7 +86,7 @@ public class NettyRequest implements Request {
         return Optional.ofNullable( pathParams.get( key ) );
     }
 
-    @Override public Map<String, String> pathParams() {
+    @Override public PersistentMap<String, String> pathParams() {
         return pathParams;
     }
 
@@ -94,7 +94,7 @@ public class NettyRequest implements Request {
         return Optional.empty();
     }
 
-    @Override public Multimap<String, String> queryParams() {
+    @Override public PersistentMultimap<String, String> queryParams() {
         return null;
     }
 

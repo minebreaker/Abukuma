@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.test;
 
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Server;
+import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.internal.HandlerAdapter;
 import rip.deadcode.abukuma3.renderer.RenderingResult;
 import rip.deadcode.abukuma3.value.Request;
@@ -10,7 +11,6 @@ import rip.deadcode.abukuma3.value.Response;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -31,7 +31,7 @@ public final class TestServer implements Server {
                     RequestHeader header,
                     Request originalRequest,
                     TestResultHolder originalResponse,
-                    Map<String, String> pathParams ) {
+                    PersistentMap<String, String> pathParams ) {
 
                 return originalRequest;
             }

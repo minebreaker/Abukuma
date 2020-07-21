@@ -20,6 +20,7 @@ import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.internal.HandlerAdapter;
 import rip.deadcode.abukuma3.netty.internal.value.NettyRequest;
 import rip.deadcode.abukuma3.netty.internal.value.NettyRequestHeader;
@@ -29,7 +30,6 @@ import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.Response;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -53,7 +53,7 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
                     RequestHeader header,
                     RequestAndContent originalRequest,
                     ChannelHandlerContext originalResponse,
-                    Map<String, String> pathParams ) {
+                    PersistentMap<String, String> pathParams ) {
                 return new NettyRequest( context, header, originalRequest, originalResponse, pathParams );
             }
 

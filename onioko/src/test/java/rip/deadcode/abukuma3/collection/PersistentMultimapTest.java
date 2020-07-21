@@ -23,7 +23,7 @@ class PersistentMultimapTest {
         Multimap<String, String> params = ImmutableListMultimap.<String, String>builder()
                 .putAll( "k1", "v1", "v2" )
                 .build();
-        PersistentMultimapImpl<String, String> s = PersistentMultimapImpl.create( params );
+        PersistentMultimapImpl<String, String> s = PersistentMultimapImpl.wrap( params );
 
         assertThat( s.getValue( "k1" ) ).isEqualTo( "v1" );
 
@@ -42,7 +42,7 @@ class PersistentMultimapTest {
         Multimap<String, String> params = ImmutableListMultimap.<String, String>builder()
                 .putAll( "k1", "v1", "v2" )
                 .build();
-        PersistentMultimapImpl<String, String> s = PersistentMultimapImpl.create( params );
+        PersistentMultimapImpl<String, String> s = PersistentMultimapImpl.wrap( params );
 
         assertThat( s.get( "k1" ) ).containsExactly( "v1", "v2" ).inOrder();
         assertThat( s.get( "k2" ) ).isEmpty();
@@ -58,7 +58,7 @@ class PersistentMultimapTest {
         Multimap<String, String> params = ImmutableListMultimap.<String, String>builder()
                 .putAll( "k1", "v1", "v2" )
                 .build();
-        PersistentMultimapImpl<String, String> s = PersistentMultimapImpl.create( params );
+        PersistentMultimapImpl<String, String> s = PersistentMultimapImpl.wrap( params );
 
         assertThat( s.mayGet( "k1" ) ).hasValue( "v1" );
         assertThat( s.mayGet( "k2" ) ).isEmpty();

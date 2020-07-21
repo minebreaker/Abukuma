@@ -23,6 +23,10 @@ public abstract class AbstractPersistentMap<K, V, T extends PersistentMapView<K,
         this.delegate = delegate.load;
     }
 
+    protected AbstractPersistentMap( Map<K, V> copy ) {
+        this.delegate = PersistentHashMap.of( copy.entrySet() );
+    }
+
     @Override
     protected final Map<K, V> delegate() {
         return delegate;

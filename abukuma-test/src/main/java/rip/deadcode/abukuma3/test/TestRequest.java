@@ -1,11 +1,11 @@
 package rip.deadcode.abukuma3.test;
 
-import com.google.common.collect.Multimap;
+import rip.deadcode.abukuma3.collection.PersistentMap;
+import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -35,7 +35,7 @@ public final class TestRequest implements Request {
         return Optional.empty();
     }
 
-    @Override public Map<String, String> pathParams() {
+    @Override public PersistentMap<String, String> pathParams() {
         return null;
     }
 
@@ -43,7 +43,7 @@ public final class TestRequest implements Request {
         return Optional.empty();
     }
 
-    @Override public Multimap<String, String> queryParams() {
+    @Override public PersistentMultimap<String, String> queryParams() {
         return null;
     }
 

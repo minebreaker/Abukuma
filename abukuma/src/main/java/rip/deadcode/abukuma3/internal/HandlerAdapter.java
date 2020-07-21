@@ -3,6 +3,8 @@ package rip.deadcode.abukuma3.internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentCollections;
+import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.filter.Filter;
 import rip.deadcode.abukuma3.handler.ExceptionHandler;
 import rip.deadcode.abukuma3.handler.Handler;
@@ -17,7 +19,6 @@ import rip.deadcode.abukuma3.value.Response;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
@@ -47,7 +48,7 @@ public abstract class HandlerAdapter<Q, R> {
             RequestHeader header,
             Q originalRequest,
             R originalResponse,
-            Map<String, String> pathParams );
+            PersistentMap<String, String> pathParams );
 
     protected abstract void submitResponse(
             ExecutionContext context,
@@ -70,7 +71,7 @@ public abstract class HandlerAdapter<Q, R> {
                 header,
                 originalRequest,
                 originalResponse,
-                route.parameters()
+                PersistentCollections.wrapMap( route.parameters() )
         );
 
         Handler handler = route.handler();
