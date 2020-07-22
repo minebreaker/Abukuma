@@ -56,13 +56,13 @@ public interface RequestHeader {
      *
      * @return The content type header
      */
-    @Unsafe
     public String contentType();
 
     /**
      * The "Content-Type" header.
      * @return String The content type header
      */
+    @Unsafe
     public MediaType mediaType();
 
     /**
