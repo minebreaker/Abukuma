@@ -3,7 +3,7 @@ package rip.deadcode.abukuma3.value.internal;
 
 import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
-import rip.deadcode.abukuma3.parser.UrlEncoded;
+import rip.deadcode.abukuma3.value.UrlEncoded;
 
 
 public final class UrlEncodedImpl

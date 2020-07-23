@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.example;
 
 import rip.deadcode.abukuma3.Abukuma;
-import rip.deadcode.abukuma3.parser.UrlEncoded;
+import rip.deadcode.abukuma3.value.UrlEncoded;
 import rip.deadcode.abukuma3.router.Routers;
 import rip.deadcode.abukuma3.value.Configs;
 import rip.deadcode.abukuma3.value.Responses;

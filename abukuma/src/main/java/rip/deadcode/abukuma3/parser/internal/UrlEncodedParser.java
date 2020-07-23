@@ -4,7 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import rip.deadcode.abukuma3.parser.Parser;
-import rip.deadcode.abukuma3.parser.UrlEncoded;
+import rip.deadcode.abukuma3.value.UrlEncoded;
 import rip.deadcode.abukuma3.value.RequestHeader;
 
 import javax.annotation.Nullable;
