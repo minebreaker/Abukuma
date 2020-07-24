@@ -1,3 +1,6 @@
+//noinspection UnnecessaryQualifiedReference
+apply plugin: rip.deadcode.abukuma3.generator.GeneratorPlugin
+
 dependencies {
     api(
             project(':abukuma'),
@@ -7,3 +10,13 @@ dependencies {
             // 'javax.servlet:servlet-api:4.0.1'
     )
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "build/generated/sources/annotationProcessor/java/main"
+        }
+    }
+}
+
+compileJava.dependsOn(generateDataClasses)

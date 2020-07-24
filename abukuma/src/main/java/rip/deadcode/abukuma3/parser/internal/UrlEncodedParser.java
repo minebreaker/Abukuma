@@ -31,7 +31,7 @@ public final class UrlEncodedParser implements Parser<UrlEncoded> {
         }
 
         ListMultimap<String, String> result = parse( new BufferedInputStream( body ) );
-        return UrlEncoded.create( result );
+        return UrlEncoded.cast( result );
     }
 
     @VisibleForTesting

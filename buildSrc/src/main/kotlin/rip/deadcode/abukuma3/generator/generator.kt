@@ -9,8 +9,14 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
 import org.yaml.snakeyaml.Yaml
+import rip.deadcode.abukuma3.generator.renderer.Record
+import rip.deadcode.abukuma3.generator.renderer.ViewMultimap
+import rip.deadcode.abukuma3.generator.renderer.mapToRecord
+import rip.deadcode.abukuma3.generator.renderer.mapToViewMultimap
 import rip.deadcode.abukuma3.generator.renderer.renderRecord
 import rip.deadcode.abukuma3.generator.renderer.renderRecordInterface
+import rip.deadcode.abukuma3.generator.renderer.renderViewMultimap
+import rip.deadcode.abukuma3.generator.renderer.renderViewMultimapInterface
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -48,6 +54,7 @@ open class GenerateDataClassTask : DefaultTask() {
             .forEach {
                 when {
                     it["type"] == "record" -> write(mapToRecord(it), generatedSrcPath)
+                    it["type"] == "view-multimap" -> write(mapToViewMultimap(it), generatedSrcPath)
                     else -> throw RuntimeException()
                 }
             }
@@ -71,6 +78,18 @@ fun write(model: Record, generatedSrcPath: Path) {
     val interfaceDestination =
         generatedSrcPath.resolve(model.`interface`.`package`.asPath()).resolve(model.`interface`.name + ".java")
     write(renderRecordInterface(model), interfaceDestination)
+}
+
+fun write(model: ViewMultimap, generatedSrcPath: Path) {
+
+    // Class
+    val classDestination = generatedSrcPath.resolve(model.`package`.asPath()).resolve(model.name + ".java")
+    write(renderViewMultimap(model), classDestination)
+
+    // Interface
+    val interfaceDestination =
+        generatedSrcPath.resolve(model.`interface`.`package`.asPath()).resolve(model.`interface`.name + ".java")
+    write(renderViewMultimapInterface(model), interfaceDestination)
 }
 
 fun write(string: String, destination: Path) {

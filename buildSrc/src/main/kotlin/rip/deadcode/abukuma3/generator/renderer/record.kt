@@ -1,10 +1,5 @@
 package rip.deadcode.abukuma3.generator.renderer
 
-import rip.deadcode.abukuma3.generator.PropertyJavadoc
-import rip.deadcode.abukuma3.generator.Record
-import rip.deadcode.abukuma3.generator.RecordMethod
-import rip.deadcode.abukuma3.generator.RecordProperty
-
 
 fun renderRecordInterface(model: Record) =
     """
@@ -69,7 +64,7 @@ fun renderRecord(model: Record) =
     """
             package ${model.`package`};
             
-            ${defaultImports}
+            $defaultImports
             import com.google.common.collect.*;
             
             import static com.google.common.base.Preconditions.checkNotNull;
@@ -351,11 +346,3 @@ private fun PropertyJavadoc?.setter() =
 
 private fun javadoc(doc: String) =
     doc.lines().joinToString("\n", prefix = "/**\n", postfix = "\n */") { " * ${it}" }
-
-
-private val defaultImports = """
-    import java.util.*;
-    import java.util.function.*;
-    import rip.deadcode.abukuma3.collection.*;
-    import javax.annotation.Nullable;
-""".trimIndent()

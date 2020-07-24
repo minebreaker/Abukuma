@@ -1,4 +1,4 @@
-package rip.deadcode.abukuma3.generator
+package rip.deadcode.abukuma3.generator.renderer
 
 
 fun mapToRecord(map: Map<String, Any>): Record {
@@ -7,27 +7,32 @@ fun mapToRecord(map: Map<String, Any>): Record {
         map["package"].toString(),
         map["name"].toString(),
         map["import"] as List<String>? ?: listOf(),
-        mapToRecordInterface(map["interface"] as Map<String, Any>),
+        mapRecordInterface(map["interface"] as Map<String, Any>),
         mapRecordConstructor(map["constructor"] as Map<String, Any>?),
-        (map["property"] as List<Map<String, Any>>).map { mapRecordProperty(it) },
-        (map["method"] as List<Map<String, Any>>?)?.map { mapRecordMethod(it) } ?: listOf()
+        (map["property"] as List<Map<String, Any>>).map {
+            mapRecordProperty(
+                it
+            )
+        },
+        (map["method"] as List<Map<String, Any>>?)?.map {
+            mapRecordMethod(
+                it
+            )
+        } ?: listOf()
     )
 }
 
-fun mapToRecordInterface(map: Map<String, Any>): RecordInterface {
-    return RecordInterface(
-        map["package"].toString(),
-        map["name"].toString()
-    )
-}
+fun mapRecordInterface(map: Map<String, Any>): RecordInterface = RecordInterface(
+    map["package"].toString(),
+    map["name"].toString()
+)
 
-fun mapRecordConstructor(map: Map<String, Any>?): RecordConstructor? {
-    return if (map == null) null else RecordConstructor(
+fun mapRecordConstructor(map: Map<String, Any>?): RecordConstructor? =
+    if (map == null) null else RecordConstructor(
         map["noArg"].bool(),
         map["requiredArg"].bool(),
         map["allArg"].bool()
     )
-}
 
 fun mapRecordProperty(map: Map<String, Any>): RecordProperty {
     val optional = map["optional"].bool()
@@ -76,17 +81,15 @@ fun mapRecordPropertyAccessor(map: Map<String, Any>): RecordPropertyAccessor =
         map["implementation"].toString()
     )
 
-private fun mapRecordMethod(map: Map<String, Any>): RecordMethod {
-    return RecordMethod(
-        map["name"].toString(),
-        map["type"].toString(),
-        map["interface"] != "false",
-        map["annotation"]?.toString(),
-        map["argument"].toString(),
-        map["implementation"].toString(),
-        map["javadoc"]?.toString()
-    )
-}
+private fun mapRecordMethod(map: Map<String, Any>): RecordMethod = RecordMethod(
+    map["name"].toString(),
+    map["type"].toString(),
+    map["interface"] != "false",
+    map["annotation"]?.toString(),
+    map["argument"].toString(),
+    map["implementation"].toString(),
+    map["javadoc"]?.toString()
+)
 
 data class Record(
     val `package`: String,
