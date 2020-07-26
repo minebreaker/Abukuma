@@ -15,6 +15,7 @@
 * Problem: case-sensitive header key is confusing
     * ~~Case-insensitive header~~
         * Lower case for internal store
+* generator nullability issue
 * `generateDataClass` execution order problem causing build failure
 
 

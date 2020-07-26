@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +33,7 @@ class GsonRendererTest {
         assertThat( response ).isNotNull();
 
         Response rendered = response.modifying().get();
-        assertThat( rendered.header().contentType() ).isEqualTo( "application/json" );
+        assertThat( rendered.header().contentType() ).hasValue( "application/json" );
         response.rendering().accept( os );
         assertThat( new String( os.toByteArray(), StandardCharsets.UTF_8 ) ).isEqualTo( "{\"foo\":\"bar\"}" );
     }

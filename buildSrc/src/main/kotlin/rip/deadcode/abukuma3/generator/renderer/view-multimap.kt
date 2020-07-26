@@ -23,7 +23,7 @@ fun renderViewMultimapInterface(model: ViewMultimap) =
 
 fun renderViewMultimapInterfaceProperty(model: ViewMultimap, property: ViewMultimapProperty) =
     """
-        public ${model.genericType} ${property.name}();
+        public Optional<${model.genericType}> ${property.name}();
         
         public ${model.`interface`.name} ${property.name}( ${model.genericType} value );
     """.trimIndent()
@@ -78,10 +78,11 @@ fun renderConstructors(model: ViewMultimap) =
         }
     """.trimIndent()
 
+// TODO should implement `mayGetValue` on Multimap and use it
 fun renderViewMultimapProperty(model: ViewMultimap, property: ViewMultimapProperty) =
     """
-        @Override public ${model.genericType} ${property.name}() {
-            return getValue( ${property.key} );
+        @Override public Optional<${model.genericType}> ${property.name}() {
+            return Optional.ofNullable( getValue( ${property.key} ) ); 
         }
         
         @Override public ${model.`interface`.name} ${property.name}( ${model.genericType} value ) {
