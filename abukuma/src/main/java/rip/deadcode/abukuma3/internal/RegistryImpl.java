@@ -1,26 +1,24 @@
 package rip.deadcode.abukuma3.internal;
 
-import com.google.common.collect.ImmutableMap;
 import rip.deadcode.abukuma3.Registry;
 import rip.deadcode.abukuma3.collection.PersistentCollections;
+import rip.deadcode.abukuma3.collection.PersistentMap;
 
-import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static rip.deadcode.abukuma3.internal.utils.MoreCollections.assoc;
 
 
 public final class RegistryImpl implements Registry {
 
-    private Map<Class<?>, Map<String, Function<Registry, ?>>> holder;
+    private PersistentMap<Class<?>, PersistentMap<String, Function<Registry, ?>>> holder;
 
     public RegistryImpl() {
         holder = PersistentCollections.createMap();
     }
 
-    private RegistryImpl( Map<Class<?>, Map<String, Function<Registry, ?>>> holder ) {
+    private RegistryImpl( PersistentMap<Class<?>, PersistentMap<String, Function<Registry, ?>>> holder ) {
         this.holder = holder;
     }
 
@@ -51,11 +49,8 @@ public final class RegistryImpl implements Registry {
 
     @Override public <T> Registry set( Class<T> cls, String name, Function<Registry, ? extends T> generator ) {
         // TODO
-        Map<String, Function<Registry, ?>> current = holder.get( cls );
-        Map<String, Function<Registry, ?>> newInstanceMap =
-                current == null
-                ? ImmutableMap.of( name, generator )
-                : assoc( current, name, generator );
-        return new RegistryImpl( assoc( holder, cls, newInstanceMap ) );
+        PersistentMap<String, Function<Registry, ?>> current = holder.mayGet( cls )
+                                                                     .orElse( PersistentCollections.createMap() );
+        return new RegistryImpl( holder.set( cls, current.set( name, generator ) ) );
     }
 }
