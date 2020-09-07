@@ -12,7 +12,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class RegistryImpl implements Registry {
 
-    private PersistentMap<Class<?>, PersistentMap<String, Function<Registry, ?>>> holder;
+    private final PersistentMap<Class<?>, PersistentMap<String, Function<Registry, ?>>> holder;
 
     public RegistryImpl() {
         holder = PersistentCollections.createMap();
@@ -28,7 +28,7 @@ public final class RegistryImpl implements Registry {
 
     @SuppressWarnings( "unchecked" )
     @Override public <T> T get( Class<T> cls, String name ) {
-        return (T) checkNotNull( holder.get( cls ).get( "" ).apply( this ) );
+        return (T) checkNotNull( holder.get( cls ).get( name ).apply( this ) );
     }
 
     @Override public <T> Registry setSingleton( Class<T> cls, T instance ) {
