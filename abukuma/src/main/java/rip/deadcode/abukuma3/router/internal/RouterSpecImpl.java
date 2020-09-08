@@ -6,6 +6,7 @@ import rip.deadcode.abukuma3.handler.Handler;
 import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.router.Routers;
 import rip.deadcode.abukuma3.router.RouterSpec;
+import rip.deadcode.abukuma3.value.Responses;
 
 import javax.annotation.Nullable;
 import java.nio.file.Files;
@@ -59,7 +60,7 @@ public class RouterSpecImpl implements RouterSpec {
             if ( Files.notExists( file ) ) {
                 return null;
             }
-            Handler handler = new PathHandler( file );
+            Handler handler = ( c, r ) -> Responses.create( file );
             return new RoutingResultImpl( handler, ImmutableMap.of() );
         } );
     }
@@ -68,7 +69,7 @@ public class RouterSpecImpl implements RouterSpec {
         return add( new MappingRouter(
                 mappingRoutePath,
                 root.toString(),
-                path -> new PathHandler( root.getFileSystem().getPath( path ) )
+                path -> ( c, r ) -> Responses.create( root.getFileSystem().getPath( path ) )
         ) );
     }
 
