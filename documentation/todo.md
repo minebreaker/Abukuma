@@ -47,6 +47,7 @@
 * Even data classes should be exposed as interfaces, not classes
 * Renderer/Parser chains should be special lists, since it's much easier to modify
 * Modular routing mechanism
+    * Reusable routing path system 
 * `MessageResolver` `ResourceBundleMessageResolver` for internal messages/logs
 * Documentation for the generator plugin
 
