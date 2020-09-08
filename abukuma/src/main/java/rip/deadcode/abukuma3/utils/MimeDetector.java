@@ -15,12 +15,12 @@ public interface MimeDetector {
      *                     equal to the value of {@code path.toString()}.
      * @return A possible mime type string of the given file.
      */
-    public String detectMime( String pathAsString, @Nullable Path path );
+    public String detect( String pathAsString, @Nullable Path path );
 
     /**
      * A convenience method for {@code detectMime(pathAsString, null)}
      */
-    public default String detectMime( String pathAsString ) {
-        return detectMime( pathAsString, null );
+    public default String detect( String pathAsString ) {
+        return detect( pathAsString, null );
     }
 }

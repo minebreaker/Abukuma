@@ -32,7 +32,7 @@ public final class FileRenderer implements Renderer {
         MimeDetector mimeDetector = checkNotNull( context.get( MimeDetector.class ) );
         File body = (File) bodyObj;
 
-        String mime = mimeDetector.detectMime( body.toString() );
+        String mime = mimeDetector.detect( body.toString() );
 
         CacheManager cacheManager = context.get( CacheManager.class, "java.io.File" );
         if ( cacheManager != null ) {

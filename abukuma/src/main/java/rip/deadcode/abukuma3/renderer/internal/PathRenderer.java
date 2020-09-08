@@ -29,7 +29,7 @@ public class PathRenderer implements Renderer {
         MimeDetector mimeDetector = checkNotNull( context.get( MimeDetector.class ) );
         Path body = (Path) bodyObj;
 
-        String mime = mimeDetector.detectMime( body.toString(), body );
+        String mime = mimeDetector.detect( body.toString(), body );
 
         CacheManager cacheManager = context.get( CacheManager.class, "java.nio.file.Path" );
         if ( cacheManager != null ) {
