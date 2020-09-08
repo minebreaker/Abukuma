@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 
 public class PathRenderer implements Renderer {
 
@@ -26,7 +24,7 @@ public class PathRenderer implements Renderer {
             return null;
         }
 
-        MimeDetector mimeDetector = checkNotNull( context.get( MimeDetector.class ) );
+        MimeDetector mimeDetector = context.get( MimeDetector.class );
         Path body = (Path) bodyObj;
 
         String mime = mimeDetector.detect( body.toString(), body );
