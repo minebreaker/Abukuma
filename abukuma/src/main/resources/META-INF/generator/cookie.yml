@@ -16,14 +16,13 @@ constructor:
 property:
   - name: name
     type: String
-    # FIXME: nullability
   - name: value
     type: String
     javadoc: |
       The value of this cookie.
   - name: maxAge
-    type: Integer
-    nullable: true
+    type: Integer  # Can be nullable
+    optional: true
     getter:
       type: OptionalInt
       implementation: |

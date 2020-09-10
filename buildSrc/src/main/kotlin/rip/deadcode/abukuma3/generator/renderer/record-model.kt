@@ -29,14 +29,14 @@ fun mapRecordInterface(map: Map<String, Any>): RecordInterface = RecordInterface
 
 fun mapRecordConstructor(map: Map<String, Any>?): RecordConstructor? =
     if (map == null) null else RecordConstructor(
-        map["noArg"].bool(),
-        map["requiredArg"].bool(),
-        map["allArg"].bool()
+        map["noArg"].boolFalseIfNull(),
+        map["requiredArg"].boolFalseIfNull(),
+        map["allArg"].boolTrueIfNull()
     )
 
 fun mapRecordProperty(map: Map<String, Any>): RecordProperty {
-    val optional = map["optional"].bool()
-    val nullable = map["nullable"].bool()
+    val optional = map["optional"].boolFalseIfNull()
+    val nullable = map["nullable"].boolFalseIfNull()
     val javadoc = when (val javadocObj = map["javadoc"]) {
         is Map<*, *> -> {
             @Suppress("UNCHECKED_CAST")
@@ -84,7 +84,7 @@ fun mapRecordPropertyAccessor(map: Map<String, Any>): RecordPropertyAccessor =
 private fun mapRecordMethod(map: Map<String, Any>): RecordMethod = RecordMethod(
     map["name"].toString(),
     map["type"].toString(),
-    map["interface"] != "false",
+    map["interface"].boolTrueIfNull(),
     map["annotation"]?.toString(),
     map["argument"].toString(),
     map["implementation"].toString(),
@@ -146,4 +146,5 @@ data class PropertyJavadoc(
 )
 
 
-fun Any?.bool() = this != null && this.toString().toBoolean()
+fun Any?.boolTrueIfNull() = this == null || this.toString().toBoolean()
+fun Any?.boolFalseIfNull() = this != null && this.toString().toBoolean()
