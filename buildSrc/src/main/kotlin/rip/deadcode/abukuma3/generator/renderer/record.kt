@@ -31,7 +31,7 @@ fun renderRecordInterfaceProperty(model: Record, property: RecordProperty) =
 fun renderRecordInterfaceGetter(property: RecordProperty) =
     """
             ${property.javadoc.getter()}
-            ${if(property.nullable && !property.optional && !property.isPrimitive()) "@Nullable" else "" }
+            ${if (property.nullable && !property.optional && !property.isPrimitive()) "@Nullable" else ""}
             public ${
         when {
             property.getter != null -> {
@@ -107,28 +107,34 @@ fun renderConstructors(model: Record) =
 fun renderRequiredArgConstructor(model: Record) =
     """
             public ${model.name}(
-                ${model.properties
-        .filter {
-            !it.nullable && !it.optional && it.default == null
-        }
-        .joinToString {
-            if (it.nullable && !it.optional && !it.isPrimitive()) "@Nullable" else "" + " " + it.type + " " + it.name 
-        }}
+                ${
+        model.properties
+            .filter {
+                !it.nullable && !it.optional && it.default == null
+            }
+            .joinToString {
+                if (it.nullable && !it.optional && !it.isPrimitive()) "@Nullable" else "" + " " + it.type + " " + it.name
+            }
+    }
             ) {
-                ${model.properties
-        .filter { !it.nullable && !it.optional }
-        .joinToString("\n") {
-            "this.${it.name} = ${it.default ?: checkingNotNull(it)};"
-        }}
+                ${
+        model.properties
+            .filter { !it.nullable && !it.optional }
+            .joinToString("\n") {
+                "this.${it.name} = ${it.default ?: checkingNotNull(it)};"
+            }
+    }
             }
         """.trimIndent()
 
 fun renderAllArgConstructor(model: Record) =
     """
             public ${model.name}(
-                ${model.properties.joinToString {
-                    if (it.nullable && !it.optional && !it.isPrimitive()) "" else "" + " " + it.type + " " + it.name 
-                }}
+                ${
+        model.properties.joinToString {
+            if (it.nullable && !it.optional && !it.isPrimitive()) "" else "" + " " + it.type + " " + it.name
+        }
+    }
             ) {
                 ${model.properties.joinToString("\n") { "this.${it.name} = ${checkingNotNull(it)};" }}
             }
@@ -221,13 +227,15 @@ fun renderRecordMapOverride(record: Record) =
             }
             
             @Nullable @Override public Object get( Object key ) {
-                if ${record.properties.joinToString(" else if ") {
-                """
+                if ${
+                record.properties.joinToString(" else if ") {
+                    """
                         ( Objects.equals( key, "${it.name}" ) ) {
                             return ${it.name};
                     }
                      """.trimIndent()
-            }} else {
+                }
+            } else {
                     return null;
                 }
             }
@@ -265,9 +273,11 @@ fun renderRecordMapOverride(record: Record) =
             @Override public boolean equals( Object o ) {
                 return o instanceof Map
                         && ( (Map) o ).size() == ${record.properties.size}
-                        && ${record.properties.joinToString("&& ") {
-                """Objects.equals( ${it.name}, ( (Map) o ).get( "${it.name}" ) )"""
-            }};
+                        && ${
+                record.properties.joinToString("&& ") {
+                    """Objects.equals( ${it.name}, ( (Map) o ).get( "${it.name}" ) )"""
+                }
+            };
             }
             
             @Override public int hashCode() {
@@ -275,17 +285,21 @@ fun renderRecordMapOverride(record: Record) =
             }
             
             @Override public Optional<Object> mayGet( String key ) {
-                if ${record.properties.joinToString(" else if ") {
-                """
+                if ${
+                record.properties.joinToString(" else if ") {
+                    """
                         ( Objects.equals( key, "${it.name}" ) ) {
-                            ${if (!it.nullable || it.isPrimitive()) {
-                    """return Optional.of( ${it.name} );"""
-                } else {
-                    """return Optional.ofNullable( ${it.name} );"""
-                }}
+                            ${
+                        if (!it.nullable || it.isPrimitive()) {
+                            """return Optional.of( ${it.name} );"""
+                        } else {
+                            """return Optional.ofNullable( ${it.name} );"""
+                        }
+                    }
                     }
                      """.trimIndent()
-            }} else {
+                }
+            } else {
                     return Optional.empty();
                 }
             }
@@ -322,9 +336,11 @@ fun renderRecordPredefinedMethods(model: Record) =
     """
         public static ${model.name} cast( Map<String, Object> map ) {
             
-            ${model.properties.joinToString("\n") {
-        """${it.type} ${it.name} = (${it.type}) map.get( "${it.name}" );"""
-    }}
+            ${
+        model.properties.joinToString("\n") {
+            """${it.type} ${it.name} = (${it.type}) map.get( "${it.name}" );"""
+        }
+    }
             
             return new ${model.name} ( ${model.properties.joinToString { it.name }} );
         }
