@@ -1,7 +1,6 @@
 ## Features
 
 * Test utilities
-* Content-type based dispatcher
 * Exception handler with type-based dispatch
 * Lens
     * Strict lenses (Prism, Lens, Optional...) or more easy-to-use ones (`getIn()` `setIn()` things)?
@@ -27,9 +26,6 @@
 * Add additional header getter methods for the `Header`
 * Problem: Modules can't have configurations
     * Flexible configuration schema
-* Problem: Static imports are tedious
-    * Single factory class for all?
-        * `rip.deadcode.abukuma3.utils.StaticImports`
 * Write tests
 * Replace Collections to internal PersistentCollections
     * Replace Guava immutable collections
@@ -60,3 +56,18 @@
     * Vert.x
 * Graal VM Compatibility check
 * JDK support - Oracle LTS lines?
+
+
+## Graveyard
+
+* Content-type based dispatcher
+->
+    * Useless if actual parses are not installed
+    * Actually, what need is a content-type based parser?
+    * Maybe frameworks should have those
+
+* Problem: Static imports are tedious
+    * Single factory class for all?
+        * `rip.deadcode.abukuma3.utils.StaticImports`
+->
+    * This is not necessary
