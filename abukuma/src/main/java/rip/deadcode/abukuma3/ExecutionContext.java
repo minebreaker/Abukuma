@@ -22,5 +22,5 @@ public interface ExecutionContext extends Registry {
 
     public ExceptionHandler exceptionHandler();
 
-    public ExecutionContext applyModule( Module module);
+    public ExecutionContext applyModule( Module module );
 }
