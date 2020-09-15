@@ -61,6 +61,7 @@ property:
       @see <a href="https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02">https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02</a>
 
 method:
+  # serializeCookie() is better?
   - name: toString
     type: String
     interface: false
