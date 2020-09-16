@@ -28,8 +28,9 @@ fun mapRecordInterface(map: Map<String, Any>): RecordInterface = RecordInterface
 )
 
 fun mapRecordConstructor(map: Map<String, Any>?): RecordConstructor? =
-    if (map == null) null else RecordConstructor(
-        map["noArg"].boolFalseIfNull(),
+    if (map == null)
+        RecordConstructor(requiredArg = false, allArg = true)
+    else RecordConstructor(
         map["requiredArg"].boolFalseIfNull(),
         map["allArg"].boolTrueIfNull()
     )
@@ -107,7 +108,6 @@ data class RecordInterface(
 )
 
 data class RecordConstructor(
-    val noArg: Boolean,
     val requiredArg: Boolean,
     val allArg: Boolean
 //        , val staticFactory:

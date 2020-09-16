@@ -112,6 +112,7 @@ fun renderRequiredArgConstructor(model: Record) =
             .filter {
                 !it.nullable && !it.optional && it.default == null
             }
+                // TODO: Isn't @Nullable unreachable?
             .joinToString {
                 (if ((it.nullable || it.optional) && !it.isPrimitive()) "@Nullable" else "") +
                         " " + it.type + " " + it.name
@@ -130,7 +131,7 @@ fun renderRequiredArgConstructor(model: Record) =
 
 fun renderAllArgConstructor(model: Record) =
     """
-            public ${model.name}(
+            ${if (model.constructor?.allArg == true) "public" else "private"} ${model.name}(
                 ${
         model.properties.joinToString {
             (if ((it.nullable || it.optional) && !it.isPrimitive()) "@Nullable" else "") +
