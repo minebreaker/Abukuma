@@ -113,7 +113,8 @@ fun renderRequiredArgConstructor(model: Record) =
                 !it.nullable && !it.optional && it.default == null
             }
             .joinToString {
-                if (it.nullable && !it.optional && !it.isPrimitive()) "@Nullable" else "" + " " + it.type + " " + it.name
+                (if ((it.nullable || it.optional) && !it.isPrimitive()) "@Nullable" else "") +
+                        " " + it.type + " " + it.name
             }
     }
             ) {
@@ -132,7 +133,8 @@ fun renderAllArgConstructor(model: Record) =
             public ${model.name}(
                 ${
         model.properties.joinToString {
-            if (it.nullable && !it.optional && !it.isPrimitive()) "" else "" + " " + it.type + " " + it.name
+            (if ((it.nullable || it.optional) && !it.isPrimitive()) "@Nullable" else "") +
+                    " " + it.type + " " + it.name
         }
     }
             ) {
