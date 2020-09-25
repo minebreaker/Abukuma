@@ -31,29 +31,40 @@ fun renderRecordInterfaceProperty(model: Record, property: RecordProperty) =
 fun renderRecordInterfaceGetter(property: RecordProperty) =
     """
             ${property.javadoc.getter()}
-            ${if (property.nullable && !property.optional && !property.isPrimitive()) "@Nullable" else ""}
+            ${
+        if (property.nullable && !property.optional && !property.isPrimitive() && property.list != null) "@Nullable"
+        else ""
+    }
             public ${
         when {
             property.getter != null -> {
                 val g = property.getter
                 "${g.type ?: property.type} ${g.name ?: property.name}( ${g.argument ?: ""} );"
             }
-            property.optional -> {
+            property.list != null ->
+                "PersistentList<${property.type}> ${property.list.plural}();"
+            property.optional ->
                 "Optional<${property.type}> ${property.name}();"
-            }
-            else -> {
+            else ->
                 "${property.type} ${property.name}();"
-            }
         }
     }
     """.trimIndent()
 
 
-fun renderRecordInterfaceSetter(model: Record, property: RecordProperty) =
-    """
+fun renderRecordInterfaceSetter(model: Record, property: RecordProperty): String {
+    val name = if (property.list != null) property.list.plural else property.name
+
+    return """
             ${property.javadoc.setter()}
-            public ${model.`interface`.name} ${property.name}( ${property.type} ${property.name} );
+            public ${model.`interface`.name} ${property.name}( ${
+        when {
+            property.list != null -> "List<${property.type}>"
+            else -> property.type
+        }
+    } ${name} );
     """.trimIndent()
+}
 
 fun renderRecordInterfaceMethod(method: RecordMethod) =
     if (method.`interface`)
@@ -112,18 +123,22 @@ fun renderRequiredArgConstructor(model: Record) =
             .filter {
                 !it.nullable && !it.optional && it.default == null
             }
-                // TODO: Isn't @Nullable unreachable?
-            .joinToString {
-                (if ((it.nullable || it.optional) && !it.isPrimitive()) "@Nullable" else "") +
-                        " " + it.type + " " + it.name
-            }
+            // TODO: Isn't @Nullable unreachable?
+            .joinToString { renderConstructorArg(it) }
     }
             ) {
                 ${
         model.properties
             .filter { !it.nullable && !it.optional }
             .joinToString("\n") {
-                "this.${it.name} = ${it.default ?: checkingNotNull(it)};"
+                "this.${it.name} = ${
+                    when {
+                        it.list != null -> {
+                            "PersistentCollections.wrapList( ${it.name} )"
+                        }
+                        else -> it.default ?: checkingNotNull(it)
+                    }
+                };"
             }
     }
             }
@@ -132,17 +147,33 @@ fun renderRequiredArgConstructor(model: Record) =
 fun renderAllArgConstructor(model: Record) =
     """
             ${if (model.constructor?.allArg == true) "public" else "private"} ${model.name}(
+                ${model.properties.joinToString { renderConstructorArg(it) }}
+            ) {
                 ${
-        model.properties.joinToString {
-            (if ((it.nullable || it.optional) && !it.isPrimitive()) "@Nullable" else "") +
-                    " " + it.type + " " + it.name
+        model.properties.joinToString("\n") {
+            "this.${it.name} = ${
+                when {
+                    it.list != null -> {
+                        "PersistentCollections.wrapList( ${it.name} )"
+                    }
+                    else -> checkingNotNull(it)
+                }
+            };"
         }
     }
-            ) {
-                ${model.properties.joinToString("\n") { "this.${it.name} = ${checkingNotNull(it)};" }}
             }
         """.trimIndent()
 
+fun renderConstructorArg(property: RecordProperty) =
+    when {
+        property.list != null -> {
+            "List<${property.type}> ${property.name}"
+        }
+        else -> {
+            (if ((property.nullable || property.optional) && !property.isPrimitive()) "@Nullable "
+            else "") + "${property.type} ${property.name}"
+        }
+    }
 
 fun renderCopy(model: Record) =
     """
@@ -152,14 +183,35 @@ fun renderCopy(model: Record) =
         """.trimIndent()
 
 fun renderProperty(model: Record, property: RecordProperty) =
-    """
-            ${if (property.nullable && !property.isPrimitive()) "@Nullable" else ""}
-            private ${property.type} ${property.name};
-            
-            ${renderGetter(property)}
-            
-            ${renderSetter(model, property)}
-        """.trimIndent()
+    when {
+        property.list != null -> {
+            // the field name is always `p.name`, not `p.list.plural`
+            """
+                private PersistentList<${property.type}> ${property.name};
+                
+                ${renderGetter(property)}
+                ${renderSetter(model, property)}
+            """.trimIndent()
+        }
+        property.optional -> {
+            """
+                ${"" /* Fields are not Optional */}
+                @Nullable private ${property.type} ${property.name};
+                
+                ${renderGetter(property)}
+                ${renderSetter(model, property)}
+            """.trimIndent()
+        }
+        else -> {
+            """
+                ${if (property.nullable && !property.isPrimitive()) "@Nullable" else ""}
+                private ${property.type} ${property.name};
+                
+                ${renderGetter(property)}
+                ${renderSetter(model, property)}
+            """.trimIndent()
+        }
+    }
 
 fun renderGetter(property: RecordProperty) =
     when {
@@ -172,6 +224,12 @@ fun renderGetter(property: RecordProperty) =
                     }
                 """.trimIndent()
         }
+        property.list != null -> """
+                @Override
+                public PersistentList<${property.type}> ${property.list.plural}() {
+                    return ${property.name};
+                }
+            """.trimIndent()
         property.optional -> """
                 @Override
                 public Optional<${property.type}> ${property.name}() {
@@ -190,11 +248,21 @@ fun renderSetter(model: Record, property: RecordProperty) =
     """
             @Override
             public ${model.name} ${property.name}(
-                ${if (property.nullable) "@Nullable" else ""} ${property.type} ${property.name}
+                ${if (property.nullable) "@Nullable" else ""} ${
+        when {
+            property.list != null -> "List<${property.type}>"
+            else -> property.type
+        }
+    } ${property.name}
             ) {
                 ${if (!property.nullable && !property.isPrimitive()) "checkNotNull( ${property.name} );" else ""}
                 ${model.name} copy = copy();
-                copy.${property.name} = ${property.name};
+                copy.${property.name} = ${
+        when {
+            property.list != null -> "PersistentCollections.wrapList( ${property.name} )"
+            else -> property.name
+        }
+    };
                 return copy;
             }
         """.trimIndent()
@@ -263,6 +331,7 @@ fun renderRecordMapOverride(record: Record) =
                 return keySet;
             }
             
+            ${"" /* FIXME: nullability? */}
             @Override public Collection<Object> values() {
                 return ImmutableList.of( ${record.properties.joinToString { it.name }} );
             }
@@ -341,7 +410,13 @@ fun renderRecordPredefinedMethods(model: Record) =
             
             ${
         model.properties.joinToString("\n") {
-            """${it.type} ${it.name} = (${it.type}) map.get( "${it.name}" );"""
+            when {
+                it.list != null ->
+                    "PersistentList<${it.type}> ${it.name} = " +
+                            """PersistentCollections.wrapList( (List<${it.type}>) map.get( "${it.name}" ) );"""
+                // TODO: should type check? (especially in a List case)
+                else -> """${it.type} ${it.name} = (${it.type}) map.get( "${it.name}" );"""
+            }
         }
     }
             
@@ -362,10 +437,10 @@ private fun RecordProperty.isPrimitive() =
         else -> false
     }
 
-private fun PropertyJavadoc?.getter() =
+private fun RecordPropertyJavadoc?.getter() =
     if (this != null && this.getter != null) javadoc(this.getter) else ""
 
-private fun PropertyJavadoc?.setter() =
+private fun RecordPropertyJavadoc?.setter() =
     if (this != null && this.setter != null) javadoc(this.setter) else ""
 
 private fun javadoc(doc: String) =

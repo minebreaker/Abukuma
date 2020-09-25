@@ -1,0 +1,66 @@
+package: rip.deadcode.abukuma3.internal
+name: ServerSpecImpl
+type: record
+
+interface:
+    package: rip.deadcode.abukuma3
+    name: ServerSpec
+
+import:
+    - rip.deadcode.abukuma3.*;
+    - rip.deadcode.abukuma3.filter.*;
+    - rip.deadcode.abukuma3.handler.*;
+    - rip.deadcode.abukuma3.parser.*;
+    - rip.deadcode.abukuma3.renderer.*;
+    - rip.deadcode.abukuma3.router.*;
+    - rip.deadcode.abukuma3.internal.*;
+    - rip.deadcode.abukuma3.value.*
+    - rip.deadcode.abukuma3.value.internal.*
+
+constructor:
+    requiredArg: false
+    allArg: false
+
+property:
+    - name: registry
+      type: Registry
+      default: "new RegistryImpl()"
+    - name: config
+      type: Config
+      nullable: true
+      default:
+          implementation: 
+#          lazy: true
+    - name: router
+      type: Router
+      nullable: true
+    - name: parser
+      type: Parser<?>
+      list: true
+    - name: renderer
+      type: Renderer
+      list: true
+    - name: filter
+      type: Filter
+      list: true
+    - name: exceptionHandler
+      type: ExceptionHandler
+      nullable: true
+    - name: module
+      type: Module
+      list: true
+
+methods:
+    - name: registry
+      type: ServerSpec
+      interface: true
+      argument: "CheckedUnaryOperator<Registry> registry"
+      implementation: |
+          ServerSpecImpl copy = copy();
+          copy.registry = registry.apply( this.registry );
+          return copy;
+    - name: build
+      type: Server
+      interface: true
+      argument: ""
+      impementation: ServerSpecUtils.build( this );

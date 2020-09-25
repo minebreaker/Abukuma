@@ -45,6 +45,7 @@
     * Reusable routing path system 
 * `MessageResolver` `ResourceBundleMessageResolver` for internal messages/logs
 * Documentation for the generator plugin
+* Need to think about collection nullability
 
 
 ## Ideas

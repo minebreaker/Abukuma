@@ -42,12 +42,12 @@ fun mapRecordProperty(map: Map<String, Any>): RecordProperty {
         is Map<*, *> -> {
             @Suppress("UNCHECKED_CAST")
             javadocObj as Map<String, Any>
-            PropertyJavadoc(
+            RecordPropertyJavadoc(
                 javadocObj["getter"].toString(),
                 javadocObj["setter"].toString()
             )
         }
-        is String -> PropertyJavadoc(
+        is String -> RecordPropertyJavadoc(
             javadocObj,
             "@see #${map["name"]}()"
         )
@@ -68,6 +68,19 @@ fun mapRecordProperty(map: Map<String, Any>): RecordProperty {
         map["type"].toString(),
         nullable,
         optional,
+        when (val listObj = map["list"]) {
+            true -> RecordPropertyList(
+                add = true,
+                addMultiple = true,
+                plural = map["name"].toString() + "s"  // I know this is dumb and you should always set "plural" property
+            )
+            is Map<*, *> -> RecordPropertyList(
+                add = listObj["add"].boolTrueIfNull(),
+                addMultiple = listObj["addMultiple"].boolTrueIfNull(),
+                plural = listObj["name"]?.toString() ?: map["name"].toString() + "s"
+            )
+            else -> null
+        },
         map["default"]?.toString(),
         getter,
         javadoc
@@ -118,9 +131,10 @@ data class RecordProperty(
     val type: String,
     val nullable: Boolean,
     val optional: Boolean,
+    val list: RecordPropertyList?,
     val default: String?,
     val getter: RecordPropertyAccessor?,
-    val javadoc: PropertyJavadoc?
+    val javadoc: RecordPropertyJavadoc?
 )
 
 data class RecordPropertyAccessor(
@@ -140,11 +154,13 @@ data class RecordMethod(
     val javadoc: String?
 )
 
-data class PropertyJavadoc(
+data class RecordPropertyJavadoc(
     val getter: String?,
     val setter: String?
 )
 
-
-fun Any?.boolTrueIfNull() = this == null || this.toString().toBoolean()
-fun Any?.boolFalseIfNull() = this != null && this.toString().toBoolean()
+data class RecordPropertyList(
+    val add: Boolean,
+    val addMultiple: Boolean,
+    val plural: String
+)

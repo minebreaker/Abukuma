@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface PersistentMultimap<K, V>
         extends ListMultimap<K, V>, Pathable<PersistentMultimap<K, V>, List<V>> {
 
+    // TODO: how about getSingle/getFirst?
     public V getValue( K key );
 
     public Optional<V> mayGet( K key );

@@ -1,14 +1,11 @@
 package rip.deadcode.abukuma3;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.filter.Filter;
-import rip.deadcode.abukuma3.filter.Filters;
 import rip.deadcode.abukuma3.handler.ExceptionHandler;
 import rip.deadcode.abukuma3.handler.internal.DefaultExceptionHandler;
-import rip.deadcode.abukuma3.internal.ExecutionContextImpl;
 import rip.deadcode.abukuma3.internal.Information;
 import rip.deadcode.abukuma3.internal.RegistryImpl;
 import rip.deadcode.abukuma3.parser.Parser;
@@ -26,12 +23,9 @@ import rip.deadcode.abukuma3.value.Config;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
-import java.util.Optional;
-import java.util.ServiceLoader;
 import java.util.function.UnaryOperator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static rip.deadcode.abukuma3.internal.utils.MoreCollections.reduce;
 
 
 public final class Abukuma {
@@ -41,6 +35,10 @@ public final class Abukuma {
     private Abukuma() {
         throw new Error();
     }
+
+//    public static ServerSpec create() {
+//        return new ServerSpecImpl();
+//    }
 
     public static AbuServerBuilder config( Config config ) {
         return new AbuServerBuilder().config( config );
@@ -198,49 +196,11 @@ public final class Abukuma {
         }
 
         public Server build() {
-            check();
-            //noinspection OptionalGetWithoutIsPresent  should have at least one default implementations
-            ExecutionContext context = new ExecutionContextImpl(
-                    registry,
-                    config,
-                    parsers.stream().reduce( Parser::ifFailed ).get(),
-                    renderers.stream().reduce( Renderer::ifFailed ).get(),
-                    filters.stream().reduce( Filter::then ).orElseGet( Filters::noop ),
-                    router,
-                    exceptionHandler
-            );
-
-            ExecutionContext c = reduce(
-                    this.modules,
-                    context,
-                    ExecutionContext::applyModule
-            );
-
-            return createServer( c );
+            throw new Error();
         }
 
         private static Server createServer( ExecutionContext context ) {
-
-            ServiceLoader<ServerFactory> loader = ServiceLoader.load( ServerFactory.class );
-            Optional<String> requestedFactoryName = context.config().serverImplementation();
-
-            if ( requestedFactoryName.isPresent() ) {
-                String factoryName = requestedFactoryName.get();
-                // Should use loader.stream() for JDK9+
-                return Streams.stream( loader )
-                              .filter( factory -> factory.getClass().getCanonicalName().equals( factoryName ) )
-                              .findFirst()
-                              .map( f -> f.provide( context ) )
-                              .orElseThrow( () -> new IllegalStateException(
-                                      "Could not find server implementation named '" + factoryName +
-                                      "'. Recheck your configuration." ) );
-
-            } else {
-                ServerFactory factory = loader.iterator().next();
-                Server server = factory.provide( context );
-                logger.info( "Auto selected server implementation: " + server.getClass().getCanonicalName() );
-                return server;
-            }
+            throw new Error();
         }
     }
 }
