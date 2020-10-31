@@ -5,7 +5,11 @@ Actually it's more like a traversal.
 * `Pathable` is an object that supports `Lens`.
 
 
-## Path query syntax
+## Pathable
+
+`Pathable` is an object that supports `Lens` when given a string *path*. 
+
+### Path query syntax
 
 ```
 path : segment ( '/' segment )* ;
