@@ -12,6 +12,7 @@ import javax.cache.CacheManager;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 
 public class PathRenderer implements Renderer {
@@ -29,8 +30,10 @@ public class PathRenderer implements Renderer {
 
         String mime = mimeDetector.detect( body.toString(), body );
 
-        CacheManager cacheManager = context.get( CacheManager.class, "java.nio.file.Path" );
-        if ( cacheManager != null ) {
+        String cacheKey = "java.nio.file.Path";
+        Optional<CacheManager> possibleCacheManager = context.mayGet( CacheManager.class, cacheKey );
+        if ( possibleCacheManager.isPresent() ) {
+            CacheManager cacheManager = possibleCacheManager.get();
             Cache<String, byte[]> cache = cacheManager.getCache( "java.nio.file.Path", String.class, byte[].class );
 
             String key = body.normalize().toAbsolutePath().toString();

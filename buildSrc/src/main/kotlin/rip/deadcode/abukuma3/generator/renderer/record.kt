@@ -28,6 +28,7 @@ fun renderRecordInterfaceProperty(model: Record, property: RecordProperty) =
             ${renderRecordInterfaceSetter(model, property)}
         """.trimIndent()
 
+// FIXME Nullability issue
 fun renderRecordInterfaceGetter(property: RecordProperty) =
     """
             ${property.javadoc.getter()}
@@ -59,7 +60,7 @@ fun renderRecordInterfaceSetter(model: Record, property: RecordProperty): String
             ${property.javadoc.setter()}
             public ${model.`interface`.name} ${property.name}( ${
         when {
-            property.list != null -> "List<${property.type}>"
+            property.list != null -> "List<${property.type}>" // FIXME plural
             else -> property.type
         }
     } ${name} );

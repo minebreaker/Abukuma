@@ -10,6 +10,7 @@ import rip.deadcode.abukuma3.renderer.Renderer;
 import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.value.Config;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -72,6 +73,14 @@ public final class ExecutionContextImpl implements ExecutionContext {
     @Override
     public <T> T get( Class<T> cls, String name ) {
         return registry.get( cls, name );
+    }
+
+    @Override public <T> Optional<T> mayGet( Class<T> cls ) {
+        return registry.mayGet( cls );
+    }
+
+    @Override public <T> Optional<T> mayGet( Class<T> cls, String name ) {
+        return registry.mayGet( cls, name );
     }
 
     @Override

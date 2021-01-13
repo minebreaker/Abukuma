@@ -8,6 +8,7 @@ interface:
 
 import:
     - rip.deadcode.abukuma3.*;
+    - rip.deadcode.abukuma3.Module;  # Necessary to disambiguate with java.lang.Module
     - rip.deadcode.abukuma3.filter.*;
     - rip.deadcode.abukuma3.handler.*;
     - rip.deadcode.abukuma3.parser.*;
@@ -16,51 +17,53 @@ import:
     - rip.deadcode.abukuma3.internal.*;
     - rip.deadcode.abukuma3.value.*
     - rip.deadcode.abukuma3.value.internal.*
+    - rip.deadcode.abukuma3.internal.utils.CheckedUnaryOperator
+    - static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck
 
 constructor:
-    requiredArg: false
+    requiredArg: true
     allArg: false
 
 property:
-    - name: registry
-      type: Registry
-      default: "new RegistryImpl()"
-    - name: config
-      type: Config
-      nullable: true
-      default:
-          implementation: 
-#          lazy: true
-    - name: router
-      type: Router
-      nullable: true
-    - name: parser
-      type: Parser<?>
-      list: true
-    - name: renderer
-      type: Renderer
-      list: true
-    - name: filter
-      type: Filter
-      list: true
-    - name: exceptionHandler
-      type: ExceptionHandler
-      nullable: true
-    - name: module
-      type: Module
-      list: true
+    -   name: registry
+        type: Registry
+        default: "new RegistryImpl()"
+    -   name: config
+        type: Config
+        nullable: true
+        default:
+            implementation:
+    #          lazy: true
+    -   name: router
+        type: Router
+        nullable: true
+    -   name: parser
+        type: Parser<?>
+        list: true
+    -   name: renderer
+        type: Renderer
+        list: true
+    -   name: filter
+        type: Filter
+        list: true
+    -   name: exceptionHandler
+        type: ExceptionHandler
+        nullable: true
+    -   name: module
+        type: Module
+        list: true
 
-methods:
-    - name: registry
-      type: ServerSpec
-      interface: true
-      argument: "CheckedUnaryOperator<Registry> registry"
-      implementation: |
-          ServerSpecImpl copy = copy();
-          copy.registry = registry.apply( this.registry );
-          return copy;
-    - name: build
-      type: Server
-      interface: true
-      argument: ""
-      impementation: ServerSpecUtils.build( this );
+method:
+    -   name: registry
+        type: ServerSpec
+        interface: true
+        argument: "CheckedUnaryOperator<Registry, Exception> registry"
+        implementation: |
+            ServerSpecImpl copy = copy();
+            copy.registry = uncheck( () -> registry.apply( this.registry ) );
+            return copy;
+    -   name: createServer
+        type: Server
+        interface: true
+        argument: ""
+        implementation: return ServerSpecUtils.build( this );

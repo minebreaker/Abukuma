@@ -1,19 +1,21 @@
 package rip.deadcode.abukuma3.router.internal;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import rip.deadcode.abukuma3.handler.Handler;
+import rip.deadcode.abukuma3.router.RouteMatcher;
 import rip.deadcode.abukuma3.router.Router;
-import rip.deadcode.abukuma3.router.Routers;
 import rip.deadcode.abukuma3.router.RouterSpec;
+import rip.deadcode.abukuma3.router.Routers;
 import rip.deadcode.abukuma3.value.Responses;
 
 import javax.annotation.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
+import static rip.deadcode.abukuma3.collection.PersistentCollections.createMap;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.addLast;
 
 
@@ -26,7 +28,7 @@ public class RouterSpecImpl implements RouterSpec {
         this( ImmutableList.of(), null );
     }
 
-    private RouterSpecImpl( List<Router> routers, Router notFound ) {
+    private RouterSpecImpl( List<Router> routers, @Nullable Router notFound ) {
         this.routers = routers;
         this.notFound = notFound;
     }
@@ -52,23 +54,27 @@ public class RouterSpecImpl implements RouterSpec {
     }
 
     @Override public RouterSpec notFound( Handler handler ) {
-        return new RouterSpecImpl( routers, context -> new RoutingResultImpl( handler, ImmutableMap.of() ) );
+        return new RouterSpecImpl( routers, context -> new RoutingResultImpl( handler, createMap() ) );
     }
 
+    // FIXME: File routers are completely broken now
+
     @Override public RouterSpec file( String mappingPath, Path file ) {
-        return add( context -> {
-            if ( Files.notExists( file ) ) {
-                return null;
-            }
-            Handler handler = ( c, r ) -> Responses.create( file );
-            return new RoutingResultImpl( handler, ImmutableMap.of() );
-        } );
+        RouteMatcher matcher = new SimpleMethodAndPathMatcher( "GET", mappingPath );
+        return add( new BasicRouter( new RouteImpl(
+                context -> {
+                    Map<String, String> r = matcher.matches( context );
+                    return r != null && Files.exists( file ) ? r : null;
+                },
+                ( c, r ) -> Responses.create( file )
+        ) ) );
     }
 
     @Override public RouterSpec dir( String mappingRoutePath, Path root ) {
         return add( new MappingRouter(
                 mappingRoutePath,
                 root.toString(),
+                // FIXME: When target does not exist / is not a file
                 path -> ( c, r ) -> Responses.create( root.getFileSystem().getPath( path ) )
         ) );
     }
@@ -82,7 +88,7 @@ public class RouterSpecImpl implements RouterSpec {
                 return null;
             }
 
-            return new RoutingResultImpl( new ResourceHandler( resource ), ImmutableMap.of() );
+            return new RoutingResultImpl( new ResourceHandler( resource ), createMap() );
         } );
     }
 

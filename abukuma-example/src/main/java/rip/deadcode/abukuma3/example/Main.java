@@ -1,19 +1,18 @@
 package rip.deadcode.abukuma3.example;
 
 import rip.deadcode.abukuma3.Abukuma;
-import rip.deadcode.abukuma3.value.UrlEncoded;
 import rip.deadcode.abukuma3.router.Routers;
 import rip.deadcode.abukuma3.value.Configs;
 import rip.deadcode.abukuma3.value.Responses;
-
-import java.nio.file.Paths;
+import rip.deadcode.abukuma3.value.UrlEncoded;
 
 
 public final class Main {
 
     public static void main( String[] args ) {
 
-        Abukuma.config( Configs.create() )
+        Abukuma.create()
+               .config( Configs.create() )
                .router( Routers.create()
                                .get( "/", ( ctx, req ) -> Responses.create( "<h1>hello, world</h1>" )
                                                                    .header( h -> h.contentType( "text/html" ) ) )
@@ -30,15 +29,17 @@ public final class Main {
                                        .path( "GET", "/nest", ( ctx, req ) ->
                                                Responses.create( "<h1>context</h1>" )
                                                         .header( h -> h.contentType( "text/html" ) ) ) )
-                               .file( "/file", Paths.get(
-                                       "./abukuma-example/src/main/resources/rip/deadcode/abukuma3/example/index.html" ) )
-                               .dir( "/dir", Paths.get(
-                                       "./abukuma-example/src/main/resources/rip/deadcode/abukuma3/example" ) )
-                               .resource( "/resource", "rip/deadcode/abukuma3/example/index.html" )
-                               .resources( "/resources", "rip/deadcode/abukuma3/example" )
+//                               .file( "/file", Paths.get(
+//                                       "./abukuma-example/src/main/resources/rip/deadcode/abukuma3/example/index.html" ) )
+//                               // Visit `/dir/index.html`
+//                               .dir( "/dir", Paths.get(
+//                                       "./abukuma-example/src/main/resources/rip/deadcode/abukuma3/example" ) )
+//                               .resource( "/resource", "rip/deadcode/abukuma3/example/index.html" )
+//                               .resources( "/resources", "rip/deadcode/abukuma3/example" )
                                .notFound( ( ctx, req ) -> Responses.create( "<h1>not found</h1>" )
-                                                                   .header( h -> h.contentType( "text/html" ) ) ) )
-               .build()
+                                                                   .header( h -> h.contentType( "text/html" ) ) )
+                               .createRouter() )
+               .createServer()
                .run();
     }
 }

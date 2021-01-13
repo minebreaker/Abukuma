@@ -4,6 +4,7 @@ import rip.deadcode.abukuma3.Registry;
 import rip.deadcode.abukuma3.collection.PersistentCollections;
 import rip.deadcode.abukuma3.collection.PersistentMap;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -29,6 +30,17 @@ public final class RegistryImpl implements Registry {
     @SuppressWarnings( "unchecked" )
     @Override public <T> T get( Class<T> cls, String name ) {
         return (T) checkNotNull( holder.get( cls ).get( name ).apply( this ) );
+    }
+
+    @Override public <T> Optional<T> mayGet( Class<T> cls ) {
+        return mayGet( cls, "" );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    @Override public <T> Optional<T> mayGet( Class<T> cls, String name ) {
+        return holder.mayGet( cls )
+                     .flatMap( c -> c.mayGet( name ) )
+                     .map( c -> (T) c.apply( this ) );
     }
 
     @Override public <T> Registry setSingleton( Class<T> cls, T instance ) {

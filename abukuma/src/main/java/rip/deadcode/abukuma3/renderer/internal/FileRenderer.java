@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -34,8 +35,10 @@ public final class FileRenderer implements Renderer {
 
         String mime = mimeDetector.detect( body.toString() );
 
-        CacheManager cacheManager = context.get( CacheManager.class, "java.io.File" );
-        if ( cacheManager != null ) {
+        String cacheKey = "java.io.File";
+        Optional<CacheManager> possibleCacheManager = context.mayGet( CacheManager.class, cacheKey );
+        if ( possibleCacheManager.isPresent() ) {
+            CacheManager cacheManager = possibleCacheManager.get();
             Cache<String, byte[]> cache = cacheManager.getCache( "java.io.File", String.class, byte[].class );
 
             String key = body.getCanonicalPath();
