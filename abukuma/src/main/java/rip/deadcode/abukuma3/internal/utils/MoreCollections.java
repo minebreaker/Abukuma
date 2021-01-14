@@ -80,6 +80,7 @@ public final class MoreCollections {
         return r;
     }
 
+    @Deprecated
     public static <T> List<T> addFirst( List<T> list, T value ) {
         return ImmutableList.<T>builder()
                 .add( value )
@@ -87,6 +88,7 @@ public final class MoreCollections {
                 .build();
     }
 
+    @Deprecated
     public static <T> List<T> addLast( List<T> list, T value ) {
         return ImmutableList.<T>builder()
                 .addAll( list )

@@ -1,7 +1,6 @@
 package rip.deadcode.abukuma3.internal;
 
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +9,9 @@ import rip.deadcode.abukuma3.Module;
 import rip.deadcode.abukuma3.Server;
 import rip.deadcode.abukuma3.ServerFactory;
 import rip.deadcode.abukuma3.ServerSpec;
+import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.filter.Filter;
 import rip.deadcode.abukuma3.filter.Filters;
-import rip.deadcode.abukuma3.handler.internal.DefaultExceptionHandler;
 import rip.deadcode.abukuma3.parser.Parser;
 import rip.deadcode.abukuma3.parser.internal.InputStreamParser;
 import rip.deadcode.abukuma3.parser.internal.StringParser;
@@ -27,9 +26,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.reduce;
-import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.coalesce;
 
 
 public final class ServerSpecUtils {
@@ -40,13 +38,13 @@ public final class ServerSpecUtils {
 
     private static final Logger logger = LoggerFactory.getLogger( ServerSpecUtils.class );
 
-    private static final List<Parser<?>> defaultParsers = ImmutableList.of(
+    private static final PersistentList<Parser<?>> defaultParsers = createList(
             new UrlEncodedParser(),
             new StringParser(),
             new InputStreamParser()
     );
 
-    private static final List<Renderer> defaultRenderers = ImmutableList.of(
+    private static final List<Renderer> defaultRenderers = createList(
             new PathRenderer(),
             new CharSequenceRenderer(),
             new InputStreamRenderer()
@@ -59,7 +57,7 @@ public final class ServerSpecUtils {
         //noinspection OptionalGetWithoutIsPresent  should have at least one default implementations
         ExecutionContext context = new ExecutionContextImpl(
                 spec.registry(),
-                checkNotNull( spec.config() ),
+                spec.config(),
                 spec.parsers()
                     .concat( defaultParsers )
                     .stream().reduce( Parser::ifFailed ).get(),
@@ -67,8 +65,8 @@ public final class ServerSpecUtils {
                     .concat( defaultRenderers )
                     .stream().reduce( Renderer::ifFailed ).get(),
                 spec.filters().stream().reduce( Filter::then ).orElseGet( Filters::noop ),
-                checkNotNull( spec.router() ),
-                coalesce( spec.exceptionHandler(), DefaultExceptionHandler::new ).get()
+                spec.router() ,
+                spec.exceptionHandler()
         );
 
         ExecutionContext contextModuleApplied = reduce(
