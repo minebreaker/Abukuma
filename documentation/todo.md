@@ -30,16 +30,12 @@
 * Replace Collections to internal PersistentCollections
     * Replace Guava immutable collections
     * Replace java.util collections
-* ~~Type hierarchy should be expressed as trees, not lists~~ This is not as easy as it seems - need more considerations
-    * e.g.) parsers, renderers...
-    * Searching should be faster
 * Request body should be pre-parsed by the framework?
     * When called multiple times...
     * Type must be specified at compile time. That's not good.
 * Request should be lazy?
     * Apparently this requires what to be parsed must be determined in advance.
       Required parameters should be configurable for the sake of performance.
-* Even data classes should be exposed as interfaces, not classes
 * Renderer/Parser chains should be special lists, since it's much easier to modify
 * Modular routing mechanism
     * Reusable routing path system 
@@ -47,13 +43,14 @@
 * Documentation for the generator plugin
 * Need to think about collection nullability
     * `PersistentNullableList`
-* Context should not extend Registry
 * Better DI and lifecycle hooks
+* Rewrite `HandlerAdapter`
 
 
 ## Ideas
 
 * Async Wrapper (`Future`)
+    * F<~>
 * Kotlin-friendliness (api, collection, helper...)
 * Integrated web framework
 * Netty backend
@@ -75,3 +72,7 @@
         * `rip.deadcode.abukuma3.utils.StaticImports`
 ->
     * This is not necessary
+
+* ~~Type hierarchy should be expressed as trees, not lists~~ This is not as easy as it seems - need more considerations
+    * e.g.) parsers, renderers...
+    * Searching should be faster
