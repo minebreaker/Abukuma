@@ -2,7 +2,6 @@ package rip.deadcode.abukuma3.example;
 
 import rip.deadcode.abukuma3.Abukuma;
 import rip.deadcode.abukuma3.router.Routers;
-import rip.deadcode.abukuma3.value.Configs;
 import rip.deadcode.abukuma3.value.Responses;
 import rip.deadcode.abukuma3.value.UrlEncoded;
 
@@ -12,7 +11,6 @@ public final class Main {
     public static void main( String[] args ) {
 
         Abukuma.create()
-               .config( Configs.create() )
                .router( Routers.create()
                                .get( "/", ( ctx, req ) -> Responses.create( "<h1>hello, world</h1>" )
                                                                    .header( h -> h.contentType( "text/html" ) ) )
@@ -39,7 +37,6 @@ public final class Main {
                                .notFound( ( ctx, req ) -> Responses.create( "<h1>not found</h1>" )
                                                                    .header( h -> h.contentType( "text/html" ) ) )
                                .createRouter() )
-               .createServer()
                .run();
     }
 }

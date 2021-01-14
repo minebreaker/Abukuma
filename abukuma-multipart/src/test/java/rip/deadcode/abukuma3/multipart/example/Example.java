@@ -8,7 +8,6 @@ import rip.deadcode.abukuma3.Abukuma;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.multipart.AbuFileItemIteratorParser;
 import rip.deadcode.abukuma3.router.Routers;
-import rip.deadcode.abukuma3.value.Configs;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.Response;
 import rip.deadcode.abukuma3.value.Responses;
@@ -24,13 +23,11 @@ public class Example {
     public static void main( String[] args ) {
 
         Abukuma.create()
-               .config( Configs.create() )
                .parser( createList( new AbuFileItemIteratorParser() ) )
                .router( Routers.create()
                                .resource( "/", "rip/deadcode/abukuma3/multipart/example/form.html" )
                                .post( "/post", Example::handle )
                                .createRouter() )
-               .createServer()
                .run();
     }
 
