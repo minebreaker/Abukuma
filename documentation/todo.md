@@ -5,7 +5,6 @@
 * Lens
     * Strict lenses (Prism, Lens, Optional...) or more easy-to-use ones (`getIn()` `setIn()` things)?
 * SSL Cert
-* Better DI and lifecycle hooks
 * Memoizer
 
 
@@ -47,6 +46,7 @@
 * Documentation for the generator plugin
 * Need to think about collection nullability
 * Context should not extend Registry
+* Better DI and lifecycle hooks
 
 
 ## Ideas
