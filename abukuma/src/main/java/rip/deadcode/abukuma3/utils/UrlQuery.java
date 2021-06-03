@@ -25,9 +25,15 @@ public interface UrlQuery {
 
     public String serialize();
 
-    public static UrlQuery fromMap( Map<String, String> params ) {}
+    public static UrlQuery fromMap( Map<String, String> params ) {
+        throw new UnsupportedOperationException();
+    }
 
-    public static UrlQuery fromMultimap( Multimap<String, String> params ) {}
+    public static UrlQuery fromMultimap( Multimap<String, String> params ) {
+        throw new UnsupportedOperationException();
+    }
 
-    public static UrlQuery createRaw( String queryString ) {}
+    public static UrlQuery createRaw( String queryString ) {
+        throw new UnsupportedOperationException();
+    }
 }

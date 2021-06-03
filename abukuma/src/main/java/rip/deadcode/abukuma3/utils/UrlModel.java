@@ -1,10 +1,6 @@
 package rip.deadcode.abukuma3.utils;
 
-import rip.deadcode.abukuma3.collection.PersistentMultimap;
-import rip.deadcode.abukuma3.collection.Tuple2;
-
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -47,5 +43,7 @@ public interface UrlModel {
 
     public URI asJava();
 
-    public static UrlModel parse() {}
+    public static UrlModel parse() {
+        throw new UnsupportedOperationException();
+    }
 }

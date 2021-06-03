@@ -2,8 +2,6 @@ package rip.deadcode.abukuma3.router.internal;
 
 
 import com.google.common.base.Splitter;
-import rip.deadcode.abukuma3.collection.PersistentCollections;
-import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.collection.Tuple2;
 import rip.deadcode.abukuma3.internal.utils.Uncheck;
 import rip.deadcode.abukuma3.router.QueryParameterParser;
@@ -25,16 +23,17 @@ public final class DefaultQueryParameterParser implements QueryParameterParser {
     @Override public List<Tuple2<String, String>> parse( String urlQuery ) {
 
         // Later rewrite with `splitToStream()`
-        return ampersandSeparator.splitToList( urlQuery ).stream()
-                                 .map( pair -> equalSeparator.splitToList( pair ) )
-                                 .reduce(
-                                         PersistentCollections.createMultimap(),
-                                         ( m, pair ) -> m.add(
-                                                 percentDecode( pair.get( 0 ) ),
-                                                 percentDecode( pair.get( 1 ) )
-                                         ),
-                                         PersistentMultimap::merge
-                                 );
+//        return ampersandSeparator.splitToList( urlQuery ).stream()
+//                                 .map( pair -> equalSeparator.splitToList( pair ) )
+//                                 .reduce(
+//                                         PersistentCollections.createMultimap(),
+//                                         ( m, pair ) -> m.add(
+//                                                 percentDecode( pair.get( 0 ) ),
+//                                                 percentDecode( pair.get( 1 ) )
+//                                         ),
+//                                         PersistentMultimap::merge
+//                                 );
+        throw new UnsupportedOperationException();
     }
 
     private static String percentDecode( String str ) {
