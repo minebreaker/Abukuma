@@ -194,13 +194,6 @@ public abstract class AbstractPersistentMultimap<K, V, T extends PersistentMulti
         return constructor( delegate.assoc( key, vec( value ) ) );
     }
 
-    protected Envelope<K, V> setRaw( K key, V value ) {
-        checkNotNull( key );
-        checkNotNull( value );
-
-        return new Envelope<>( delegate.assoc( key, vec( value ) ) );
-    }
-
     @SuppressWarnings( "unchecked" )
     @Override
     public T set( K key, Iterable<? extends V> values ) {
@@ -220,6 +213,14 @@ public abstract class AbstractPersistentMultimap<K, V, T extends PersistentMulti
         } else {
             throw new NoSuchElementException();
         }
+    }
+
+    @Override public PersistentMultimap<K, V> merge( Multimap<K, V> multimap ) {
+        PersistentMultimap<K, V> acc = this;
+        for ( Map.Entry<K, V> e : multimap.entries() ) {
+            acc = acc.add( e.getKey(), e.getValue() );
+        }
+        return acc;
     }
 
     @Deprecated @Override public final void clear() {

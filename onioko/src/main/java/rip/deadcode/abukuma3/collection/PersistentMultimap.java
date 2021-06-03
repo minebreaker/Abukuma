@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3.collection;
 
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.collection.traverse.Lens;
 import rip.deadcode.abukuma3.collection.traverse.Pathable;
 import rip.deadcode.abukuma3.collection.traverse.internal.PathedPersistentListMultimapLens;
@@ -26,6 +27,8 @@ public interface PersistentMultimap<K, V>
     public PersistentMultimap<K, V> set( K key, Iterable<? extends V> values );
 
     public PersistentMultimap<K, V> delete( K key );
+
+    public PersistentMultimap<K, V> merge( Multimap<K, V> multimap );
 
     public ListMultimap<K, V> mutable();
 

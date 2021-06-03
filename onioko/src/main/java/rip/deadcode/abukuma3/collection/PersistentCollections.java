@@ -4,6 +4,8 @@ import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.collection.internal.PersistentListImpl;
 import rip.deadcode.abukuma3.collection.internal.PersistentMapImpl;
 import rip.deadcode.abukuma3.collection.internal.PersistentMultimapImpl;
+import rip.deadcode.abukuma3.collection.internal.Tuple2Impl;
+import rip.deadcode.abukuma3.collection.internal.Tuple3Impl;
 
 import java.util.List;
 import java.util.Map;
@@ -59,4 +61,12 @@ public final class PersistentCollections {
     }
 
     // TODO add other factory methods
+
+    public static <T0, T1> Tuple2<T0, T1> tuple( T0 value0, T1 value1 ) {
+        return new Tuple2Impl<>( value0, value1 );
+    }
+
+    public static <T0, T1, T2> Tuple3<T0, T1, T2> tuple( T0 value0, T1 value1, T2 value2 ) {
+        return new Tuple3Impl<>( value0, value1, value2 );
+    }
 }

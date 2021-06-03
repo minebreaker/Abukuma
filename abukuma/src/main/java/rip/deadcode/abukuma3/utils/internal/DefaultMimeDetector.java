@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.utils.internal;
 
-import rip.deadcode.abukuma3.router.internal.RoutingUtils;
+import com.google.common.base.Splitter;
 import rip.deadcode.abukuma3.utils.MimeDetector;
 
 import javax.annotation.Nullable;
@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import static rip.deadcode.abukuma3.internal.utils.MoreCollections.last;
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 
 
@@ -21,9 +22,15 @@ public class DefaultMimeDetector implements MimeDetector {
                        .orElseGet( () -> extensionBasedGuess( pathAsString ) );
     }
 
+    private static final Splitter extensionSplitter = Splitter.on( "." ).omitEmptyStrings();
+
+    private static String getExtension( String fileName ) {
+        return last( extensionSplitter.split( fileName ) ).toLowerCase();
+    }
+
     private static String extensionBasedGuess( String path ) {
 
-        String extension = RoutingUtils.getExtension( path );
+        String extension = getExtension( path );
 
         switch ( extension ) {
 

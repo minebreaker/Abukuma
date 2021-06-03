@@ -62,8 +62,7 @@ public abstract class HandlerAdapter<Q, R> {
         RequestHeader header = createHeader( context, originalRequest );
         RoutingResult route = router.route( new RoutingContextImpl(
                 header,
-                header.urlString(),
-                header.urlString()
+                this.context
         ) );
         checkNotNull( route, "No matching route found." );
 
@@ -71,7 +70,7 @@ public abstract class HandlerAdapter<Q, R> {
                 header,
                 originalRequest,
                 originalResponse,
-                PersistentCollections.wrapMap( route.parameters() )
+                PersistentCollections.wrapMap( route.pathParameters() )
         );
 
         Handler handler = route.handler();

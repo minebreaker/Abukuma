@@ -1,14 +1,6 @@
 package rip.deadcode.abukuma3.gson.example;
 
-import rip.deadcode.abukuma3.Abukuma;
-import rip.deadcode.abukuma3.filter.Filters;
-import rip.deadcode.abukuma3.gson.GsonModule;
 import rip.deadcode.abukuma3.gson.JsonBody;
-import rip.deadcode.abukuma3.router.Routers;
-import rip.deadcode.abukuma3.value.Responses;
-
-import static com.google.common.base.MoreObjects.firstNonNull;
-import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
 
 
 public final class Example {
@@ -43,19 +35,19 @@ public final class Example {
 
     public static void main( String[] args ) {
 
-        Abukuma.create()
-               .filter( createList( Filters.antiCsrf() ) )
-               .module( createList( GsonModule.getInstance() ) )
-               .router( Routers.create()
-                               .post( "/post", ( ctx, req ) -> {
-                                   Request request = req.body( Request.class );
-                                   Response response = new Response();
-                                   response.setMessage( String.format(
-                                           "hello, %s!", firstNonNull( request.getName(), "world" ) ) );
-                                   return Responses.create( response )
-                                                   .header( h -> h.contentType( "application/json" ) );
-                               } )
-                               .createRouter() )
-               .run();
+//        Abukuma.create()
+//               .filter( createList( Filters.antiCsrf() ) )
+//               .module( createList( GsonModule.getInstance() ) )
+//               .router( Routers.create()
+//                               .post( "/post", ( ctx, req ) -> {
+//                                   Request request = req.body( Request.class );
+//                                   Response response = new Response();
+//                                   response.setMessage( String.format(
+//                                           "hello, %s!", firstNonNull( request.getName(), "world" ) ) );
+//                                   return Responses.create( response )
+//                                                   .header( h -> h.contentType( "application/json" ) );
+//                               } )
+//                               .createRouter() )
+//               .run();
     }
 }

@@ -28,7 +28,7 @@ public interface RequestHeader {
 
     /**
      * Returns the URL {@link String} sent from the client.
-     * It is without query parameters.
+     * This is the `Request-URI` specified by the RFC 2616§5.1.2.
      *
      * @return URL String
      */

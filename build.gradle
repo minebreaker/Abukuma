@@ -32,6 +32,8 @@ subprojects {
     javadoc {
         // Temporary suppress warnings
         options.addStringOption("Xdoclint:none", "-quiet")
+        options.charSet = 'UTF-8'
+        options.encoding = 'UTF-8'
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {

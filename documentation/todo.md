@@ -36,7 +36,11 @@
 * Request should be lazy?
     * Apparently this requires what to be parsed must be determined in advance.
       Required parameters should be configurable for the sake of performance.
-* Renderer/Parser chains should be special lists, since it's much easier to modify
+* Better Renderer/Parser/Router
+    * Special lists which is easy to modify
+    * Monoid
+    * Both of them
+
 * Modular routing mechanism
     * Reusable routing path system 
 * `MessageResolver` `ResourceBundleMessageResolver` for internal messages/logs
@@ -45,6 +49,7 @@
     * `PersistentNullableList`
 * Better DI and lifecycle hooks
 * Rewrite `HandlerAdapter`
+* Remove all Exceptions and replace to Try monad
 
 
 ## Ideas

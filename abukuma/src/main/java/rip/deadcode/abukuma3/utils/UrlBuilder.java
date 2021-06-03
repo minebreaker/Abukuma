@@ -5,7 +5,7 @@ import java.net.URI;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
-public final class UriBuilder {
+public final class UrlBuilder {
 
     private final boolean strict;
     private final boolean rectify;
@@ -16,20 +16,20 @@ public final class UriBuilder {
     private String query;
     private String fragment;
 
-    private UriBuilder( boolean strict, boolean rectify ) {
+    private UrlBuilder( boolean strict, boolean rectify ) {
         this.strict = strict;
         this.rectify = rectify;
     }
 
-    public static UriBuilder builder( boolean strict, boolean rectify ) {
-        return new UriBuilder( strict, rectify );
+    public static UrlBuilder builder( boolean strict, boolean rectify ) {
+        return new UrlBuilder( strict, rectify );
     }
 
     public URI build() {
         return uncheck( () -> new URI( scheme, authority, path, query, fragment ) );
     }
 
-    public UriBuilder scheme( String scheme ) {
+    public UrlBuilder scheme( String scheme ) {
         this.scheme = scheme;
         return this;
     }

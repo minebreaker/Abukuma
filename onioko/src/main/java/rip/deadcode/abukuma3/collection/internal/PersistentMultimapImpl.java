@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.collection.internal;
 
 import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.collection.AbstractPersistentMultimap;
+import rip.deadcode.abukuma3.collection.PersistentMultimap;
 
 
 public final class PersistentMultimapImpl<K, V>
