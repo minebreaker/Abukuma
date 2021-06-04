@@ -1,0 +1,132 @@
+{
+    "type": "object",
+    "required": [
+        "package",
+        "name",
+        "type",
+        "property"
+    ],
+    "properties": {
+        "package": {
+            "type": "string",
+            "description": "Package of the generated interface",
+            "examples": [
+                "rip.deadcode.abukuma3.value"
+            ]
+        },
+        "name": {
+            "type": "string",
+            "description": "Name of the generated interface",
+            "examples": [
+                "SomeRecord"
+            ]
+        },
+        "type": {
+            "$ref": "#/definitions/type"
+        },
+        "import": {
+            "type": "array",
+            "description": "Additional imports",
+            "items": {
+                "type": "string"
+            },
+            "examples": [
+                "rip.deadcode.abukuma3.value.*"
+            ]
+        },
+        "property": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "type"
+                ],
+                "description": "Properties of the record.",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the property",
+                        "examples": [
+                            "value"
+                        ]
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Type of the property",
+                        "examples": [
+                            "Object"
+                        ]
+                    },
+                    "optional": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Mark property as an optional. Return type of the getter will become \"Optional<T>\". The setter will accepts \"null\" as a value. If set to \"true\", \"nullable\" property will be ignored."
+                    },
+                    "nullable": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Mark property as nullable. Return type of the getter will be annotated by \"@Nullable\" and may return null. The setter will accepts \"null\" as a value."
+                    },
+                    "default": {
+                        "type": "string",
+                        "default": null,
+                        "description": "Default value of the property."
+                    },
+                    "getter": {
+                        "type": "object",
+                        "description": "Replace the getter for given one. Useful for computed properties.",
+                        "required": [
+                            "type",
+                            "implementation"
+                        ],
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "description": "Return type of the getter",
+                                "examples": [
+                                    "String"
+                                ]
+                            },
+                            "implementation": {
+                                "type": "string",
+                                "description": "Implementation of the getter",
+                                "examples": [
+                                    "return \"whatever\";"
+                                ]
+                            }
+                        }
+                    },
+                    "javadoc": {
+                        "type": "string",
+                        "description": "Javadoc of the property. Applied to both the getter and the setter"
+                    }
+                }
+            }
+        },
+        "method": {
+            "type": "array",
+            "description": "Additional methods of the record",
+            "items": {
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the method",
+                        "examples": [ ]
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "type": {
+            "enum": [
+                "record"
+            ]
+        }
+    }
+}
