@@ -50,6 +50,8 @@
 * Better DI and lifecycle hooks
 * Rewrite `HandlerAdapter`
 * Remove all Exceptions and replace to Try monad
+  * Make `Try` monad
+* Lint and formatter for the yaml and markdown files
 
 
 ## Ideas
@@ -68,7 +70,7 @@
 
 * Content-type based dispatcher
 ->
-    * Useless if actual parses are not installed
+    * Useless if actual parsers are not installed
     * Actually, what needed is a content-type based parser?
     * Maybe frameworks should have those
 
