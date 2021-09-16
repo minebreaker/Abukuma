@@ -20,7 +20,7 @@ jobs:
 
       - run: chmod +x gradlew
       # FIXME: イメージに入ってるgradleはKotlinのバージョンの問題で死ぬ
-      - run: ./gradlew dependencies
+      - run: ./gradlew dependencies -PGITHUB_USER=${GITHUB_USER} -PGITHUB_TOKEN=${GITHUB_TOKEN}
 
       - save_cache:
           paths:
