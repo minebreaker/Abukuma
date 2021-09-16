@@ -1,6 +1,6 @@
 dependencies {
     api(
             project(':abukuma'),
-            'com.google.code.gson:gson:2.8.6'
+            'com.google.code.gson:gson:2.8.8'
     )
 }

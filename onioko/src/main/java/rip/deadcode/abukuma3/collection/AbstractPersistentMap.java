@@ -2,7 +2,7 @@ package rip.deadcode.abukuma3.collection;
 
 import com.google.common.collect.ForwardingMap;
 import org.organicdesign.fp.collections.ImMap;
-import org.organicdesign.fp.collections.MutableMap;
+import org.organicdesign.fp.collections.MutMap;
 import org.organicdesign.fp.collections.PersistentHashMap;
 
 import java.util.HashMap;
@@ -63,7 +63,7 @@ public abstract class AbstractPersistentMap<K, V, T extends PersistentMapView<K,
 
     @Override
     public T merge( Map<K, V> other ) {
-        MutableMap<K, V> temp = delegate.mutable();
+        MutMap<K, V> temp = delegate.mutable();
         for ( Entry<K, V> e : other.entrySet() ) {
             temp.assoc( e );
         }
