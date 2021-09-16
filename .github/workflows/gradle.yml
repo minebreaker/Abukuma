@@ -1,7 +1,6 @@
 name: Java CI
 
-#on: [push]
-on: # ビルドを直すまで止めておく
+on: [push]
 
 jobs:
   build:
@@ -17,4 +16,4 @@ jobs:
     - name: Permission
       run: chmod +x ./gradlew
     - name: Build with Gradle
-      run: ./gradlew generateDataClasses build
+      run: ./gradlew generateDataClasses build -PGITHUB_USER=${_GITHUB_USER} -PGITHUB_TOKEN=${_GITHUB_TOKEN}
