@@ -13,17 +13,17 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "build.gradle" }}
-          - v1-dependencies-
+#      - restore_cache:
+#          keys:
+#          - v1-dependencies-{{ checksum "build.gradle" }}
+#          - v1-dependencies-
 
-      - run: gradle dependencies
+      - run: ./gradlew dependencies
 
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+#      - save_cache:
+#          paths:
+#            - ~/.gradle
+#          key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: gradle :abukuma:generateDataClasses build jacocoTestReport
+      - run: ./gradlew :abukuma:generateDataClasses build jacocoTestReport
       - run: bash <(curl -s https://codecov.io/bash)
