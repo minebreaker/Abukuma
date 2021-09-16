@@ -9,6 +9,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven {
+            println(project.hasProperty("GITHUB_USER"))
             url = "https://maven.pkg.github.com/minebreaker/Izvestia"
             credentials {
                 username = project.hasProperty("GITHUB_USER") ? GITHUB_USER : ''

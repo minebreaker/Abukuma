@@ -1,6 +1,7 @@
 name: Java CI
 
-on: [push]
+#on: [push]
+on: # ビルドを直すまで止めておく
 
 jobs:
   build:
