@@ -5,7 +5,11 @@ plugins {
 repositories {
     mavenCentral()
     maven {
-        url = "https://dl.bintray.com/minebreaker/test"
+        url = "https://maven.pkg.github.com/minebreaker/Izvestia"
+        credentials {
+            username = project.hasProperty("GITHUB_USER") ? GITHUB_USER : ''
+            password = project.hasProperty("GITHUB_TOKEN") ? GITHUB_TOKEN : ''
+        }
     }
 }
 
