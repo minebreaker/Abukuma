@@ -1,6 +1,6 @@
 dependencies {
     api(
-            'org.organicdesign:Paguro:3.5.9',  // TODO: move to implementation
+            'org.organicdesign:Paguro:3.1.4',  // TODO: move to implementation
 //            'org.organicdesign:Paguro:3.2.0',  // requires Java 11
             'com.google.guava:guava:30.1.1-jre',
     )
