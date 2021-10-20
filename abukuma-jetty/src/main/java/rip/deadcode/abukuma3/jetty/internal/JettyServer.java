@@ -33,19 +33,22 @@ public final class JettyServer implements Server {
             c.setSendServerVersion( false );
         } );
 
-        SslContextFactory ssl = also( new SslContextFactory(), f -> {
-            f.setKeyStore( KeyStore.getInstance( "" ) );
-            f.setKeyStorePassword( "" );
-        } );
-
         HttpConnectionFactory connectionFactory = new HttpConnectionFactory( jettyConfig );
 
         QueuedThreadPool threadPool = new QueuedThreadPool( config.maxThreads(), config.minThreads() );
 
-        server = also( new Server( threadPool ), server -> {
-            ServerConnector connector = also( new ServerConnector( server, ssl, connectionFactory ), c -> {
-                c.setPort( config.port() );
-            } );
+        server = also( new org.eclipse.jetty.server.Server( threadPool ), server -> {
+            ServerConnector connector = also(
+                    config.ssl()
+                    ? new ServerConnector( server, also( new SslContextFactory.Server(), f -> {
+                        f.setKeyStore( KeyStore.getInstance( "" ) );
+                        f.setKeyStorePassword( "" );
+                    } ), connectionFactory )
+                    : new ServerConnector( server, connectionFactory ),
+                    c -> {
+                        c.setPort( config.port() );
+                    }
+            );
 
             server.setConnectors( new Connector[] { connector } );
             server.setHandler( new JettyHandler( context ) );

@@ -13,6 +13,7 @@ public final class PojoConfig {
     private int port;
     private int maxThreads;
     private int minThreads;
+    private boolean ssl;
 
     public PojoConfig() {}
 
@@ -24,7 +25,7 @@ public final class PojoConfig {
     }
 
     public Config toConfig() {
-        return new ConfigImpl( port, maxThreads, minThreads, serverImplementation );
+        return new ConfigImpl( port, maxThreads, minThreads, serverImplementation, ssl );
     }
 
     public String getServerImplementation() {
@@ -57,5 +58,13 @@ public final class PojoConfig {
 
     public void setMinThreads( int minThreads ) {
         this.minThreads = minThreads;
+    }
+
+    public boolean getSsl() {
+        return ssl;
+    }
+
+    public void setSsl( boolean ssl ) {
+        this.ssl = ssl;
     }
 }

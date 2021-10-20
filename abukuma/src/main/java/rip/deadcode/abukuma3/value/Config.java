@@ -22,4 +22,8 @@ public interface Config {
     public int minThreads();
 
     public ConfigImpl minThreads( int minThreads );
+
+    public boolean ssl();
+
+    public ConfigImpl ssl( boolean ssl );
 }

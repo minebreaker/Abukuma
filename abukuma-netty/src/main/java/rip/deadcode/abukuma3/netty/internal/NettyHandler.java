@@ -4,6 +4,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
@@ -20,7 +21,6 @@ import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import rip.deadcode.abukuma3.ExecutionContext;
@@ -36,7 +36,6 @@ import rip.deadcode.abukuma3.value.Response;
 import javax.net.ssl.KeyManagerFactory;
 import java.io.ByteArrayOutputStream;
 import java.security.KeyStore;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
@@ -44,11 +43,13 @@ import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 public final class NettyHandler extends ChannelInitializer<SocketChannel> {
 
+    private final ExecutionContext context;
     private final HandlerAdapter<RequestAndContent, ChannelHandlerContext> adapter;
     private final EventExecutorGroup executors;
 
     public NettyHandler( ExecutionContext context ) {
 
+        this.context = context;
         this.adapter = new HandlerAdapter<RequestAndContent, ChannelHandlerContext>( context ) {
 
             @Override
@@ -105,17 +106,17 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
 
     @Override
     protected void initChannel( SocketChannel ch ) {
-        KeyStore keyStore = uncheck(() -> KeyStore.getInstance("JKS"));
-        KeyManagerFactory keyManagerFactory = uncheck(() -> KeyManagerFactory.getInstance("X509"));
-        uncheck(() -> keyManagerFactory.init(keyStore, "".toCharArray()));
-        SslContext sslCtx = uncheck(() ->
-                SslContextBuilder
-                .forServer(keyManagerFactory)
-                .build());
+        KeyStore keyStore = uncheck( () -> KeyStore.getInstance( "JKS" ) );
+        KeyManagerFactory keyManagerFactory = uncheck( () -> KeyManagerFactory.getInstance( "X509" ) );
+        uncheck( () -> keyManagerFactory.init( keyStore, "".toCharArray() ) );
+        SslContext sslCtx = uncheck( () -> SslContextBuilder.forServer( keyManagerFactory ).build() );
 
-        ch.pipeline()
-          .addLast( new SslHandler(sslCtx.newEngine(ch.alloc())))
-          .addLast( new HttpRequestDecoder() )
+        ChannelPipeline cp = ch.pipeline();
+        if ( context.config().ssl() ) {
+            cp.addLast( new SslHandler( sslCtx.newEngine( ch.alloc() ) ) );
+        }
+
+        cp.addLast( new HttpRequestDecoder() )
           .addLast( new HttpResponseEncoder() )
           .addLast( new HttpContentCompressor() )
           .addLast( executors, new Handler( adapter ) );
