@@ -2,7 +2,7 @@ package rip.deadcode.abukuma3.parser.internal;
 
 import com.google.common.collect.Multimap;
 import org.junit.jupiter.api.Test;
-import rip.deadcode.abukuma3.parser.UrlEncoded;
+import rip.deadcode.abukuma3.value.UrlEncoded;
 
 import java.io.IOException;
 import java.io.InputStream;

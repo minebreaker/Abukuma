@@ -4,18 +4,18 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.AbuServer;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.Server;
 
 
-public final class NettyServer implements AbuServer {
+public final class NettyServer implements Server {
 
-    private final AbuExecutionContext context;
+    private final ExecutionContext context;
 
     private EventLoopGroup parentGroup;
     private EventLoopGroup workerGroup;
 
-    public NettyServer( AbuExecutionContext context ) {
+    public NettyServer( ExecutionContext context ) {
         this.context = context;
     }
 

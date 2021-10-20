@@ -23,14 +23,15 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
-import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.internal.HandlerAdapter;
 import rip.deadcode.abukuma3.netty.internal.value.NettyRequest;
 import rip.deadcode.abukuma3.netty.internal.value.NettyRequestHeader;
-import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.renderer.RenderingResult;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
+import rip.deadcode.abukuma3.value.Response;
 
 import javax.net.ssl.KeyManagerFactory;
 import java.io.ByteArrayOutputStream;
@@ -46,30 +47,29 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
     private final HandlerAdapter<RequestAndContent, ChannelHandlerContext> adapter;
     private final EventExecutorGroup executors;
 
-    public NettyHandler( AbuExecutionContext context ) {
+    public NettyHandler( ExecutionContext context ) {
 
         this.adapter = new HandlerAdapter<RequestAndContent, ChannelHandlerContext>( context ) {
 
             @Override
-            protected AbuRequestHeader createHeader( AbuExecutionContext context, RequestAndContent originalRequest ) {
+            protected RequestHeader createHeader( ExecutionContext context, RequestAndContent originalRequest ) {
                 return new NettyRequestHeader( context, originalRequest );
             }
 
             @Override
-            protected AbuRequest createRequest(
-                    AbuExecutionContext context,
-                    AbuRequestHeader header,
+            protected Request createRequest(
+                    RequestHeader header,
                     RequestAndContent originalRequest,
                     ChannelHandlerContext originalResponse,
-                    Map<String, String> pathParams ) {
+                    PersistentMap<String, String> pathParams ) {
                 return new NettyRequest( context, header, originalRequest, originalResponse, pathParams );
             }
 
             @Override
             protected void submitResponse(
-                    AbuExecutionContext context,
-                    AbuResponse response,
-                    AbuRenderingResult renderingResult,
+                    ExecutionContext context,
+                    Response response,
+                    RenderingResult renderingResult,
                     RequestAndContent originalRequest,
                     ChannelHandlerContext originalResponse ) throws Exception {
 

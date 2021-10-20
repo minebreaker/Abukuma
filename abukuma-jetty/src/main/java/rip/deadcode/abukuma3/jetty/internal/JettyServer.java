@@ -3,13 +3,12 @@ package rip.deadcode.abukuma3.jetty.internal;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.AbuServer;
-import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.Server;
+import rip.deadcode.abukuma3.value.Config;
 
 import java.security.KeyStore;
 
@@ -17,18 +16,18 @@ import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.also;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
-public final class JettyServer implements AbuServer {
+public final class JettyServer implements Server {
 
-    private final AbuExecutionContext context;
-    private Server server;
+    private final ExecutionContext context;
+    private org.eclipse.jetty.server.Server server;
 
-    public JettyServer( AbuExecutionContext context ) {
+    public JettyServer( ExecutionContext context ) {
         this.context = context;
     }
 
     @Override public void run() {
 
-        AbuConfig config = context.config();
+        Config config = context.config();
 
         HttpConfiguration jettyConfig = also( new HttpConfiguration(), c -> {
             c.setSendServerVersion( false );

@@ -2,8 +2,8 @@ package rip.deadcode.abukuma3.multipart;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import rip.deadcode.abukuma3.parser.AbuParser;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.parser.Parser;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +15,10 @@ import java.util.Map;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
-public final class AbuMultipartParser implements AbuParser<Multipart> {
+public final class AbuMultipartParser implements Parser<Multipart> {
 
     @Nullable @Override public Multipart parse(
-            Class<?> convertTo, InputStream body, AbuRequestHeader header ) throws IOException {
+            Class<?> convertTo, InputStream body, RequestHeader header ) throws IOException {
 
         if ( !convertTo.equals( Multipart.class ) ) {
             return null;

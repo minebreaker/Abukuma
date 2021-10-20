@@ -1,39 +1,39 @@
 package rip.deadcode.abukuma3.netty.internal.value;
 
-import com.google.common.collect.Multimap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentMap;
+import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.netty.internal.NettyHandler;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.URL;
-import java.util.Map;
+import java.net.URI;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 
-public class NettyRequest implements AbuRequest {
+public class NettyRequest implements Request {
 
-    private final AbuExecutionContext context;
-    private final AbuRequestHeader header;
+    private final ExecutionContext context;
+    private final RequestHeader header;
     private final NettyHandler.RequestAndContent nettyRequest;
     private final ChannelHandlerContext rawResponse;
-    private final Map<String, String> pathParams;
+    private final PersistentMap<String, String> pathParams;
 
     public NettyRequest(
-            AbuExecutionContext context,
-            AbuRequestHeader header,
+            ExecutionContext context,
+            RequestHeader header,
             NettyHandler.RequestAndContent nettyRequest,
             ChannelHandlerContext rawResponse,
-            Map<String, String> pathParams ) {
+            PersistentMap<String, String> pathParams ) {
 
         this.context = context;
         this.header = header;
@@ -54,7 +54,7 @@ public class NettyRequest implements AbuRequest {
             checkNotNull( result, "Could not find an appropriate parser for the type '%s'.", cls );
             checkState(
                     cls.isInstance( result ),
-                    "Illegal instance '%s' of type '%s' was returned by the parser for the request '%s'. This may be caused by a bug of the parsers.",
+                    "An illegal instance '%s' of type '%s' was returned by the parser for the request '%s'. This may be caused by a bug of the parsers.",
                     result,
                     result.getClass(),
                     cls
@@ -66,23 +66,19 @@ public class NettyRequest implements AbuRequest {
         }
     }
 
-    @Override public AbuExecutionContext context() {
-        return context;
-    }
-
     @Override public String method() {
         return header.method();
     }
 
-    @Override public URL url() {
+    @Override public URI url() {
         return header.url();
     }
 
-    @Override public String requestUri() {
-        return header.requestUri();
+    @Override public String urlString() {
+        return header.urlString();
     }
 
-    @Override public AbuRequestHeader header() {
+    @Override public RequestHeader header() {
         return header;
     }
 
@@ -90,7 +86,7 @@ public class NettyRequest implements AbuRequest {
         return Optional.ofNullable( pathParams.get( key ) );
     }
 
-    @Override public Map<String, String> pathParams() {
+    @Override public PersistentMap<String, String> pathParams() {
         return pathParams;
     }
 
@@ -98,7 +94,7 @@ public class NettyRequest implements AbuRequest {
         return Optional.empty();
     }
 
-    @Override public Multimap<String, String> queryParams() {
+    @Override public PersistentMultimap<String, String> queryParams() {
         return null;
     }
 

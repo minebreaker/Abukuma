@@ -1,6 +1,6 @@
 dependencies {
-    compile(
+    api(
             project(':abukuma'),
-            'org.yaml:snakeyaml:1.23'
+            'org.yaml:snakeyaml:1.29'
     )
 }

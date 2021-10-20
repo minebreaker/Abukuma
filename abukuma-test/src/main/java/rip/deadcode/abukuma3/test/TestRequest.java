@@ -1,22 +1,17 @@
 package rip.deadcode.abukuma3.test;
 
-import com.google.common.collect.Multimap;
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.collection.PersistentMap;
+import rip.deadcode.abukuma3.collection.PersistentMultimap;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
-import java.net.URL;
-import java.util.Map;
+import java.net.URI;
 import java.util.Optional;
 
 
-public final class TestRequest implements AbuRequest {
+public final class TestRequest implements Request {
 
     @Override public <T> T body( Class<T> cls ) {
-        return null;
-    }
-
-    @Override public AbuExecutionContext context() {
         return null;
     }
 
@@ -24,15 +19,15 @@ public final class TestRequest implements AbuRequest {
         return null;
     }
 
-    @Override public URL url() {
+    @Override public URI url() {
         return null;
     }
 
-    @Override public String requestUri() {
+    @Override public String urlString() {
         return null;
     }
 
-    @Override public AbuRequestHeader header() {
+    @Override public RequestHeader header() {
         return null;
     }
 
@@ -40,7 +35,7 @@ public final class TestRequest implements AbuRequest {
         return Optional.empty();
     }
 
-    @Override public Map<String, String> pathParams() {
+    @Override public PersistentMap<String, String> pathParams() {
         return null;
     }
 
@@ -48,7 +43,7 @@ public final class TestRequest implements AbuRequest {
         return Optional.empty();
     }
 
-    @Override public Multimap<String, String> queryParams() {
+    @Override public PersistentMultimap<String, String> queryParams() {
         return null;
     }
 

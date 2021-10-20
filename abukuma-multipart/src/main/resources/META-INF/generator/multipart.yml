@@ -1,0 +1,30 @@
+package: rip.deadcode.abukuma3.multipart.internal
+name: MultipartImpl
+type: view-multimap
+
+# TODO `FIleItem` should be wrapped
+genericType: FileItem
+
+interface:
+    package: rip.deadcode.abukuma3.multipart
+    name: Multipart
+
+    code: |
+        // TODO use a persistent multimap
+        public static Multipart create( Map<String, List<FileItem>> items ) {
+
+            ListMultimap<String, FileItem> temp = items
+                    .entrySet()
+                    .stream()
+                    .collect(
+                            ArrayListMultimap::create,
+                            ( acc, entry ) -> acc.putAll( entry.getKey(), entry.getValue() ),
+                            ( acc, other ) -> acc.putAll( other )
+                    );
+            return MultipartImpl.cast( temp );
+        }
+
+import:
+    - rip.deadcode.abukuma3.multipart.*
+    - rip.deadcode.abukuma3.multipart.internal.*
+    - org.apache.commons.fileupload.FileItem

@@ -1,43 +1,43 @@
 package rip.deadcode.abukuma3.jetty.internal;
 
 import com.google.common.net.HttpHeaders;
-import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.internal.HandlerAdapter;
 import rip.deadcode.abukuma3.jetty.internal.value.JettyRequest;
 import rip.deadcode.abukuma3.jetty.internal.value.JettyRequestHeader;
-import rip.deadcode.abukuma3.renderer.AbuRenderingResult;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
-import rip.deadcode.abukuma3.value.AbuResponse;
+import rip.deadcode.abukuma3.renderer.RenderingResult;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
+import rip.deadcode.abukuma3.value.Response;
 import rip.deadcode.abukuma3.value.internal.SerializeCookie;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 
 public final class JettyHandler extends AbstractHandler {
 
-    private final HandlerAdapter<Request, HttpServletResponse> handlerAdapter;
+    private final HandlerAdapter<org.eclipse.jetty.server.Request, HttpServletResponse> handlerAdapter;
 
-    JettyHandler( AbuExecutionContext context ) {
+    JettyHandler( ExecutionContext context ) {
 
-        this.handlerAdapter = new HandlerAdapter<Request, HttpServletResponse>( context ) {
+        this.handlerAdapter = new HandlerAdapter<org.eclipse.jetty.server.Request, HttpServletResponse>( context ) {
 
             @Override
-            public AbuRequestHeader createHeader( AbuExecutionContext context, Request originalRequest ) {
+            public RequestHeader createHeader(
+                    ExecutionContext context,
+                    org.eclipse.jetty.server.Request originalRequest ) {
                 return new JettyRequestHeader( context, originalRequest );
             }
 
             @Override
-            public AbuRequest createRequest(
-                    AbuExecutionContext context,
-                    AbuRequestHeader header,
-                    Request originalRequest,
+            public Request createRequest(
+                    RequestHeader header,
+                    org.eclipse.jetty.server.Request originalRequest,
                     HttpServletResponse originalResponse,
-                    Map<String, String> pathParams ) {
+                    PersistentMap<String, String> pathParams ) {
                 return new JettyRequest(
                         context,
                         header,
@@ -49,10 +49,10 @@ public final class JettyHandler extends AbstractHandler {
 
             @Override
             public void submitResponse(
-                    AbuExecutionContext context,
-                    AbuResponse response,
-                    AbuRenderingResult renderingResult,
-                    Request originalRequest,
+                    ExecutionContext context,
+                    Response response,
+                    RenderingResult renderingResult,
+                    org.eclipse.jetty.server.Request originalRequest,
                     HttpServletResponse originalResponse ) throws Exception {
 
                 originalResponse.setStatus( response.status() );
@@ -76,7 +76,7 @@ public final class JettyHandler extends AbstractHandler {
     @Override
     public void handle(
             String target,
-            Request baseRequest,
+            org.eclipse.jetty.server.Request baseRequest,
             HttpServletRequest servletRequest,
             HttpServletResponse servletResponse ) {
 

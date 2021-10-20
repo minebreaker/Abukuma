@@ -1,10 +1,10 @@
 package: rip.deadcode.abukuma3.value.internal
-name: AbuResponseImpl
+name: ResponseImpl
 type: record
 
 interface:
   package: rip.deadcode.abukuma3.value
-  name: AbuResponse
+  name: Response
 
 import:
   - rip.deadcode.abukuma3.value.*
@@ -17,16 +17,17 @@ property:
   - name: status
     type: int
   - name: header
-    type: AbuHeader
+    type: Header
   - name: cookie
+    # TODO: Should accept List<Cookie>
     type: PersistentList<Cookie>
 
 method:
   - name: header
-    type: AbuResponse
-    argument: Function<AbuHeader, AbuHeader> header
+    type: Response
+    argument: Function<Header, Header> header
     implementation: |
-      AbuResponseImpl r = this.copy();
+      ResponseImpl r = this.copy();
       r.header = header.apply( this.header );
       return r;
   - name: cookie
@@ -37,16 +38,16 @@ method:
                    .filter( c -> c.name().equals( key ) )
                    .findAny();
   - name: addCookie
-    type: AbuResponse
+    type: Response
     argument: Cookie cookie
     implementation: |
-      AbuResponseImpl r = copy();
+      ResponseImpl r = copy();
       r.cookie = this.cookie.addLast( cookie );
       return r;
   - name: addCookie
-    type: AbuResponse
+    type: Response
     argument: Cookie first, Cookie... rest
     implementation: |
-      AbuResponseImpl r = copy();
+      ResponseImpl r = copy();
       r.cookie = this.cookie.addLast( first ).concat( Arrays.asList( rest ) );
       return r;

@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3;
 
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -10,6 +11,10 @@ public interface Registry {
     public <T> T get( Class<T> cls );
 
     public <T> T get( Class<T> cls, String name );
+
+    public <T> Optional<T> mayGet( Class<T> cls );
+
+    public <T> Optional<T> mayGet( Class<T> cls, String name );
 
     public <T> Registry setSingleton( Class<T> cls, T instance );
 

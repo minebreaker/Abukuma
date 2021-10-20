@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.value;
 
 
-import rip.deadcode.abukuma3.value.internal.AbuConfigImpl;
+import rip.deadcode.abukuma3.value.internal.ConfigImpl;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -23,8 +23,8 @@ public final class PojoConfig {
         this.serverImplementation = serverImplementation;
     }
 
-    public AbuConfig toConfig() {
-        return new AbuConfigImpl( port, maxThreads, minThreads, serverImplementation );
+    public Config toConfig() {
+        return new ConfigImpl( port, maxThreads, minThreads, serverImplementation );
     }
 
     public String getServerImplementation() {

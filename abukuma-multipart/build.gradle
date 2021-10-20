@@ -1,8 +1,22 @@
+//noinspection UnnecessaryQualifiedReference
+apply plugin: rip.deadcode.abukuma3.generator.GeneratorPlugin
+
 dependencies {
-    compile(
+    api(
             project(':abukuma'),
             'commons-fileupload:commons-fileupload:1.4',
             // see https://commons.apache.org/proper/commons-fileupload/dependencies.html#provided
             'javax.servlet:servlet-api:2.4'
+            // 'javax.servlet:servlet-api:4.0.1'
     )
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "build/generated/sources/annotationProcessor/java/main"
+        }
+    }
+}
+
+compileJava.dependsOn(generateDataClasses)

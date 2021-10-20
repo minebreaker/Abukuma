@@ -16,4 +16,4 @@ jobs:
     - name: Permission
       run: chmod +x ./gradlew
     - name: Build with Gradle
-      run: ./gradlew generateDataClasses build
+      run: ./gradlew generateDataClasses build -PGITHUB_USER=${{ secrets._GITHUB_USER }} -PGITHUB_TOKEN=${{ secrets._GITHUB_TOKEN }}
