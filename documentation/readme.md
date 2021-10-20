@@ -5,8 +5,9 @@
 
 Abukuma is a simple and elegant web framework for Java/Kotlin.
 
-Abukuma is a thin wrapper for the [Eclipse Jetty](https://www.eclipse.org/jetty).
-It's aim is to provide fluent routing functions and simple way to manipulate HTTP request/response.
+Abukuma is a thin wrapper and interfaces for the [Eclipse Jetty](https://www.eclipse.org/jetty)
+and other web server implementations.
+Its aim is to provide fluent routing functions and simple way to manipulate HTTP request/response.
 
 
 * Immutable objects (request, response, etc)
@@ -22,10 +23,8 @@ It's aim is to provide fluent routing functions and simple way to manipulate HTT
 class Application {
 
     public static void main( String[] args ) {
-        Abukuma.config( AbuConfig.create() )
-               .router( AbuRouters.get("/", AbuResponses.create( "<h1>hello, world</h1>" )
-                                                        .header( h -> h.contentType( "text/html" ) ) ) )
-               .build()
+        Abukuma.router( Routers.get("/", Responses.create( "<h1>hello, world</h1>" )
+                                                  .header( h -> h.contentType( "text/html" ) ) ) )
                .run();
     }
 }

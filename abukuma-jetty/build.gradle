@@ -1,6 +1,6 @@
 dependencies {
-    compile(
+    api(
             project(':abukuma'),
-            'org.eclipse.jetty:jetty-server:9.4.15.v20190215'
+            'org.eclipse.jetty:jetty-server:9.4.43.v20210629'
     )
 }

@@ -2,13 +2,15 @@ rootProject.name = 'abukuma'
 
 include (
         'abukuma',
-        'abukuma-test',
-        'abukuma-jetty',
-        'abukuma-netty',
+        'abukuma-caffeine',
+        'abukuma-example',
         'abukuma-gson',
-        'abukuma-multipart',
         'abukuma-hocon',
+        'abukuma-jetty',
+        'abukuma-multipart',
+        'abukuma-netty',
+        'abukuma-test',
         'abukuma-thymeleaf',
         'abukuma-yaml',
-        'abukuma-example'
+        'onioko',
 )

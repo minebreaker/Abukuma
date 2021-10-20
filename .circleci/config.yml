@@ -15,15 +15,17 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "build.gradle" }}
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
 
-      - run: gradle dependencies
+      - run: chmod +x gradlew
+      # FIXME: イメージに入ってるgradleはKotlinのバージョンの問題で死ぬ
+      - run: ./gradlew dependencies -PGITHUB_USER=${GITHUB_USER} -PGITHUB_TOKEN=${GITHUB_TOKEN}
 
       - save_cache:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: gradle :abukuma:generateDataClasses build jacocoTestReport
+      - run: ./gradlew :abukuma:generateDataClasses build jacocoTestReport -PGITHUB_USER=${GITHUB_USER} -PGITHUB_TOKEN=${GITHUB_TOKEN}
       - run: bash <(curl -s https://codecov.io/bash)

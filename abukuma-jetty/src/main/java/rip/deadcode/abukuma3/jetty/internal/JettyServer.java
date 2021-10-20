@@ -3,29 +3,31 @@ package rip.deadcode.abukuma3.jetty.internal;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import rip.deadcode.abukuma3.AbuExecutionContext;
-import rip.deadcode.abukuma3.AbuServer;
-import rip.deadcode.abukuma3.value.AbuConfig;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.Server;
+import rip.deadcode.abukuma3.value.Config;
+
+import java.security.KeyStore;
 
 import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.also;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
-public final class JettyServer implements AbuServer {
+public final class JettyServer implements Server {
 
-    private final AbuExecutionContext context;
-    private Server server;
+    private final ExecutionContext context;
+    private org.eclipse.jetty.server.Server server;
 
-    public JettyServer( AbuExecutionContext context ) {
+    public JettyServer( ExecutionContext context ) {
         this.context = context;
     }
 
     @Override public void run() {
 
-        AbuConfig config = context.config();
+        Config config = context.config();
 
         HttpConfiguration jettyConfig = also( new HttpConfiguration(), c -> {
             c.setSendServerVersion( false );
@@ -35,10 +37,18 @@ public final class JettyServer implements AbuServer {
 
         QueuedThreadPool threadPool = new QueuedThreadPool( config.maxThreads(), config.minThreads() );
 
-        server = also( new Server( threadPool ), server -> {
-            ServerConnector connector = also( new ServerConnector( server, connectionFactory ), c -> {
-                c.setPort( config.port() );
-            } );
+        server = also( new org.eclipse.jetty.server.Server( threadPool ), server -> {
+            ServerConnector connector = also(
+                    config.ssl()
+                    ? new ServerConnector( server, also( new SslContextFactory.Server(), f -> {
+                        f.setKeyStore( KeyStore.getInstance( "" ) );
+                        f.setKeyStorePassword( "" );
+                    } ), connectionFactory )
+                    : new ServerConnector( server, connectionFactory ),
+                    c -> {
+                        c.setPort( config.port() );
+                    }
+            );
 
             server.setConnectors( new Connector[] { connector } );
             server.setHandler( new JettyHandler( context ) );

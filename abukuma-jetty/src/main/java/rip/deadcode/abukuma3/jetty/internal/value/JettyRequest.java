@@ -1,21 +1,21 @@
 package rip.deadcode.abukuma3.jetty.internal.value;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.net.HttpHeaders;
-import org.eclipse.jetty.server.Request;
-import rip.deadcode.abukuma3.AbuExecutionContext;
+import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
-import rip.deadcode.abukuma3.value.AbuRequest;
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
+import rip.deadcode.abukuma3.collection.PersistentCollections;
+import rip.deadcode.abukuma3.collection.PersistentMap;
+import rip.deadcode.abukuma3.collection.PersistentMultimap;
+import rip.deadcode.abukuma3.value.Request;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.URL;
-import java.util.Map;
+import java.net.URI;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -23,20 +23,20 @@ import static com.google.common.base.Preconditions.checkState;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.mayFirst;
 
 
-public final class JettyRequest implements AbuRequest {
+public final class JettyRequest implements Request {
 
-    private final AbuExecutionContext context;
-    private final AbuRequestHeader header;
-    private final Request jettyRequest;
+    private final ExecutionContext context;
+    private final RequestHeader header;
+    private final org.eclipse.jetty.server.Request jettyRequest;
     private final HttpServletResponse servletResponse;
-    private final Map<String, String> pathParams;
+    private final PersistentMap<String, String> pathParams;
 
     public JettyRequest(
-            AbuExecutionContext context,
-            AbuRequestHeader header,
-            Request jettyRequest,
+            ExecutionContext context,
+            RequestHeader header,
+            org.eclipse.jetty.server.Request jettyRequest,
             HttpServletResponse servletResponse,
-            Map<String, String> pathParams ) {
+            PersistentMap<String, String> pathParams ) {
         this.context = context;
         this.header = header;
         this.jettyRequest = jettyRequest;
@@ -63,23 +63,19 @@ public final class JettyRequest implements AbuRequest {
         }
     }
 
-    @Override public AbuExecutionContext context() {
-        return context;
-    }
-
     @Override public String method() {
         return header.method();
     }
 
-    @Override public URL url() {
+    @Override public URI url() {
         return header.url();
     }
 
-    @Override public String requestUri() {
-        return header.requestUri();
+    @Override public String urlString() {
+        return header.urlString();
     }
 
-    @Override public AbuRequestHeader header() {
+    @Override public RequestHeader header() {
         return header;
     }
 
@@ -87,7 +83,7 @@ public final class JettyRequest implements AbuRequest {
         return Optional.ofNullable( pathParams.get( key ) );
     }
 
-    @Override public Map<String, String> pathParams() {
+    @Override public PersistentMap<String, String> pathParams() {
         return pathParams;
     }
 
@@ -95,7 +91,8 @@ public final class JettyRequest implements AbuRequest {
         return mayFirst( jettyRequest.getQueryParameters().getValues( key ) );
     }
 
-    @Override public Multimap<String, String> queryParams() {
+    @Override public PersistentMultimap<String, String> queryParams() {
+        // TODO: use PersistentMultimap directly
         Multimap<String, String> params =
                 jettyRequest.getQueryParameters().entrySet().stream()
                             .collect(
@@ -103,7 +100,7 @@ public final class JettyRequest implements AbuRequest {
                                     ( map, e ) -> map.putAll( e.getKey(), e.getValue() ),
                                     Multimap::putAll
                             );
-        return ImmutableListMultimap.copyOf( params );
+        return PersistentCollections.wrapMultimap( params );
     }
 
     @Override public Optional<String> host() {
@@ -116,7 +113,7 @@ public final class JettyRequest implements AbuRequest {
 
     @Unsafe
     @Override
-    public Request rawRequest() {
+    public org.eclipse.jetty.server.Request rawRequest() {
         return jettyRequest;
     }
 

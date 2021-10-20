@@ -21,8 +21,8 @@ property:
     javadoc: |
       The value of this cookie.
   - name: maxAge
-    type: Integer
-    nullable: true
+    type: Integer  # Can be nullable
+    optional: true
     getter:
       type: OptionalInt
       implementation: |
@@ -61,6 +61,7 @@ property:
       @see <a href="https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02">https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02</a>
 
 method:
+  # serializeCookie() is better?
   - name: toString
     type: String
     interface: false

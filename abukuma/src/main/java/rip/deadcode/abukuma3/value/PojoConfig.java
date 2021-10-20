@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.value;
 
 
-import rip.deadcode.abukuma3.value.internal.AbuConfigImpl;
+import rip.deadcode.abukuma3.value.internal.ConfigImpl;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -13,6 +13,7 @@ public final class PojoConfig {
     private int port;
     private int maxThreads;
     private int minThreads;
+    private boolean ssl;
 
     public PojoConfig() {}
 
@@ -23,8 +24,8 @@ public final class PojoConfig {
         this.serverImplementation = serverImplementation;
     }
 
-    public AbuConfig toConfig() {
-        return new AbuConfigImpl( port, maxThreads, minThreads, serverImplementation );
+    public Config toConfig() {
+        return new ConfigImpl( port, maxThreads, minThreads, serverImplementation, ssl );
     }
 
     public String getServerImplementation() {
@@ -57,5 +58,13 @@ public final class PojoConfig {
 
     public void setMinThreads( int minThreads ) {
         this.minThreads = minThreads;
+    }
+
+    public boolean getSsl() {
+        return ssl;
+    }
+
+    public void setSsl( boolean ssl ) {
+        this.ssl = ssl;
     }
 }

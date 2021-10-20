@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.router;
 
-import rip.deadcode.abukuma3.handler.AbuHandler;
+import rip.deadcode.abukuma3.handler.Handler;
 
 import java.nio.file.Path;
 import java.util.function.Function;
@@ -8,13 +8,13 @@ import java.util.function.Function;
 
 public interface RouterSpec {
 
-    public RouterSpec path( String method, String pattern, AbuHandler handler );
+    public RouterSpec path( String method, String pattern, Handler handler );
 
-    public RouterSpec get( String pattern, AbuHandler handler );
+    public RouterSpec get( String pattern, Handler handler );
 
-    public RouterSpec post( String pattern, AbuHandler handler );
+    public RouterSpec post( String pattern, Handler handler );
 
-    public RouterSpec notFound( AbuHandler handler );
+    public RouterSpec notFound( Handler handler );
 
     public RouterSpec file( String mappingPath, Path file );
 
@@ -26,5 +26,5 @@ public interface RouterSpec {
 
     public RouterSpec context( String contextPath, Function<RouterSpec, RouterSpec> router );
 
-    public AbuRouter createRouter();
+    public Router createRouter();
 }

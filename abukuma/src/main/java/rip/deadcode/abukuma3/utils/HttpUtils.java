@@ -10,6 +10,10 @@ import java.time.temporal.TemporalAccessor;
 
 public final class HttpUtils {
 
+    private HttpUtils() {
+        throw new Error();
+    }
+
     public static ZonedDateTime parseHttpDate( CharSequence httpDate ) {
         return ZonedDateTime.parse( httpDate, DateTimeFormatter.RFC_1123_DATE_TIME );
     }

@@ -1,17 +1,12 @@
 package rip.deadcode.abukuma3.router;
 
-import rip.deadcode.abukuma3.value.AbuRequestHeader;
-
-import java.util.List;
+import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
 
 public interface RoutingContext {
 
-    public AbuRequestHeader header();
+    public RequestHeader header();
 
-    public List<String> path();
-
-    public List<String> contextPath();
-
-    public RoutingContext contextPath( List<String> contextPath );
+    public ExecutionContext executionContext();
 }
