@@ -58,12 +58,13 @@
 
 * Async Wrapper (`Future`)
     * F<~>
-* Kotlin-friendliness (api, collection, helper...)
+* Kotlin-friendliness (api, collection, helper, componentsN...)
 * Integrated web framework
 * Netty backend
     * Vert.x
 * Graal VM Compatibility check
 * JDK support - Oracle LTS lines?
+* PersistentCollectors
 
 
 ## Graveyard
