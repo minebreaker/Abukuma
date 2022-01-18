@@ -14,7 +14,7 @@ Its aim is to provide fluent routing functions and simple way to manipulate HTTP
 * Persistent map and list
 * Function-oriented (router as a function, handler as a function)
 * Explicit configuration. No magics.
-* No XML, (mostly) no Annotations
+* No magics. No XML, (mostly) no Annotations
 
 
 ## Getting started

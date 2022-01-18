@@ -64,6 +64,8 @@
     * Vert.x
 * Graal VM Compatibility check
 * JDK support - Oracle LTS lines?
+* `Option` `Either` rather than exceptions?
+* Maybe service loader is not a great idea
 
 
 ## Graveyard
