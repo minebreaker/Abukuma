@@ -13,7 +13,7 @@ import java.util.OptionalInt;
 
 public final class UrlModelImpl implements UrlModel {
 
-    @Nullable private String scheme;
+    @Nullable String scheme;
     @Nullable String username;
     @Nullable String password;
     @Nullable String host;

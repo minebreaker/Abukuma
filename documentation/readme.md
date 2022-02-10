@@ -15,6 +15,7 @@ Its aim is to provide fluent routing functions and simple way to manipulate HTTP
 * Function-oriented (router as a function, handler as a function)
 * Explicit configuration. No magics.
 * No magics. No XML, (mostly) no Annotations
+* Modular. Configurable. Extendable.
 
 
 ## Getting started
