@@ -4,6 +4,7 @@ package rip.deadcode.abukuma3.value;
 import com.google.common.net.MediaType;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
+import rip.deadcode.abukuma3.collection.PersistentList;
 
 import javax.annotation.Nullable;
 import java.net.URI;
@@ -34,6 +35,8 @@ public interface RequestHeader {
      */
     public String urlString();
 
+    public PersistentList<String> urlPaths();
+
     @Nullable
     public String getValue( String headerName );
 
@@ -60,6 +63,7 @@ public interface RequestHeader {
 
     /**
      * The "Content-Type" header.
+     *
      * @return String The content type header
      */
     @Unsafe
@@ -69,6 +73,7 @@ public interface RequestHeader {
      * The charset of the request.
      * The value can be, but not necessarily, the charset specified in the "Content-Type" header.
      * The server implementation is allowed to choose the way to detect it.
+     *
      * @return The charset of the request
      */
     public Optional<Charset> charset();

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.collection.PersistentCollections;
+import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.filter.Filter;
 import rip.deadcode.abukuma3.handler.ExceptionHandler;
@@ -13,6 +14,8 @@ import rip.deadcode.abukuma3.renderer.RenderingResult;
 import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.router.RoutingResult;
 import rip.deadcode.abukuma3.router.internal.RoutingContextImpl;
+import rip.deadcode.abukuma3.utils.url.UrlPathParseResult;
+import rip.deadcode.abukuma3.utils.url.UrlPathParser;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.Response;
@@ -24,6 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 
 
+// TODO: rewrite in functional manner
 public abstract class HandlerAdapter<Q, R> {
 
     private static final Logger logger = LoggerFactory.getLogger( HandlerAdapter.class );
@@ -42,7 +46,12 @@ public abstract class HandlerAdapter<Q, R> {
         this.filter = context.filter();
     }
 
-    protected abstract RequestHeader createHeader( ExecutionContext context, Q originalRequest );
+    protected abstract String pathString( Q originalRequest );
+
+    protected abstract RequestHeader createHeader(
+            ExecutionContext context,
+            PersistentList<String> urlPaths,
+            Q originalRequest );
 
     protected abstract Request createRequest(
             RequestHeader header,
@@ -59,7 +68,14 @@ public abstract class HandlerAdapter<Q, R> {
 
     public void handle( Q originalRequest, R originalResponse ) {
 
-        RequestHeader header = createHeader( context, originalRequest );
+        UrlPathParser urlPathParser = checkNotNull( context.get( UrlPathParser.class ) );
+        UrlPathParseResult result = urlPathParser.parse( pathString( originalRequest ) );
+        if ( !( result instanceof UrlPathParseResult.Success ) ) {
+            throw ( (UrlPathParseResult.Error) result ).validationErrors().first();
+        }
+        PersistentList<String> urlPaths = ( (UrlPathParseResult.Success) result ).result();
+
+        RequestHeader header = createHeader( context, urlPaths, originalRequest );
         RoutingResult route = router.route( new RoutingContextImpl(
                 header,
                 this.context

@@ -6,8 +6,9 @@ import com.google.common.collect.Iterators;
 import com.google.common.net.MediaType;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.ExecutionContext;
-import rip.deadcode.abukuma3.value.RequestHeader;
+import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.value.Cookie;
+import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.internal.CookieImpl;
 
 import javax.annotation.Nullable;
@@ -27,10 +28,12 @@ import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 public final class JettyRequestHeader implements RequestHeader {
 
     private final ExecutionContext context;
+    private final PersistentList<String> urlPaths;
     private final Request jettyRequest;
 
-    public JettyRequestHeader( ExecutionContext context, Request jettyRequest ) {
+    public JettyRequestHeader( ExecutionContext context, PersistentList<String> urlPaths, Request jettyRequest ) {
         this.context = context;
+        this.urlPaths = urlPaths;
         this.jettyRequest = jettyRequest;
     }
 
@@ -56,6 +59,10 @@ public final class JettyRequestHeader implements RequestHeader {
 
     @Override public String urlString() {
         return jettyRequest.getRequestURI();
+    }
+
+    @Override public PersistentList<String> urlPaths() {
+        return urlPaths;
     }
 
     @Nullable @Override public String getValue( String headerName ) {

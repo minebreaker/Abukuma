@@ -3,6 +3,7 @@ package rip.deadcode.abukuma3.jetty.internal;
 import com.google.common.net.HttpHeaders;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.internal.HandlerAdapter;
 import rip.deadcode.abukuma3.jetty.internal.value.JettyRequest;
@@ -25,11 +26,14 @@ public final class JettyHandler extends AbstractHandler {
 
         this.handlerAdapter = new HandlerAdapter<org.eclipse.jetty.server.Request, HttpServletResponse>( context ) {
 
+            @Override protected String pathString( org.eclipse.jetty.server.Request originalRequest ) {
+                return originalRequest.getRequestURI();
+            }
+
             @Override
             public RequestHeader createHeader(
-                    ExecutionContext context,
-                    org.eclipse.jetty.server.Request originalRequest ) {
-                return new JettyRequestHeader( context, originalRequest );
+                    ExecutionContext context, PersistentList<String> urlPaths, org.eclipse.jetty.server.Request originalRequest ) {
+                return new JettyRequestHeader( context, urlPaths, originalRequest );
             }
 
             @Override

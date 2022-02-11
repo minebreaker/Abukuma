@@ -2,9 +2,10 @@ package rip.deadcode.abukuma3.netty.internal.value;
 
 import com.google.common.net.MediaType;
 import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.netty.internal.NettyHandler;
-import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.Cookie;
+import rip.deadcode.abukuma3.value.RequestHeader;
 
 import javax.annotation.Nullable;
 import java.net.URI;
@@ -19,10 +20,13 @@ import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 public class NettyRequestHeader implements RequestHeader {
 
     private final ExecutionContext context;
+    private final PersistentList<String> urlPaths;
     private final NettyHandler.RequestAndContent request;
 
-    public NettyRequestHeader( ExecutionContext context, NettyHandler.RequestAndContent request ) {
+    public NettyRequestHeader(
+            ExecutionContext context, PersistentList<String> urlPaths, NettyHandler.RequestAndContent request ) {
         this.context = context;
+        this.urlPaths = urlPaths;
         this.request = request;
     }
 
@@ -44,6 +48,10 @@ public class NettyRequestHeader implements RequestHeader {
     @Override
     public String urlString() {
         return request.request.uri();
+    }
+
+    @Override public PersistentList<String> urlPaths() {
+        return urlPaths;
     }
 
     @Nullable
