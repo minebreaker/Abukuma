@@ -27,5 +27,5 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: ./gradlew :abukuma:generateDataClasses build jacocoTestReport -PGITHUB_USER=${GITHUB_USER} -PGITHUB_TOKEN=${GITHUB_TOKEN}
+      - run: ./gradlew build jacocoTestReport -PGITHUB_USER=${GITHUB_USER} -PGITHUB_TOKEN=${GITHUB_TOKEN}
       - run: bash <(curl -s https://codecov.io/bash)
