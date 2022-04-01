@@ -1,5 +1,6 @@
 # 阿武隈 - Simple web framework for Java/Kotlin
 
+![GitHub](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)
 [![CircleCI](https://circleci.com/gh/minebreaker/Abukuma.svg?style=svg)](https://circleci.com/gh/minebreaker/Abukuma)
 [![codecov](https://codecov.io/gh/minebreaker/Abukuma/branch/master/graph/badge.svg)](https://codecov.io/gh/minebreaker/Abukuma)
 
