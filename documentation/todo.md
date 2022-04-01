@@ -49,9 +49,8 @@
     * `PersistentNullableList`
 * Better DI and lifecycle hooks
 * Rewrite `HandlerAdapter`
-* Remove all Exceptions and replace to Try monad
-  * Make `Try` monad
 * Lint and formatter for the yaml and markdown files
+* Strict header size limit to avoid DDoSes
 
 
 ## Ideas
@@ -64,8 +63,14 @@
     * Vert.x
 * Graal VM Compatibility check
 * JDK support - Oracle LTS lines?
-* `Option` `Either` rather than exceptions?
 * Maybe service loader is not a great idea
+* I gave up code generation
+    * Hard to refactor
+* Remove all Exceptions and replace to Try monad
+    * `Option` `Either` rather than exceptions?
+    * Make `Try` monad
+    * Should stick to standard Java?
+* Rewrite all int calculation with `Math.exact`
 
 
 ## Graveyard
