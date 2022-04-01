@@ -1,6 +1,3 @@
-//noinspection UnnecessaryQualifiedReference
-apply plugin: rip.deadcode.abukuma3.generator.GeneratorPlugin
-
 dependencies {
     api(
             project(':onioko'),
@@ -18,5 +15,3 @@ sourceSets {
         }
     }
 }
-
-compileJava.dependsOn(generateDataClasses)

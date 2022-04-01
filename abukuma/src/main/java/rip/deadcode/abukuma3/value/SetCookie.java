@@ -1,6 +1,6 @@
 package rip.deadcode.abukuma3.value;
 
-import rip.deadcode.abukuma3.value.internal.CookieImpl;
+import rip.deadcode.abukuma3.utils.url.internal.CookieImpl;
 
 
 public final class SetCookie {

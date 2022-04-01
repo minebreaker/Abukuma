@@ -9,7 +9,7 @@ import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.value.Cookie;
 import rip.deadcode.abukuma3.value.RequestHeader;
-import rip.deadcode.abukuma3.value.internal.CookieImpl;
+import rip.deadcode.abukuma3.utils.url.internal.CookieImpl;
 
 import javax.annotation.Nullable;
 import java.net.URI;
