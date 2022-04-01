@@ -1,11 +1,9 @@
 ## Features
 
 * Test utilities
-* Exception handler with type-based dispatch
 * Lens
     * Strict lenses (Prism, Lens, Optional...) or more easy-to-use ones (`getIn()` `setIn()` things)?
 * SSL Cert
-* Memoizer
 * PersistentSet
 
 
@@ -14,14 +12,13 @@
 * Problem: case-sensitive header key is confusing
     * ~~Case-insensitive header~~
         * Lower case for internal store
+        * Specific methods are made case-insensitive
+        * Map methods are case-sensitive
 
 
 ## Refactoring
 
 * Builder -> Immutable copying object
-* Value classes
-    * Auto generation
-    * Config implementing Map
 * Add additional header getter methods for the `Header`
 * Problem: Modules can't have configurations
     * Flexible configuration schema
@@ -50,6 +47,7 @@
 * Rewrite `HandlerAdapter`
 * Lint and formatter for the yaml and markdown files
 * Strict header size limit to avoid DDoSes
+* Java 11
 
 
 ## Ideas
@@ -70,6 +68,7 @@
     * Make `Try` monad
     * Should stick to standard Java?
 * Rewrite all int calculation with `Math.exact`
+* Memoizer
 
 
 ## Graveyard
@@ -89,3 +88,13 @@
 * ~~Type hierarchy should be expressed as trees, not lists~~ This is not as easy as it seems - need more considerations
     * e.g.) parsers, renderers...
     * Searching should be faster
+
+* Automatic code generation
+    * First, I thought automatic code generations for data classes are good idea,
+      turned out as cumbersome as hand-writing them.
+    * Refactoring and debugging got very hard.
+
+* Exception handler with type-based dispatch
+    * I don't recommend using `ExceptionHandler` for handling exceptions.
+      Catching all errors inside the handler makes the code much simpler and cleaner.
+      `ExceptionHandler` should be used for truly exceptional situations.
