@@ -21,6 +21,7 @@ public final class PersistentCollections {
         return PersistentListImpl.create();
     }
 
+    @SafeVarargs
     public static <T> PersistentList<T> createList( T first, T... rest ) {
         return PersistentListImpl.create( first, rest );
     }

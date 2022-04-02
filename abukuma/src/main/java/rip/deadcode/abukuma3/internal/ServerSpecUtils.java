@@ -1,7 +1,6 @@
 package rip.deadcode.abukuma3.internal;
 
 
-import com.google.common.collect.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.ExecutionContext;
@@ -65,7 +64,7 @@ public final class ServerSpecUtils {
                     .concat( defaultRenderers )
                     .stream().reduce( Renderer::ifFailed ).get(),
                 spec.filters().stream().reduce( Filter::then ).orElseGet( Filters::noop ),
-                spec.router() ,
+                spec.router(),
                 spec.exceptionHandler()
         );
 
@@ -80,14 +79,13 @@ public final class ServerSpecUtils {
 
         if ( requestedFactoryName.isPresent() ) {
             String factoryName = requestedFactoryName.get();
-            // Should use loader.stream() for JDK9+
-            return Streams.stream( loader )
-                          .filter( factory -> factory.getClass().getCanonicalName().equals( factoryName ) )
-                          .findFirst()
-                          .map( f -> f.provide( context ) )
-                          .orElseThrow( () -> new IllegalStateException(
-                                  "Could not find server implementation named '" + factoryName +
-                                  "'. Recheck your configuration." ) );
+            return loader.stream()
+                         .filter( factory -> factory.getClass().getCanonicalName().equals( factoryName ) )
+                         .findFirst()
+                         .map( p -> p.get().provide( context ) )
+                         .orElseThrow( () -> new IllegalStateException(
+                                 "Could not find server implementation named '" + factoryName +
+                                 "'. Recheck your configuration." ) );
 
         } else {
             ServerFactory factory = loader.iterator().next();

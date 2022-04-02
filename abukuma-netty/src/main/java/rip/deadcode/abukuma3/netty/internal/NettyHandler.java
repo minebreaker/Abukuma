@@ -51,7 +51,7 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
     public NettyHandler( ExecutionContext context ) {
 
         this.context = context;
-        this.adapter = new HandlerAdapter<RequestAndContent, ChannelHandlerContext>( context ) {
+        this.adapter = new HandlerAdapter<>( context ) {
 
             @Override protected String pathString( RequestAndContent originalRequest ) {
                 return originalRequest.request.uri();

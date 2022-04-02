@@ -21,6 +21,8 @@ Its aim is to provide fluent routing functions and simple way to manipulate HTTP
 
 ## Getting started
 
+Requires Java 18+
+
 ```java
 class Application {
 

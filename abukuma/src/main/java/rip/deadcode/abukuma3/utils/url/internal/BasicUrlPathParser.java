@@ -5,8 +5,8 @@ import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.utils.url.UrlPathParseResult;
 import rip.deadcode.abukuma3.utils.url.UrlPathParser;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -32,13 +32,7 @@ public final class BasicUrlPathParser implements UrlPathParser {
     public static PersistentList<String> parseStaticUncheck( String urlPath ) {
         String pathStr = urlPath.startsWith( "/" ) ? urlPath.substring( 1 ) : urlPath;
         List<String> paths = pathSplitter.splitToStream( pathStr )
-                                         .map( s -> {
-                                             try {
-                                                 return URLDecoder.decode( s, "UTF-8" );
-                                             } catch ( UnsupportedEncodingException e ) {
-                                                 throw new RuntimeException( e );
-                                             }
-                                         } )
+                                         .map( s -> URLDecoder.decode( s, StandardCharsets.UTF_8 ) )
                                          .collect( toList() );
         return wrapList( paths );
     }

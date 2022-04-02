@@ -21,7 +21,7 @@ public final class TestServer implements Server {
     private final HandlerAdapter<Request, TestResultHolder> adapter;
 
     private TestServer( ExecutionContext context ) {
-        this.adapter = new HandlerAdapter<Request, TestResultHolder>( context ) {
+        this.adapter = new HandlerAdapter<>( context ) {
 
             @Override protected String pathString( Request originalRequest ) {
                 return originalRequest.urlString();
