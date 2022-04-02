@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.value.internal;
 
 
 import org.junit.jupiter.api.Test;
+import rip.deadcode.abukuma3.utils.url.internal.CookieImpl;
 import rip.deadcode.abukuma3.value.Cookie;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -29,17 +30,5 @@ public final class CookieImplTest {
 
         assertThat( param.toString() ).isEqualTo(
                 "name=value; Max-Age=3600; Domain=domain; Path=/path; Secure; HttpOnly" );
-    }
-
-    @Test
-    void testEquals() {
-        Cookie param2 = new CookieImpl( "name", "value", null, null, null, false, false, null );
-
-        assertThat( param.equals( param2 ) ).isTrue();
-        assertThat( param2.equals( param ) ).isTrue();
-        //noinspection EqualsWithItself
-        assertThat( param2.equals( param2 ) ).isTrue();
-
-        assertThat( param.equals( param2.maxAge( 3600 ) ) ).isFalse();
     }
 }

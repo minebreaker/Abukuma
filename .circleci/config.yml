@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:11-jdk
 
     working_directory: ~/repo
 
@@ -27,5 +27,5 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: ./gradlew :abukuma:generateDataClasses build jacocoTestReport -PGITHUB_USER=${GITHUB_USER} -PGITHUB_TOKEN=${GITHUB_TOKEN}
+      - run: ./gradlew build jacocoTestReport -PGITHUB_USER=${GITHUB_USER} -PGITHUB_TOKEN=${GITHUB_TOKEN}
       - run: bash <(curl -s https://codecov.io/bash)

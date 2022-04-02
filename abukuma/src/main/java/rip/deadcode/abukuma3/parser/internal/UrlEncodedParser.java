@@ -4,8 +4,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import rip.deadcode.abukuma3.parser.Parser;
-import rip.deadcode.abukuma3.value.UrlEncoded;
 import rip.deadcode.abukuma3.value.RequestHeader;
+import rip.deadcode.abukuma3.value.UrlEncoded;
 
 import javax.annotation.Nullable;
 import java.io.BufferedInputStream;
@@ -90,7 +90,8 @@ public final class UrlEncodedParser implements Parser<UrlEncoded> {
     private static final int and = '&';
     private static final int plus = '+';
 
-    private static String parseKeyOrValue( InputStream is, ByteArrayOutputStream baos, boolean allowEqual ) throws IOException {
+    private static String parseKeyOrValue( InputStream is, ByteArrayOutputStream baos, boolean allowEqual )
+            throws IOException {
 
         baos.reset();
 
@@ -100,7 +101,7 @@ public final class UrlEncodedParser implements Parser<UrlEncoded> {
 
             if ( i == -1 || !allowEqual && i == equal || i == and ) {
                 is.reset();
-                return URLDecoder.decode( new String( baos.toByteArray(), StandardCharsets.UTF_8 ), "UTF-8" );
+                return URLDecoder.decode( baos.toString( StandardCharsets.UTF_8 ), StandardCharsets.UTF_8 );
             }
 
             if ( i == plus ) {

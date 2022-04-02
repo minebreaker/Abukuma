@@ -47,9 +47,9 @@ public final class MoreCollections {
         Iterator<T> i1 = iter1.iterator();
         Iterator<U> i2 = iter2.iterator();
 
-        return new Iterable<V>() {
+        return new Iterable<>() {
             @Nonnull @Override public Iterator<V> iterator() {
-                return new Iterator<V>() {
+                return new Iterator<>() {
                     @Override public boolean hasNext() {
                         return i1.hasNext() && i2.hasNext();
                     }

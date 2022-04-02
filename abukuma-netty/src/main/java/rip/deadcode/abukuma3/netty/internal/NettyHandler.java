@@ -24,6 +24,7 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.internal.HandlerAdapter;
 import rip.deadcode.abukuma3.netty.internal.value.NettyRequest;
@@ -50,11 +51,16 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
     public NettyHandler( ExecutionContext context ) {
 
         this.context = context;
-        this.adapter = new HandlerAdapter<RequestAndContent, ChannelHandlerContext>( context ) {
+        this.adapter = new HandlerAdapter<>( context ) {
+
+            @Override protected String pathString( RequestAndContent originalRequest ) {
+                return originalRequest.request.uri();
+            }
 
             @Override
-            protected RequestHeader createHeader( ExecutionContext context, RequestAndContent originalRequest ) {
-                return new NettyRequestHeader( context, originalRequest );
+            protected RequestHeader createHeader(
+                    ExecutionContext context, PersistentList<String> urlPaths, RequestAndContent originalRequest ) {
+                return new NettyRequestHeader( context, urlPaths, originalRequest );
             }
 
             @Override

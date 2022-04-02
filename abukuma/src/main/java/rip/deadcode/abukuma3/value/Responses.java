@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.value;
 
 import rip.deadcode.abukuma3.collection.PersistentCollections;
-import rip.deadcode.abukuma3.value.internal.ResponseImpl;
+import rip.deadcode.abukuma3.utils.url.internal.ResponseImpl;
 
 
 public final class Responses {

@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.test;
 
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Server;
+import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.internal.HandlerAdapter;
 import rip.deadcode.abukuma3.renderer.RenderingResult;
@@ -20,10 +21,14 @@ public final class TestServer implements Server {
     private final HandlerAdapter<Request, TestResultHolder> adapter;
 
     private TestServer( ExecutionContext context ) {
-        this.adapter = new HandlerAdapter<Request, TestResultHolder>( context ) {
+        this.adapter = new HandlerAdapter<>( context ) {
+
+            @Override protected String pathString( Request originalRequest ) {
+                return originalRequest.urlString();
+            }
 
             @Override protected RequestHeader createHeader(
-                    ExecutionContext context, Request originalRequest ) {
+                    ExecutionContext context, PersistentList<String> urlPaths, Request originalRequest ) {
                 return originalRequest.header();
             }
 

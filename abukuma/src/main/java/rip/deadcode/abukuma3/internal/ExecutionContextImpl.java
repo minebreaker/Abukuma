@@ -8,6 +8,12 @@ import rip.deadcode.abukuma3.handler.ExceptionHandler;
 import rip.deadcode.abukuma3.parser.Parser;
 import rip.deadcode.abukuma3.renderer.Renderer;
 import rip.deadcode.abukuma3.router.Router;
+import rip.deadcode.abukuma3.utils.url.UrlParser;
+import rip.deadcode.abukuma3.utils.url.UrlPathParser;
+import rip.deadcode.abukuma3.utils.url.UrlQueryParser;
+import rip.deadcode.abukuma3.utils.url.internal.BasicUrlPathParser;
+import rip.deadcode.abukuma3.utils.url.internal.JavaUrlParser;
+import rip.deadcode.abukuma3.utils.url.internal.JavaUrlQueryParser;
 import rip.deadcode.abukuma3.value.Config;
 
 import java.util.Optional;
@@ -38,7 +44,10 @@ public final class ExecutionContextImpl implements ExecutionContext {
                 .setSingleton( Renderer.class, renderer )
                 .setSingleton( Filter.class, filterChain )
                 .setSingleton( Router.class, router )
-                .setSingleton( ExceptionHandler.class, exceptionHandler );
+                .setSingleton( ExceptionHandler.class, exceptionHandler )
+                .setSingleton( UrlParser.class, JavaUrlParser::parseStatic )
+                .setSingleton( UrlPathParser.class, BasicUrlPathParser::parseStatic )
+                .setSingleton( UrlQueryParser.class, JavaUrlQueryParser::parseStatic );
     }
 
     @Override public Config config() {

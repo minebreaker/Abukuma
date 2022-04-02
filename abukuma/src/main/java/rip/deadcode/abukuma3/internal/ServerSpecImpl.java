@@ -12,6 +12,7 @@ import rip.deadcode.abukuma3.internal.utils.CheckedUnaryOperator;
 import rip.deadcode.abukuma3.parser.Parser;
 import rip.deadcode.abukuma3.renderer.Renderer;
 import rip.deadcode.abukuma3.router.Router;
+import rip.deadcode.abukuma3.router.internal.EmptyRouter;
 import rip.deadcode.abukuma3.value.Config;
 import rip.deadcode.abukuma3.value.Configs;
 
@@ -39,7 +40,7 @@ public final class ServerSpecImpl implements ServerSpec {
         this(
                 new RegistryImpl(),
                 Configs.create(),
-                ( c ) -> { throw new RuntimeException(); },
+                new EmptyRouter(),
                 createList(),
                 createList(),
                 createList(),

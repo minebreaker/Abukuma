@@ -12,7 +12,7 @@ public interface Lens<S, A> {
 
         if ( getter instanceof GetterStreamable ) {
             GetterStreamable<S, A> g = (GetterStreamable<S, A>) getter;
-            return new Lens<S, A>() {
+            return new Lens<>() {
 
                 @Override public Getter<S, A> getter() {
                     return g;
@@ -28,7 +28,7 @@ public interface Lens<S, A> {
             };
         }
 
-        return new Lens<S, A>() {
+        return new Lens<>() {
             @Override public Getter<S, A> getter() {
                 return getter;
             }
@@ -66,7 +66,7 @@ public interface Lens<S, A> {
 
     public default <B> Lens<S, B> compose( Lens<A, B> another ) {
         Lens<S, A> self = this;
-        return new Lens<S, B>() {
+        return new Lens<>() {
 
             @Override public Getter<S, B> getter() {
                 return object -> another.get( self.get( object ) );

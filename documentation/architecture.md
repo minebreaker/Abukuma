@@ -5,7 +5,7 @@
 > [*Steve Yegge*](https://gist.github.com/chitchcock/1281611)
 
 
-## Flow
+# Execution Flow
 
 1. A user sends a request.
 2. The server receives the request and parse headers.
@@ -19,9 +19,29 @@
 ![architecture diagram](./architecture.drawio.svg)
 
 
-### `Config`
+# Routing
+
+
+
+
+## `StandardRouter`
+
+
+
+
+
+# `Config`
 
 * `AbuConfig.create()`
 * `AbuPojoConfig`
 * `AbuConfig.json()` `AbuConfig.yaml()` `AbuConfig.properties()`
-* `AbuTypeSafeConfig.load()`
+* `AbuLightbendConfig.load()`
+
+
+# Some design caveats you should consider
+
+* The classes inside the package named `internal` should not be used by the application.
+  Those classes might have breaking changes in the future.
+* `Serializable` is **NOT** supported at all. You must not serialize any classes of the framework.
+* Most implementations are immutable thus thread safe.
+  The classes annotated by `@Mutable` is mutable, thus should be carefully shared between threads.

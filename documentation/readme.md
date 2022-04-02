@@ -1,5 +1,6 @@
 # 阿武隈 - Simple web framework for Java/Kotlin
 
+![GitHub](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)
 [![CircleCI](https://circleci.com/gh/minebreaker/Abukuma.svg?style=svg)](https://circleci.com/gh/minebreaker/Abukuma)
 [![codecov](https://codecov.io/gh/minebreaker/Abukuma/branch/master/graph/badge.svg)](https://codecov.io/gh/minebreaker/Abukuma)
 
@@ -14,10 +15,13 @@ Its aim is to provide fluent routing functions and simple way to manipulate HTTP
 * Persistent map and list
 * Function-oriented (router as a function, handler as a function)
 * Explicit configuration. No magics.
-* No XML, (mostly) no Annotations
+* No magics. No XML, (mostly) no Annotations
+* Modular. Configurable. Extendable.
 
 
 ## Getting started
+
+Requires Java 18+
 
 ```java
 class Application {

@@ -11,9 +11,9 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 
-public abstract class AbstractPersistentList<T>
+public abstract class AbstractPersistentList<T, U extends PersistentListView<T, U>>
         extends ForwardingList<T>
-        implements PersistentList<T> {
+        implements PersistentListView<T, U> {
 
     private final ImList<T> delegate;
 
@@ -23,6 +23,10 @@ public abstract class AbstractPersistentList<T>
 
     protected AbstractPersistentList( Envelope<T> envelope ) {
         this.delegate = envelope.load;
+    }
+
+    protected AbstractPersistentList( List<T> copy ) {
+        this.delegate = PersistentVector.ofIter( copy );
     }
 
     @Override protected final List<T> delegate() {
@@ -40,7 +44,7 @@ public abstract class AbstractPersistentList<T>
     /**
      * To encapsulate the internal data structure.
      */
-    protected abstract PersistentList<T> constructor( Envelope<T> envelope );
+    protected abstract U constructor( Envelope<T> envelope );
 
     @Override public Optional<T> mayGet( int nth ) {
 
@@ -65,7 +69,7 @@ public abstract class AbstractPersistentList<T>
         return delegate.get( delegate.size() - 1 );
     }
 
-    @Override public PersistentList<T> addFirst( T value ) {
+    @Override public U addFirst( T value ) {
         checkNotNull( value );
 
         return constructor( new Envelope<>(
@@ -73,7 +77,7 @@ public abstract class AbstractPersistentList<T>
         ) );
     }
 
-    @Override public PersistentList<T> addLast( T value ) {
+    @Override public U addLast( T value ) {
         checkNotNull( value );
 
         return constructor( new Envelope<>(
@@ -81,7 +85,7 @@ public abstract class AbstractPersistentList<T>
         ) );
     }
 
-    @Override public PersistentList<T> insert( int nth, T value ) {
+    @Override public U insert( int nth, T value ) {
 
         checkNotNull( value );
 
@@ -91,14 +95,14 @@ public abstract class AbstractPersistentList<T>
 
         return constructor( new Envelope<>(
                 PersistentVector.<T>emptyMutable()
-                        .concat( delegate.subList( 0, nth ) )
-                        .append( value )
-                        .concat( delegate.subList( nth, delegate.size() ) )
-                        .immutable()
+                                .concat( delegate.subList( 0, nth ) )
+                                .append( value )
+                                .concat( delegate.subList( nth, delegate.size() ) )
+                                .immutable()
         ) );
     }
 
-    @Override public PersistentList<T> replace( int nth, T value ) {
+    @Override public U replace( int nth, T value ) {
 
         checkNotNull( value );
 
@@ -111,7 +115,7 @@ public abstract class AbstractPersistentList<T>
         ) );
     }
 
-    @Override public PersistentList<T> delete( int nth ) {
+    @Override public U delete( int nth ) {
 
         if ( nth < 0 || nth >= delegate.size() ) {
             throw new IndexOutOfBoundsException();
@@ -119,13 +123,13 @@ public abstract class AbstractPersistentList<T>
 
         return constructor( new Envelope<>(
                 PersistentVector.<T>emptyMutable()
-                        .concat( delegate.subList( 0, nth ) )
-                        .concat( delegate.subList( nth + 1, delegate.size() ) )
-                        .immutable()
+                                .concat( delegate.subList( 0, nth ) )
+                                .concat( delegate.subList( nth + 1, delegate.size() ) )
+                                .immutable()
         ) );
     }
 
-    @Override public PersistentList<T> concat( Iterable<? extends T> list ) {
+    @Override public U concat( Iterable<? extends T> list ) {
         return constructor( new Envelope<>(
                 delegate.concat( list )
         ) );
