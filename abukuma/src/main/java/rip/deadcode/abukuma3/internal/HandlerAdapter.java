@@ -46,6 +46,10 @@ public abstract class HandlerAdapter<Q, R> {
         this.filter = context.filter();
     }
 
+    /**
+     * Retrieve a path from the request.
+     * The path should not include query parameters.
+     */
     protected abstract String pathString( Q originalRequest );
 
     protected abstract RequestHeader createHeader(
@@ -71,7 +75,8 @@ public abstract class HandlerAdapter<Q, R> {
         UrlPathParser urlPathParser = checkNotNull( context.get( UrlPathParser.class ) );
         UrlPathParseResult result = urlPathParser.parse( pathString( originalRequest ) );
         if ( !( result instanceof UrlPathParseResult.Success ) ) {
-            throw ( (UrlPathParseResult.Error) result ).validationErrors().first();
+            // FIXME
+            throw ( (UrlPathParseResult.Error) result ).validationErrors().last();
         }
         PersistentList<String> urlPaths = ( (UrlPathParseResult.Success) result ).result();
 
@@ -80,7 +85,7 @@ public abstract class HandlerAdapter<Q, R> {
                 header,
                 this.context
         ) );
-        checkNotNull( route, "No matching route found." );
+        checkNotNull( route, "No matching route found." ); // FIXME
 
         Request request = createRequest(
                 header,
@@ -99,7 +104,7 @@ public abstract class HandlerAdapter<Q, R> {
 
         try {
             RenderingResult renderingResult = renderer.render( context, response );
-            checkNotNull( renderingResult );
+            checkNotNull( renderingResult ); // FIXME
             Response renderedResponse = renderingResult.modifying().get();
 
             submitResponse( context, renderedResponse, renderingResult, originalRequest, originalResponse );

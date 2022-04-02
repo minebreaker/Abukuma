@@ -9,14 +9,19 @@ import java.util.List;
 
 
 // TODO better name as a public interface?
-public final class PersistentListImpl<V> extends AbstractPersistentList<V> {
+public final class PersistentListImpl<T>
+        extends AbstractPersistentList<T, PersistentListImpl<T>> {
 
     private PersistentListImpl() {
         super();
     }
 
-    private PersistentListImpl( Envelope<V> envelope ) {
+    private PersistentListImpl( Envelope<T> envelope ) {
         super( envelope );
+    }
+
+    @Override protected PersistentListImpl<T> constructor( Envelope<T> delegate ) {
+        return new PersistentListImpl<>( delegate );
     }
 
     public static <V> PersistentListImpl<V> create() {
@@ -30,9 +35,5 @@ public final class PersistentListImpl<V> extends AbstractPersistentList<V> {
 
     public static <V> PersistentList<V> wrap( List<V> list ) {
         return new PersistentListImpl<V>().concat( list );
-    }
-
-    @Override protected PersistentListImpl<V> constructor( Envelope<V> envelope ) {
-        return new PersistentListImpl<>( envelope );
     }
 }

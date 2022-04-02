@@ -14,6 +14,10 @@ public class UrlParseException extends RuntimeException {
         super( message, cause );
     }
 
+    public UrlParseException( @Nullable Exception cause ) {
+        super( cause );
+    }
+
     public static final class InvalidCharacter extends UrlParseException {
 
         public InvalidCharacter( String message ) {
