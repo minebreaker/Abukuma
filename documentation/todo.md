@@ -70,6 +70,7 @@
 * Rewrite all int calculation with `Math.exact`
 * Memoizer
 * PersistentCollectors
+* WebSockets
 
 
 ## Graveyard

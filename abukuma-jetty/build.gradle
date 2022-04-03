@@ -1,6 +1,11 @@
 dependencies {
-    api(
-            project(':abukuma'),
-            'org.eclipse.jetty:jetty-server:9.4.43.v20210629'
-    )
+    api(project(':abukuma'))
+    api('org.eclipse.jetty:jetty-server:11.0.8') {
+        // Jetty 10+ relies on slf4j 2.x series,
+        // which is unstable and not supported by logback
+        // We follow this suggestion[1] and exclude dependencies on 2.x.
+        // This can cause some undesirable outcomes.
+        // [1] https://github.com/eclipse/jetty.project/issues/5943
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
 }

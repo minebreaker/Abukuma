@@ -1,6 +1,6 @@
 dependencies {
     api(
             project(':abukuma'),
-            'org.thymeleaf:thymeleaf:3.0.12.RELEASE'
+            'org.thymeleaf:thymeleaf:3.0.15.RELEASE'
     )
 }

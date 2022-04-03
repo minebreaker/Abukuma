@@ -3,6 +3,7 @@ package rip.deadcode.abukuma3.jetty.internal.value;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.net.HttpHeaders;
+import jakarta.servlet.http.HttpServletResponse;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
 import rip.deadcode.abukuma3.collection.PersistentCollections;
@@ -11,7 +12,6 @@ import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;

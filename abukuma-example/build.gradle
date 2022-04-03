@@ -1,5 +1,5 @@
 plugins {
-    id 'com.google.cloud.tools.jib' version '1.0.2'
+    id 'com.google.cloud.tools.jib' version '3.2.1'
 }
 
 dependencies {
@@ -8,8 +8,8 @@ dependencies {
             project(':abukuma-jetty'),
             project(':abukuma-gson'),
 
-            'org.slf4j:jul-to-slf4j:1.7.32', // Guava uses java.util.logging
-            'ch.qos.logback:logback-classic:1.2.5'
+            'org.slf4j:jul-to-slf4j:1.7.33', // Guava uses java.util.logging
+            'ch.qos.logback:logback-classic:1.2.11'
     )
 }
 
@@ -21,8 +21,8 @@ jar {
     }
 
     // Fat jar
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    exclude 'META-INF/LICENSE', 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/NOTICE*', 'about.html'
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
 }
 
 // Dependencies needed for the internal build process, should be removed later

@@ -1,6 +1,8 @@
 package rip.deadcode.abukuma3.jetty.internal;
 
 import com.google.common.net.HttpHeaders;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.collection.PersistentList;
@@ -14,8 +16,6 @@ import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.Response;
 import rip.deadcode.abukuma3.value.internal.SerializeCookie;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 public final class JettyHandler extends AbstractHandler {

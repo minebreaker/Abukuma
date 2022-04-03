@@ -7,9 +7,9 @@ import com.google.common.net.MediaType;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.collection.PersistentList;
+import rip.deadcode.abukuma3.utils.url.internal.CookieImpl;
 import rip.deadcode.abukuma3.value.Cookie;
 import rip.deadcode.abukuma3.value.RequestHeader;
-import rip.deadcode.abukuma3.utils.url.internal.CookieImpl;
 
 import javax.annotation.Nullable;
 import java.net.URI;
@@ -77,7 +77,7 @@ public final class JettyRequestHeader implements RequestHeader {
         return Optional.ofNullable( jettyRequest.getHeader( headerName ) );
     }
 
-    private static CookieImpl fromServletCookie( javax.servlet.http.Cookie cookie ) {
+    private static CookieImpl fromServletCookie( jakarta.servlet.http.Cookie cookie ) {
         return new CookieImpl(
                 cookie.getName(),
                 cookie.getValue(),
