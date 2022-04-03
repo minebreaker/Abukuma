@@ -20,7 +20,10 @@ public final class Main {
                                                                         req.pathParam( "name" ).orElse( "world" )
                                                                 ) )
                                                         .header( h -> h.contentType( "text/html" ) ) )
-               )
+                                       .notFound( ( ctx, req ) ->
+                                                          Responses.create( "<h1>not found</h1>" )
+                                                                   .status( 404 )
+                                                                   .header( h -> h.contentType( "text/html" ) ) ) )
                .run();
 
 //        Abukuma.create()

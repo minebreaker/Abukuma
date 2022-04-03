@@ -68,7 +68,7 @@ public final class PathMatchingRouterImpl implements Router {
     @Nullable private static RouteMatcher parsePathParameterPart( String pattern, int targetIndex ) {
         if ( pattern.startsWith( "{" ) && pattern.endsWith( "}" ) ) {
             return new PathVariableMatcher(
-                    pattern.substring( 1, pattern.length() - 2 ),
+                    pattern.substring( 1, pattern.length() - 1 ),
                     targetIndex
             );
         }

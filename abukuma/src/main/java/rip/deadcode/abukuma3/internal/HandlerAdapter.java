@@ -3,7 +3,6 @@ package rip.deadcode.abukuma3.internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.ExecutionContext;
-import rip.deadcode.abukuma3.collection.PersistentCollections;
 import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.filter.Filter;
@@ -20,10 +19,13 @@ import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.Response;
 
+import javax.annotation.Nullable;
 import java.io.Closeable;
 import java.io.IOException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static rip.deadcode.abukuma3.collection.PersistentCollections.createMap;
+import static rip.deadcode.abukuma3.collection.PersistentCollections.wrapMap;
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 
 
@@ -81,20 +83,23 @@ public abstract class HandlerAdapter<Q, R> {
         PersistentList<String> urlPaths = ( (UrlPathParseResult.Success) result ).result();
 
         RequestHeader header = createHeader( context, urlPaths, originalRequest );
-        RoutingResult route = router.route( new RoutingContextImpl(
+
+        @Nullable RoutingResult route = router.route( new RoutingContextImpl(
                 header,
                 this.context
         ) );
-        checkNotNull( route, "No matching route found." ); // FIXME
 
         Request request = createRequest(
                 header,
                 originalRequest,
                 originalResponse,
-                PersistentCollections.wrapMap( route.pathParameters() )
+                route != null ? wrapMap( route.pathParameters() )
+                              : createMap()
         );
 
-        Handler handler = route.handler();
+        Handler handler = route != null ? route.handler()
+                                        : router.notFound();
+        checkNotNull( handler, "No matching route found and not-found-router is not set." );
 
         Response response = possibly(
                 () -> filter.filter( context, request, handler )

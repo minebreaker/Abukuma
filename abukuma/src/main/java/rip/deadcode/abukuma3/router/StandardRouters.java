@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.router;
 
 
 import rip.deadcode.abukuma3.handler.Handler;
+import rip.deadcode.abukuma3.router.internal.MatcherRouter;
 import rip.deadcode.abukuma3.router.internal.PathMatchingRouterImpl;
 import rip.deadcode.abukuma3.router.internal.StandardRouterImpl;
 
@@ -31,5 +32,9 @@ public final class StandardRouters {
      */
     public static StandardRouter path( String method, String pattern, Handler handler ) {
         return new StandardRouterImpl( new PathMatchingRouterImpl( method, pattern, handler, null ) );
+    }
+
+    public static StandardRouter ofMatcher( RouteMatcher matcher, Handler handler ) {
+        return new StandardRouterImpl( new MatcherRouter( matcher, handler, null ) );
     }
 }
