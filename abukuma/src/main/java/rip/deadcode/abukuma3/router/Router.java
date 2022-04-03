@@ -1,6 +1,7 @@
 package rip.deadcode.abukuma3.router;
 
 import rip.deadcode.abukuma3.handler.Handler;
+import rip.deadcode.abukuma3.router.internal.NotFoundRouter;
 
 import javax.annotation.Nullable;
 
@@ -29,17 +30,7 @@ public interface Router {
         };
     }
 
-    // FIXME 合成のやり方を改善する
     public default Router notFound( Handler handler ) {
-        Router self = this;
-        return new Router() {
-            @Nullable @Override public RoutingResult route( RoutingContext context ) {
-                return self.route( context );
-            }
-
-            @Override public Handler notFound() {
-                return handler;
-            }
-        };
+        return this.ifNotMatch( new NotFoundRouter( handler ) );
     }
 }

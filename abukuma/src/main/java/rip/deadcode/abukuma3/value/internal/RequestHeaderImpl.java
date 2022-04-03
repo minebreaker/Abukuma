@@ -43,11 +43,11 @@ public final class RequestHeaderImpl implements RequestHeader {
     }
 
     @Override public URI url() {
-        return null;
+        return uri;
     }
 
     @Override public String urlString() {
-        return null;
+        return uri.toString();
     }
 
     @Override public PersistentList<String> urlPaths() {

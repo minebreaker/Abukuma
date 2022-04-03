@@ -10,9 +10,17 @@ public final class Main {
 
     public static void main( String[] args ) {
         Abukuma.create()
-               .router( StandardRouters.path( "GET", "/", ( ctx, req ) -> Responses.create( "<h1>hello, world</h1>" )
-                                                                                   .header( h -> h.contentType(
-                                                                                           "text/html" ) ) ) )
+               .router( StandardRouters.path( "GET", "/", ( ctx, req ) ->
+                                               Responses.create( "<h1>hello, world</h1>" )
+                                                        .header( h -> h.contentType( "text/html" ) ) )
+                                       .path( "GET", "/user/{name}", ( ctx, req ) ->
+                                               Responses.create(
+                                                                String.format(
+                                                                        "<h1>hello, %s</h1>",
+                                                                        req.pathParam( "name" ).orElse( "world" )
+                                                                ) )
+                                                        .header( h -> h.contentType( "text/html" ) ) )
+               )
                .run();
 
 //        Abukuma.create()

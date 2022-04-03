@@ -9,6 +9,7 @@ import rip.deadcode.abukuma3.router.RoutingResult;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,13 +32,14 @@ public final class PathMatchingRouterImpl implements Router {
 
     private static RouteMatcher parse( String pattern ) {
         if ( Objects.equals( pattern, "*" ) ) {
+            // OPTIONS
             return new ExactPathMatcher( "*" );
         } else {
             return parsePattern( pattern, 0 );
         }
     }
 
-    private static final Pattern regexPart = Pattern.compile( "^/?([^/]*)(.*)$" );
+    private static final Pattern regexPart = Pattern.compile( "^/([^/]*)(.*)$" );
 
     /**
      * @param pattern     Route pattern currently matching to
@@ -51,15 +53,27 @@ public final class PathMatchingRouterImpl implements Router {
 
         String targetPattern = m.group( 1 );
 
-        RouteMatcher resultMatcher = new PathMatcher( targetPattern, targetIndex );
+        RouteMatcher resultMatcher = Optional.ofNullable( parsePathParameterPart( targetPattern, targetIndex ) )
+                                             .orElse( new PathMatcher( targetPattern, targetIndex ) );
 
         String rest = m.group( 2 );
         if ( rest.isEmpty() ) {
             // if this is the final path segment, check the size of path segments to ensure there's no remaining
-            return resultMatcher.and( new PathSegmentSizeMatcher( incrementExact( targetIndex ) ));
+            return resultMatcher.and( new PathSegmentSizeMatcher( incrementExact( targetIndex ) ) );
         } else {
             return resultMatcher.and( parsePattern( rest, incrementExact( targetIndex ) ) );
         }
+    }
+
+    @Nullable private static RouteMatcher parsePathParameterPart( String pattern, int targetIndex ) {
+        if ( pattern.startsWith( "{" ) && pattern.endsWith( "}" ) ) {
+            return new PathVariableMatcher(
+                    pattern.substring( 1, pattern.length() - 2 ),
+                    targetIndex
+            );
+        }
+
+        return null;
     }
 
     @Nullable @Override public RoutingResult route( RoutingContext context ) {

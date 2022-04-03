@@ -35,6 +35,19 @@ public interface RequestHeader {
      */
     public String urlString();
 
+    /**
+     * Returns the path strings split by '/'.
+     * Trailing slashes are represented as empty strings.
+     * If the path is root (just '/'), the list contains exactly one empty string.
+     *
+     * <table>
+     *     <tr><th>The path in the request</th><th>The returned list</th></tr>
+     *     <tr><td><code>/</code></td><td><code>[""]</code></td></tr>
+     *     <tr><td><code>/foo/bar</code></td><td><code>["foo", "bar"]</code></td></tr>
+     *     <tr><td><code>/foo///bar</code></td><td><code>["foo", "", "", "bar"]</code></td></tr>
+     *     <tr><td><code>*</code></td><td><code>["*"]</code></td></tr>
+     * </table>
+     */
     public PersistentList<String> urlPaths();
 
     @Nullable

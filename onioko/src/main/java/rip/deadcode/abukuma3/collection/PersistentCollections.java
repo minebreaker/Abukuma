@@ -39,6 +39,10 @@ public final class PersistentCollections {
         return PersistentMapImpl.create();
     }
 
+    public static <K, V> PersistentMap<K, V> createMap( K key, V value ) {
+        return PersistentMapImpl.<K, V>create().set( key, value );
+    }
+
     public static <K, V> PersistentMap<K, V> wrapMap( Map<K, V> copy ) {
 
         if ( copy instanceof PersistentMap ) {
