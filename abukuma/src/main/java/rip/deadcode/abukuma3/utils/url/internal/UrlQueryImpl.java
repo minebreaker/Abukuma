@@ -10,9 +10,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
 import static rip.deadcode.abukuma3.collection.PersistentCollections.tuple;
-import static rip.deadcode.abukuma3.collection.PersistentCollections.wrapList;
+import static rip.deadcode.abukuma3.collection.PersistentCollectors.toPersistentList;
 
 
 public final class UrlQueryImpl
@@ -47,11 +46,10 @@ public final class UrlQueryImpl
     }
 
     @Override public PersistentList<String> getAll( String key ) {
-        List<String> l = this.stream()
-                             .filter( t -> Objects.equals( t.getKey(), key ) )
-                             .map( Tuple2::getValue )
-                             .collect( toList() );
-        return wrapList( l );
+        return this.stream()
+                   .filter( t -> Objects.equals( t.getKey(), key ) )
+                   .map( Tuple2::getValue )
+                   .collect( toPersistentList() );
     }
 
     @Override public UrlQueryImpl add( String key, String value ) {
@@ -59,9 +57,9 @@ public final class UrlQueryImpl
     }
 
     @Override public UrlQueryImpl remove( String key ) {
-        List<Tuple2<String, String>> l = this.stream()
-                                             .filter( t -> !Objects.equals( t.getKey(), key ) )
-                                             .collect( toList() );
+        var l = this.stream()
+                    .filter( t -> !Objects.equals( t.getKey(), key ) )
+                    .collect( toPersistentList() );
         return new UrlQueryImpl( l );
     }
 }

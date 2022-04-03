@@ -18,8 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+import static rip.deadcode.abukuma3.collection.PersistentCollectors.toPersistentList;
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
@@ -97,7 +97,7 @@ public final class JettyRequestHeader implements RequestHeader {
 
         return Arrays.stream( jettyRequest.getCookies() )
                      .map( JettyRequestHeader::fromServletCookie )
-                     .collect( Collectors.toList() );
+                     .collect( toPersistentList() );
     }
 
     @Override public Optional<Cookie> cookie( String cookieName ) {
