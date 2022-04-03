@@ -1,3 +1,6 @@
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+
 dependencies {
     api(
             project(':onioko'),
@@ -15,3 +18,35 @@ sourceSets {
         }
     }
 }
+
+def resourceDir = sourceSets.main.output.resourcesDir.toPath()
+
+task writeCommitHash(type: Exec) {
+    def commitFile = resourceDir.resolve("abukuma-commit")
+
+    // This will disable incremental compile
+//    doNotTrackState("")
+    outputs.file(commitFile)
+
+    def baos = new ByteArrayOutputStream()
+    standardOutput = baos
+    commandLine "git", "rev-parse", "HEAD"
+    doLast {
+        Files.createDirectories(resourceDir)
+        Files.writeString(commitFile, baos.toString(StandardCharsets.UTF_8).trim())
+    }
+}
+
+task writeVersion {
+    def versionFile = resourceDir.resolve("abukuma-version")
+
+//    doNotTrackState("")
+    outputs.file(versionFile)
+
+    doLast {
+        Files.createDirectories(resourceDir)
+        Files.writeString(versionFile, version)
+    }
+}
+processResources.dependsOn(writeCommitHash, writeVersion)
+//    compileTestKotlin.dependsOn(processResources)  // Gradle warns. Not sure why this is not default
