@@ -47,7 +47,6 @@
 * Rewrite `HandlerAdapter`
 * Lint and formatter for the yaml and markdown files
 * Strict header size limit to avoid DDoSes
-* Java 11
 
 
 ## Ideas
@@ -71,6 +70,7 @@
 * Memoizer
 * PersistentCollectors
 * WebSockets
+* Sphinx documentations
 
 
 ## Graveyard
