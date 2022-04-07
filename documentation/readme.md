@@ -1,6 +1,6 @@
 # 阿武隈 - Simple web framework for Java/Kotlin
 
-![GitHub](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)
+![GitHub](https://github.com/minebreaker/Abukuma/actions/workflows/gradle.yml/badge.svg)
 [![CircleCI](https://circleci.com/gh/minebreaker/Abukuma.svg?style=svg)](https://circleci.com/gh/minebreaker/Abukuma)
 [![codecov](https://codecov.io/gh/minebreaker/Abukuma/branch/master/graph/badge.svg)](https://codecov.io/gh/minebreaker/Abukuma)
 
@@ -27,8 +27,9 @@ Requires Java 11+
 class Application {
 
     public static void main( String[] args ) {
-        Abukuma.router( Routers.get("/", Responses.create( "<h1>hello, world</h1>" )
-                                                  .header( h -> h.contentType( "text/html" ) ) ) )
+        Abukuma.create()
+               .router( StandardRouters.get( "/", Responses.create( "<h1>hello, world</h1>" )
+                                                           .header( h -> h.contentType( "text/html" ) ) ) )
                .run();
     }
 }
