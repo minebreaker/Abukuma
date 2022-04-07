@@ -1,7 +1,7 @@
 package rip.deadcode.abukuma3.value.internal;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import rip.deadcode.abukuma3.collection.PersistentSet;
 import rip.deadcode.abukuma3.value.Config;
 
 import javax.annotation.Nullable;
@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+
+import static rip.deadcode.abukuma3.collection.PersistentCollections.createSet;
 
 
 public final class ConfigImpl implements Config, Map<String, Object> {
@@ -144,22 +146,21 @@ public final class ConfigImpl implements Config, Map<String, Object> {
         }
     }
 
-    private static final Set<String> keySet = ImmutableSet.of( "port, maxThreads", "minThreads" );
+    private static final PersistentSet<String> keySet = createSet( "port, maxThreads", "minThreads" );
 
     @Override
-    public Set<String> keySet() {
+    public PersistentSet<String> keySet() {
         return keySet;
     }
 
     @Override
     public Collection<Object> values() {
-        return ImmutableSet.of( port, maxThreads, minThreads );
+        return createSet( port, maxThreads, minThreads );
     }
 
     @Override
     public Set<Entry<String, Object>> entrySet() {
-        // FIXME: persistent collection
-        return ImmutableSet.of(
+        return createSet(
                 Maps.immutableEntry( "port", port ),
                 Maps.immutableEntry( "maxThreads", maxThreads ),
                 Maps.immutableEntry( "minThreads", minThreads ),

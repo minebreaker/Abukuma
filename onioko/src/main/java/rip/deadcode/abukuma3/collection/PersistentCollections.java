@@ -4,12 +4,14 @@ import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.collection.internal.PersistentListImpl;
 import rip.deadcode.abukuma3.collection.internal.PersistentMapImpl;
 import rip.deadcode.abukuma3.collection.internal.PersistentMultimapImpl;
+import rip.deadcode.abukuma3.collection.internal.PersistentSetImpl;
 import rip.deadcode.abukuma3.collection.internal.Tuple2Impl;
 import rip.deadcode.abukuma3.collection.internal.Tuple3Impl;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public final class PersistentCollections {
@@ -38,6 +40,23 @@ public final class PersistentCollections {
         }
 
         return PersistentListImpl.wrap( copy );
+    }
+
+    public static <T> PersistentSet<T> createSet() {
+        return PersistentSetImpl.create();
+    }
+
+    public static <T> PersistentSet<T> createSet( T first ) {
+        return PersistentSetImpl.<T>create().set( first );
+    }
+
+    @SafeVarargs
+    public static <T> PersistentSet<T> createSet( T first, T... rest ) {
+        return PersistentSetImpl.<T>create().set( first ).merge( Arrays.asList( rest ) );
+    }
+
+    public static <T> PersistentSet<T> wrapSet( Set<T> copy ) {
+        return PersistentSetImpl.wrap( copy );
     }
 
     public static <K, V> PersistentMap<K, V> createMap() {

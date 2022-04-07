@@ -18,12 +18,12 @@ public final class PersistentListImpl<T>
         super( envelope );
     }
 
-    private PersistentListImpl(List<T> delegate) {
-        super(delegate);
+    private PersistentListImpl(List<T> envelope) {
+        super(envelope);
     }
 
-    @Override protected PersistentListImpl<T> constructor( Envelope<T> delegate ) {
-        return new PersistentListImpl<>( delegate );
+    @Override protected PersistentListImpl<T> constructor( Envelope<T> envelope ) {
+        return new PersistentListImpl<>( envelope );
     }
 
     public static <V> PersistentListImpl<V> create() {

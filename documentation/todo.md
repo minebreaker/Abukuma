@@ -2,7 +2,6 @@
 
 * Test utilities
 * SSL Cert
-* PersistentSet
 
 
 ## Bugs

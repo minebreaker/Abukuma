@@ -21,16 +21,16 @@ public final class PersistentMapImpl<K, V>
         super( envelope );
     }
 
+    @Override
+    protected PersistentMapImpl<K, V> constructor( Envelope<K, V> envelope ) {
+        return new PersistentMapImpl<>( envelope );
+    }
+
     public static <K, V> PersistentMapImpl<K, V> create() {
         return new PersistentMapImpl<>();
     }
 
     public static <K, V> PersistentMapImpl<K, V> wrap( Map<K, V> envelope ) {
         return new PersistentMapImpl<>( envelope );
-    }
-
-    @Override
-    protected PersistentMapImpl<K, V> constructor( Envelope<K, V> delegate ) {
-        return new PersistentMapImpl<>( delegate );
     }
 }
