@@ -1,8 +1,6 @@
 ## Features
 
 * Test utilities
-* Lens
-    * Strict lenses (Prism, Lens, Optional...) or more easy-to-use ones (`getIn()` `setIn()` things)?
 * SSL Cert
 * PersistentSet
 
@@ -18,7 +16,6 @@
 
 ## Refactoring
 
-* Builder -> Immutable copying object
 * Add additional header getter methods for the `Header`
 * Problem: Modules can't have configurations
     * Flexible configuration schema
@@ -71,7 +68,8 @@
 * PersistentCollectors
 * WebSockets
 * Sphinx documentations
-
+* Lens
+    * Strict lenses (Prism, Lens, Optional...) or more easy-to-use ones (`getIn()` `setIn()` things)?
 
 ## Graveyard
 
