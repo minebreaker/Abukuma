@@ -19,8 +19,8 @@ public abstract class AbstractPersistentMap<K, V, T extends PersistentMapView<K,
         this.delegate = PersistentHashMap.empty();
     }
 
-    protected AbstractPersistentMap( Envelope<K, V> delegate ) {
-        this.delegate = delegate.load;
+    protected AbstractPersistentMap( Envelope<K, V> envelope ) {
+        this.delegate = envelope.load;
     }
 
     protected AbstractPersistentMap( Map<K, V> copy ) {

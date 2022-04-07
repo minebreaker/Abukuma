@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.utils.url.internal;
 
 
 import rip.deadcode.abukuma3.collection.AbstractPersistentList;
+import rip.deadcode.abukuma3.collection.PersistentCollections;
 import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.collection.Tuple2;
 import rip.deadcode.abukuma3.utils.url.UrlQuery;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static rip.deadcode.abukuma3.collection.PersistentCollections.tuple;
 import static rip.deadcode.abukuma3.collection.PersistentCollectors.toPersistentList;
 
 
@@ -53,7 +53,7 @@ public final class UrlQueryImpl
     }
 
     @Override public UrlQueryImpl add( String key, String value ) {
-        return addLast( tuple( key, value ) );
+        return addLast( PersistentCollections.createTuple( key, value ) );
     }
 
     @Override public UrlQueryImpl remove( String key ) {

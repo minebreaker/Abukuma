@@ -13,20 +13,20 @@ public final class PersistentMapImpl<K, V>
         super();
     }
 
-    private PersistentMapImpl( Map<K, V> delegate ) {
-        super( delegate );
+    private PersistentMapImpl( Envelope<K, V> envelope ) {
+        super( envelope );
     }
 
-    private PersistentMapImpl( Envelope<K, V> delegate ) {
-        super( delegate );
+    private PersistentMapImpl( Map<K, V> envelope ) {
+        super( envelope );
     }
 
     public static <K, V> PersistentMapImpl<K, V> create() {
         return new PersistentMapImpl<>();
     }
 
-    public static <K, V> PersistentMapImpl<K, V> wrap( Map<K, V> delegate ) {
-        return new PersistentMapImpl<>( delegate );
+    public static <K, V> PersistentMapImpl<K, V> wrap( Map<K, V> envelope ) {
+        return new PersistentMapImpl<>( envelope );
     }
 
     @Override
