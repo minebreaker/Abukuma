@@ -5,6 +5,7 @@ import org.organicdesign.fp.collections.ImSet;
 import org.organicdesign.fp.collections.PersistentHashSet;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 
@@ -22,8 +23,16 @@ public abstract class AbstractPersistentSet<T, U extends PersistentSetView<T, U>
         this.delegate = envelope.load;
     }
 
-    protected AbstractPersistentSet( Set<T> copy ) {
+    protected AbstractPersistentSet( Iterable<T> copy ) {
         this.delegate = PersistentHashSet.of( copy );
+    }
+
+    protected AbstractPersistentSet( Iterator<T> iter ) {
+        var s = PersistentHashSet.<T>emptyMutable();
+        while ( iter.hasNext() ) {
+            s.put( iter.next() );
+        }
+        this.delegate = s.immutable();
     }
 
     protected static final class Envelope<T> {

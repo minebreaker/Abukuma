@@ -13,8 +13,7 @@ public final class PersistentSetImplTest {
     @Test
     void testSet() {
 
-        var param = PersistentSetImpl.<String>create()
-                                     .set( "foo" );
+        var param = new PersistentSetImpl<String>().set( "foo" );
 
         assertThat( param ).containsExactly( "foo" );
     }
@@ -22,9 +21,18 @@ public final class PersistentSetImplTest {
     @Test
     void testMerge() {
 
-        var param = PersistentSetImpl.wrap( Set.of( "foo", "bar" ) )
-                                     .merge( Set.of( "bar", "buz" ) );
+        var param = new PersistentSetImpl<>( Set.of( "foo", "bar" ) )
+                .merge( Set.of( "bar", "buz" ) );
 
         assertThat( param ).containsExactly( "foo", "bar", "buz" );
+    }
+
+    @Test
+    void testMutable() {
+
+        var param = new PersistentSetImpl<>( Set.of( "foo" ) ).mutable();
+        param.add( "bar" );
+
+        assertThat( param ).containsExactly( "foo", "bar" );
     }
 }

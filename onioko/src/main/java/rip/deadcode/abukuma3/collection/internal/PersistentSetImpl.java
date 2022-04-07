@@ -2,33 +2,29 @@ package rip.deadcode.abukuma3.collection.internal;
 
 import rip.deadcode.abukuma3.collection.AbstractPersistentSet;
 
-import java.util.Set;
+import java.util.Iterator;
 
 
 public final class PersistentSetImpl<T>
         extends AbstractPersistentSet<T, PersistentSetImpl<T>> {
 
-    private PersistentSetImpl() {
+    public PersistentSetImpl() {
         super();
     }
 
-    private PersistentSetImpl( Envelope<T> envelope ) {
+    public PersistentSetImpl( Envelope<T> envelope ) {
         super( envelope );
     }
 
-    private PersistentSetImpl( Set<T> envelope ) {
+    public PersistentSetImpl( Iterable<T> envelope ) {
         super( envelope );
+    }
+
+    public PersistentSetImpl( Iterator<T> copy ) {
+        super( copy );
     }
 
     @Override protected PersistentSetImpl<T> constructor( Envelope<T> envelope ) {
-        return new PersistentSetImpl<>( envelope );
-    }
-
-    public static <T> PersistentSetImpl<T> create() {
-        return new PersistentSetImpl<>();
-    }
-
-    public static <T> PersistentSetImpl<T> wrap( Set<T> envelope ) {
         return new PersistentSetImpl<>( envelope );
     }
 }

@@ -5,6 +5,7 @@ import org.organicdesign.fp.collections.ImList;
 import org.organicdesign.fp.collections.PersistentVector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +26,16 @@ public abstract class AbstractPersistentList<T, U extends PersistentListView<T, 
         this.delegate = envelope.load;
     }
 
-    protected AbstractPersistentList( List<T> copy ) {
+    protected AbstractPersistentList( Iterable<T> copy ) {
         this.delegate = PersistentVector.ofIter( copy );
+    }
+
+    protected AbstractPersistentList( Iterator<T> iter ) {
+        var v = PersistentVector.<T>emptyMutable();
+        while ( iter.hasNext() ) {
+            v.append( iter.next() );
+        }
+        this.delegate = v.immutable();
     }
 
     @Override protected final List<T> delegate() {

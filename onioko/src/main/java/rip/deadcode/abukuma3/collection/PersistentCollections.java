@@ -9,9 +9,8 @@ import rip.deadcode.abukuma3.collection.internal.Tuple2Impl;
 import rip.deadcode.abukuma3.collection.internal.Tuple3Impl;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 
 public final class PersistentCollections {
@@ -21,50 +20,58 @@ public final class PersistentCollections {
     }
 
     public static <T> PersistentList<T> createList() {
-        return PersistentListImpl.create();
+        return new PersistentListImpl<>();
     }
 
     public static <T> PersistentList<T> createList( T first ) {
-        return PersistentListImpl.<T>create().addFirst( first );
+        return new PersistentListImpl<T>().addFirst( first );
     }
 
     @SafeVarargs
     public static <T> PersistentList<T> createList( T first, T... rest ) {
-        return PersistentListImpl.<T>create().addFirst( first ).concat( Arrays.asList( rest ) );
+        return new PersistentListImpl<T>().addFirst( first ).concat( Arrays.asList( rest ) );
     }
 
-    public static <T> PersistentList<T> wrapList( List<T> copy ) {
+    public static <T> PersistentList<T> wrapList( Iterable<T> copy ) {
 
         if ( copy instanceof PersistentList ) {
             return (PersistentList<T>) copy;
         }
 
-        return PersistentListImpl.wrap( copy );
+        return new PersistentListImpl<>( copy );
+    }
+
+    public static <T> PersistentList<T> wrapList( Iterator<T> copy ) {
+        return new PersistentListImpl<>( copy );
     }
 
     public static <T> PersistentSet<T> createSet() {
-        return PersistentSetImpl.create();
+        return new PersistentSetImpl<T>();
     }
 
     public static <T> PersistentSet<T> createSet( T first ) {
-        return PersistentSetImpl.<T>create().set( first );
+        return new PersistentSetImpl<T>().set( first );
     }
 
     @SafeVarargs
     public static <T> PersistentSet<T> createSet( T first, T... rest ) {
-        return PersistentSetImpl.<T>create().set( first ).merge( Arrays.asList( rest ) );
+        return new PersistentSetImpl<T>().set( first ).merge( Arrays.asList( rest ) );
     }
 
-    public static <T> PersistentSet<T> wrapSet( Set<T> copy ) {
-        return PersistentSetImpl.wrap( copy );
+    public static <T> PersistentSet<T> wrapSet( Iterable<T> copy ) {
+        return new PersistentSetImpl<>( copy );
+    }
+
+    public static <T> PersistentSet<T> wrapSet( Iterator<T> iter ) {
+        return new PersistentSetImpl<>( iter );
     }
 
     public static <K, V> PersistentMap<K, V> createMap() {
-        return PersistentMapImpl.create();
+        return new PersistentMapImpl<>();
     }
 
     public static <K, V> PersistentMap<K, V> createMap( K key, V value ) {
-        return PersistentMapImpl.<K, V>create().set( key, value );
+        return new PersistentMapImpl<K, V>().set( key, value );
     }
 
     public static <K, V> PersistentMap<K, V> wrapMap( Map<K, V> copy ) {
@@ -73,11 +80,11 @@ public final class PersistentCollections {
             return (PersistentMap<K, V>) copy;
         }
 
-        return PersistentMapImpl.wrap( copy );
+        return new PersistentMapImpl<K, V>( copy );
     }
 
     public static <K, V> PersistentMultimap<K, V> createMultimap() {
-        return PersistentMultimapImpl.create();
+        return new PersistentMultimapImpl<>();
     }
 
     public static <K, V> PersistentMultimap<K, V> wrapMultimap( Multimap<K, V> copy ) {
@@ -86,7 +93,7 @@ public final class PersistentCollections {
             return (PersistentMultimap<K, V>) copy;
         }
 
-        return PersistentMultimapImpl.wrap( copy );
+        return new PersistentMultimapImpl<>( copy );
     }
 
     public static <T0, T1> Tuple2<T0, T1> createTuple( T0 value0, T1 value1 ) {
