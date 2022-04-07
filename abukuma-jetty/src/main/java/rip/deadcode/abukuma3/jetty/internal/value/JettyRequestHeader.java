@@ -1,11 +1,10 @@
 package rip.deadcode.abukuma3.jetty.internal.value;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.net.MediaType;
 import org.eclipse.jetty.server.Request;
 import rip.deadcode.abukuma3.ExecutionContext;
+import rip.deadcode.abukuma3.collection.PersistentCollections;
 import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.utils.url.internal.CookieImpl;
 import rip.deadcode.abukuma3.value.Cookie;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
 import static rip.deadcode.abukuma3.collection.PersistentCollectors.toPersistentList;
 import static rip.deadcode.abukuma3.internal.utils.Try.possibly;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
@@ -70,7 +70,7 @@ public final class JettyRequestHeader implements RequestHeader {
     }
 
     @Override public Set<String> getValues( String headerName ) {
-        return ImmutableSet.copyOf( Iterators.forEnumeration( jettyRequest.getHeaders( headerName ) ) );
+        return PersistentCollections.wrapSet( Iterators.forEnumeration( jettyRequest.getHeaders( headerName ) ) );
     }
 
     @Override public Optional<String> mayGet( String headerName ) {
@@ -92,7 +92,7 @@ public final class JettyRequestHeader implements RequestHeader {
 
     @Override public List<Cookie> cookie() {
         if ( jettyRequest.getCookies() == null ) {
-            return ImmutableList.of();
+            return createList();
         }
 
         return Arrays.stream( jettyRequest.getCookies() )
