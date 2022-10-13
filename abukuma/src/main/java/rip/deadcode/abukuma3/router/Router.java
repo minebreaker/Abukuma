@@ -12,7 +12,7 @@ public interface Router {
     public RoutingResult route( RoutingContext context );
 
     @Nullable
-    public Handler notFound();
+    public Handler<?> notFound();
 
     public default Router ifNotMatch( Router downstream ) {
         Router self = this;
@@ -22,7 +22,7 @@ public interface Router {
                 return result != null ? result : downstream.route( context );
             }
 
-            @Nullable @Override public Handler notFound() {
+            @Nullable @Override public Handler<?> notFound() {
                 return downstream.notFound() != null
                        ? downstream.notFound()
                        : self.notFound();
@@ -30,7 +30,7 @@ public interface Router {
         };
     }
 
-    public default Router notFound( Handler handler ) {
+    public default Router notFound( Handler<?> handler ) {
         return this.ifNotMatch( new NotFoundRouter( handler ) );
     }
 }

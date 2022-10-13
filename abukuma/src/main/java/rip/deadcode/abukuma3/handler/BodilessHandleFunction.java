@@ -7,5 +7,5 @@ import rip.deadcode.abukuma3.value.Response;
 
 @FunctionalInterface
 public interface BodilessHandleFunction {
-    public Response handle( ExecutionContext context, Request<? extends Void> request);
+    public Response handle( ExecutionContext context, Request<? extends Request.Empty> request);
 }

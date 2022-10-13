@@ -10,6 +10,10 @@ import java.util.Optional;
 
 public interface Request<T> {
 
+    public interface Empty {
+        public static final Empty singleton = new Empty() {};
+    }
+
     public T body();
 
     public RequestHeader header();

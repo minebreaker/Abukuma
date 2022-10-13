@@ -13,14 +13,14 @@ public final class Handlers {
         throw new Error();
     }
 
-    public static Handler<Void> createHandler( BodilessHandleFunction handler ) {
+    public static Handler<Request.Empty> createHandler( BodilessHandleFunction handler ) {
         return new Handler<>() {
 
-            @Override public Class<Void> bodyType() {
-                return Void.class;
+            @Override public Class<Request.Empty> bodyType() {
+                return Request.Empty.class;
             }
 
-            @Override public Response handle( ExecutionContext context, Request<? extends Void> request ) {
+            @Override public Response handle( ExecutionContext context, Request<? extends Request.Empty> request ) {
                 return handler.handle( context, request );
             }
         };

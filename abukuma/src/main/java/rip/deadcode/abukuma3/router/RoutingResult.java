@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface RoutingResult {
 
-    public Handler handler();
+    public Handler<?> handler();
 
     public Map<String, String> pathParameters();
 }

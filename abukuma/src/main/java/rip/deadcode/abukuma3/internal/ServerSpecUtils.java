@@ -12,6 +12,7 @@ import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.filter.Filter;
 import rip.deadcode.abukuma3.filter.Filters;
 import rip.deadcode.abukuma3.parser.Parser;
+import rip.deadcode.abukuma3.parser.internal.EmptyParser;
 import rip.deadcode.abukuma3.parser.internal.InputStreamParser;
 import rip.deadcode.abukuma3.parser.internal.StringParser;
 import rip.deadcode.abukuma3.parser.internal.UrlEncodedParser;
@@ -38,6 +39,7 @@ public final class ServerSpecUtils {
     private static final Logger logger = LoggerFactory.getLogger( ServerSpecUtils.class );
 
     private static final PersistentList<Parser<?>> defaultParsers = createList(
+            new EmptyParser(),
             new UrlEncodedParser(),
             new StringParser(),
             new InputStreamParser()

@@ -93,8 +93,9 @@ public abstract class HandlerAdapter<Q, R> {
                 this.context
         ) );
 
-        Handler<Object> handler = route != null ? route.handler()
-                                                : router.notFound();
+        @SuppressWarnings( "unchecked" )
+        Handler<Object> handler = route != null ? (Handler<Object>) route.handler()
+                                                : (Handler<Object>) router.notFound();
         checkNotNull( handler, "No matching route found and not-found-router is not set." );
         Class<?> cls = handler.bodyType();
         Request<?> request = createRequest(
