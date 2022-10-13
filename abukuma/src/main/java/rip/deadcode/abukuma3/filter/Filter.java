@@ -1,28 +1,84 @@
 package rip.deadcode.abukuma3.filter;
 
 import rip.deadcode.abukuma3.ExecutionContext;
-import rip.deadcode.abukuma3.handler.Handler;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.Response;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
-/**
- * If filter consumed the request body, filter MUST NOT invoke given handler.
- */
-@FunctionalInterface
 public interface Filter {
 
-    public Response filter( ExecutionContext context, Request request, Handler handler );
+    public interface BeforeFilterResult {
+    }
 
-    @Nonnull
+    public interface SuccessfulBeforeFilterResult extends BeforeFilterResult {
+        public Request<?> request();
+    }
+
+    public interface InterruptedBeforeFilterResult extends BeforeFilterResult {
+        public Response response();
+    }
+
+    public interface AfterFilterResult {
+        public Response response();
+    }
+
+    /**
+     * The function invoked before the handler is called.
+     *
+     * <p>If the return value is {@code null}, it indicates that
+     * the response is "unchanged",
+     * which is effectively same as calling
+     * {@code Filters.createSuccessfulBeforeFilterResult(request)}.
+     */
+    @Nullable
+    public BeforeFilterResult filterBefore(
+            ExecutionContext context,
+            Request<?> request );
+
+    /**
+     * The function invoked after tha handler is called.
+     *
+     * <p>If the return value is {@code null}, it indicates that
+     * the response is "unchanged",
+     * which is effectively same as calling
+     * {@code Filters.createAfterFilterResult(response)}.
+     */
+    @Nullable
+    public AfterFilterResult filterAfter(
+            ExecutionContext context,
+            Request<?> request,
+            Response response
+    );
+
     public default Filter then( Filter downstream ) {
-        return ( context, request, handler ) ->
-                filter(
-                        context,
-                        request,
-                        ( nextContext, nextRequest ) -> downstream.filter( nextContext, nextRequest, handler )
-                );
+        var self = this;
+        return new Filter() {
+            @Override public BeforeFilterResult filterBefore( ExecutionContext context, Request<?> request ) {
+
+                var result = self.filterBefore( context, request );
+                if ( result == null ) {
+                    return downstream.filterBefore( context, request );
+                } else if ( result instanceof SuccessfulBeforeFilterResult ) {
+                    var r = ( (SuccessfulBeforeFilterResult) result );
+                    return downstream.filterBefore( context, r.request() );
+                } else if ( result instanceof InterruptedBeforeFilterResult ) {
+                    return result;
+                } else {
+                    throw new RuntimeException( String.format(
+                            "The class is neither SuccessfulBeforeFilterResult nor InterruptedBeforeFilterResult: %s",
+                            result.getClass().getCanonicalName()
+                    ) );
+                }
+            }
+
+            @Override
+            public AfterFilterResult filterAfter( ExecutionContext context, Request<?> request, Response response ) {
+                var downstreamResult = downstream.filterAfter( context, request, response );
+                var downstreamResponse = downstreamResult == null ? response : downstreamResult.response();
+                return self.filterAfter( context, request, downstreamResponse );
+            }
+        };
     }
 }

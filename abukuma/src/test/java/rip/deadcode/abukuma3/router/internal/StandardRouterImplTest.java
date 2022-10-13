@@ -1,7 +1,6 @@
 package rip.deadcode.abukuma3.router.internal;
 
 import org.junit.jupiter.api.Test;
-import rip.deadcode.abukuma3.handler.Handler;
 import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.router.RoutingContext;
 import rip.deadcode.abukuma3.router.RoutingResult;
@@ -13,6 +12,7 @@ import java.net.URI;
 
 import static com.google.common.truth.Truth.assertThat;
 import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
+import static rip.deadcode.abukuma3.handler.Handlers.createHandler;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
@@ -22,7 +22,7 @@ class StandardRouterImplTest {
     public void testPath() {
 
         // Path matches
-        Handler h = ( c, req ) -> Responses.create( "OK" );
+        var h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         Router r = StandardRouters.path( "GET", "/foo/bar", h );
         RoutingContext ctx = new RoutingContextImpl( new RequestHeaderImpl(
                 null, "GET", null,
@@ -34,7 +34,7 @@ class StandardRouterImplTest {
 
 
         // Path matches to root
-        h = ( c, req ) -> Responses.create( "OK" );
+        h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "GET", "/", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
                 null, "GET", null,
@@ -46,7 +46,7 @@ class StandardRouterImplTest {
 
 
         // Path matches with empty parts
-        h = ( c, req ) -> Responses.create( "OK" );
+        h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "GET", "/foo///bar/", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
                 null, "GET", null,
@@ -58,7 +58,7 @@ class StandardRouterImplTest {
 
 
         // Path matches to asterisk
-        h = ( c, req ) -> Responses.create( "OK" );
+        h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "OPTIONS", "*", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
                 null, "OPTIONS", uncheck( () -> new URI( "*" ) ),
@@ -70,7 +70,7 @@ class StandardRouterImplTest {
 
 
         // Request URL is too short
-        h = ( c, req ) -> Responses.create( "OK" );
+        h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "GET", "/foo/bar", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
                 null, "GET", null,
@@ -82,7 +82,7 @@ class StandardRouterImplTest {
 
 
         // Request URL is same size but not matching
-        h = ( c, req ) -> Responses.create( "OK" );
+        h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "GET", "/foo/bar", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
                 null, "GET", null,

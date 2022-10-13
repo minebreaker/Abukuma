@@ -4,9 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.filter.Filter;
-import rip.deadcode.abukuma3.handler.Handler;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.Response;
+
+import static rip.deadcode.abukuma3.filter.Filters.createSuccessfulBeforeFilterResult;
 
 
 public final class LoggingFilter implements Filter {
@@ -19,8 +20,13 @@ public final class LoggingFilter implements Filter {
         this.logger = logger;
     }
 
-    @Override public Response filter( ExecutionContext context, Request request, Handler handler ) {
+    @Override public BeforeFilterResult filterBefore( ExecutionContext context, Request<?> request ) {
         logger.info( "Request: {} {}", request.method(), request.urlString() );  // TODO
-        return handler.handle( context, request );
+        return createSuccessfulBeforeFilterResult( request );
+    }
+
+    @Override public AfterFilterResult filterAfter( ExecutionContext context, Request<?> request, Response response ) {
+        logger.info( "Response: {}", response.status() ); // TODO
+        return null;
     }
 }

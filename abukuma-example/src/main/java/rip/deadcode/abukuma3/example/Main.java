@@ -5,25 +5,37 @@ import rip.deadcode.abukuma3.Abukuma;
 import rip.deadcode.abukuma3.router.StandardRouters;
 import rip.deadcode.abukuma3.value.Responses;
 
+import static rip.deadcode.abukuma3.handler.Handlers.createHandler;
+
 
 public final class Main {
 
     public static void main( String[] args ) {
         Abukuma.create()
-               .router( StandardRouters.path( "GET", "/", ( ctx, req ) ->
-                                               Responses.create( "<h1>hello, world</h1>" )
-                                                        .header( h -> h.contentType( "text/html" ) ) )
-                                       .path( "GET", "/user/{name}", ( ctx, req ) ->
-                                               Responses.create(
-                                                                String.format(
-                                                                        "<h1>hello, %s</h1>",
-                                                                        req.pathParam( "name" ).orElse( "world" )
-                                                                ) )
-                                                        .header( h -> h.contentType( "text/html" ) ) )
-                                       .notFound( ( ctx, req ) ->
-                                                          Responses.create( "<h1>not found</h1>" )
-                                                                   .status( 404 )
-                                                                   .header( h -> h.contentType( "text/html" ) ) ) )
+               .router( StandardRouters.path( "GET", "/",
+                                              createHandler(
+                                                      ( ctx, req ) ->
+                                                              Responses.create(
+                                                                               "<h1>hello, world</h1>" )
+                                                                       .header( h -> h.contentType(
+                                                                               "text/html" ) ) )
+                                       )
+                                       .path( "GET", "/user/{name}",
+                                              createHandler(
+                                                      ( ctx, req ) ->
+                                                              Responses.create(
+                                                                               String.format(
+                                                                                       "<h1>hello, %s</h1>",
+                                                                                       req.pathParam( "name" )
+                                                                                          .orElse( "world" )
+                                                                               ) )
+                                                                       .header( h -> h.contentType( "text/html" ) ) )
+                                       )
+                                       .notFound(
+                                               createHandler( ( ctx, req ) ->
+                                                                      Responses.create( "<h1>not found</h1>" )
+                                                                               .status( 404 )
+                                                                               .header( h -> h.contentType( "text/html" ) ) ) ) )
                .run();
 
 //        Abukuma.create()

@@ -4,7 +4,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.net.HttpHeaders;
 import jakarta.servlet.http.HttpServletResponse;
-import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
 import rip.deadcode.abukuma3.collection.PersistentCollections;
 import rip.deadcode.abukuma3.collection.PersistentMap;
@@ -12,55 +11,35 @@ import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.net.URI;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.mayFirst;
 
 
-public final class JettyRequest implements Request {
+public final class JettyRequest<T> implements Request<T> {
 
-    private final ExecutionContext context;
+    private final T body;
     private final RequestHeader header;
     private final org.eclipse.jetty.server.Request jettyRequest;
     private final HttpServletResponse servletResponse;
     private final PersistentMap<String, String> pathParams;
 
     public JettyRequest(
-            ExecutionContext context,
+            T body,
             RequestHeader header,
             org.eclipse.jetty.server.Request jettyRequest,
             HttpServletResponse servletResponse,
             PersistentMap<String, String> pathParams ) {
-        this.context = context;
+        this.body = body;
         this.header = header;
         this.jettyRequest = jettyRequest;
         this.servletResponse = servletResponse;
         this.pathParams = pathParams;
     }
 
-    @SuppressWarnings( "unchecked" )  // checked by Class.isInstance(Object)
-    @Override public <T> T body( Class<T> cls ) {
-        try ( InputStream is = jettyRequest.getInputStream() ) {
-            Object result = context.parser().parse( cls, is, header );
-            checkNotNull( result, "Could not find an appropriate parser for the type '%s'.", cls );
-            checkState(
-                    cls.isInstance( result ),
-                    "Illegal instance '%s' of type '%s' was returned by the parser for the request '%s'. This may be caused by a bug of the parsers.",
-                    result,
-                    result.getClass(),
-                    cls
-            );
-            return (T) result;
-
-        } catch ( IOException e ) {
-            throw new UncheckedIOException( e );
-        }
+    @Override public T body() {
+        return body;
     }
 
     @Override public String method() {

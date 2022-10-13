@@ -8,23 +8,17 @@ import java.net.URI;
 import java.util.Optional;
 
 
-public interface Request {
+public interface Request<T> {
 
-    public <T> T body( Class<T> cls );
+    public T body();
+
+    public RequestHeader header();
 
     public String method();
 
-    /**
-     * A convenience method for {@code header().url()}.
-     */
     public URI url();
 
-    /**
-     * A convenience method for {@code header().urlString()}
-     */
     public String urlString();
-
-    public RequestHeader header();
 
     public Optional<String> pathParam( String key );
 

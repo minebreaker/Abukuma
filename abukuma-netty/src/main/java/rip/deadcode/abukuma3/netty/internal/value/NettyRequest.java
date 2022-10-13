@@ -1,69 +1,41 @@
 package rip.deadcode.abukuma3.netty.internal.value;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.netty.internal.NettyHandler;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.net.URI;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
+public class NettyRequest<T> implements Request<T> {
 
-public class NettyRequest implements Request {
+    private final T body;
 
-    private final ExecutionContext context;
     private final RequestHeader header;
     private final NettyHandler.RequestAndContent nettyRequest;
     private final ChannelHandlerContext rawResponse;
     private final PersistentMap<String, String> pathParams;
 
     public NettyRequest(
-            ExecutionContext context,
+            T body,
             RequestHeader header,
             NettyHandler.RequestAndContent nettyRequest,
             ChannelHandlerContext rawResponse,
             PersistentMap<String, String> pathParams ) {
 
-        this.context = context;
+        this.body = body;
         this.header = header;
         this.nettyRequest = nettyRequest;
         this.rawResponse = rawResponse;
         this.pathParams = pathParams;
     }
 
-    @SuppressWarnings( "unchecked" )
-    @Override public <T> T body( Class<T> cls ) {
-
-        ByteBuf buf = nettyRequest.content.content();
-        byte[] arr = new byte[buf.readableBytes()];
-        buf.getBytes( buf.readerIndex(), arr );
-
-        try ( InputStream is = new ByteArrayInputStream( arr ) ) {
-            Object result = context.parser().parse( cls, is, header );
-            checkNotNull( result, "Could not find an appropriate parser for the type '%s'.", cls );
-            checkState(
-                    cls.isInstance( result ),
-                    "An illegal instance '%s' of type '%s' was returned by the parser for the request '%s'. This may be caused by a bug of the parsers.",
-                    result,
-                    result.getClass(),
-                    cls
-            );
-            return (T) result;
-
-        } catch ( IOException e ) {
-            throw new UncheckedIOException( e );
-        }
+    @Override public T body() {
+        return body;
     }
 
     @Override public String method() {

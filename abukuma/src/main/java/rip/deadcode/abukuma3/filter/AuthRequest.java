@@ -9,5 +9,5 @@ public interface AuthRequest {
 
     public String password();
 
-    public Request request();
+    public Request<?> request();
 }

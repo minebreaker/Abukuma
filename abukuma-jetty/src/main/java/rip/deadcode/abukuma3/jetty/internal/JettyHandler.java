@@ -16,6 +16,9 @@ import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.Response;
 import rip.deadcode.abukuma3.value.internal.SerializeCookie;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.function.Function;
 
 
 public final class JettyHandler extends AbstractHandler {
@@ -39,18 +42,24 @@ public final class JettyHandler extends AbstractHandler {
             }
 
             @Override
-            public Request createRequest(
+            public <T> Request<T> createRequest(
+                    Function<InputStream, T> is2body,
                     RequestHeader header,
                     org.eclipse.jetty.server.Request originalRequest,
                     HttpServletResponse originalResponse,
                     PersistentMap<String, String> pathParams ) {
-                return new JettyRequest(
-                        context,
-                        header,
-                        originalRequest,
-                        originalResponse,
-                        pathParams
-                );
+
+                try (InputStream is = originalRequest.getInputStream()) {
+                    return new JettyRequest<>(
+                            is2body.apply( is ),
+                            header,
+                            originalRequest,
+                            originalResponse,
+                            pathParams
+                    );
+                } catch ( IOException e ) {
+                    throw new RuntimeException(e);
+                }
             }
 
             @Override

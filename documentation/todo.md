@@ -15,6 +15,7 @@
 
 ## Refactoring
 
+* Parser doesn't need to specify its type.
 * Add additional header getter methods for the `Header`
 * Problem: Modules can't have configurations
     * Flexible configuration schema
@@ -43,6 +44,9 @@
 * Rewrite `HandlerAdapter`
 * Lint and formatter for the yaml and markdown files
 * Strict header size limit to avoid DDoSes
+* Java module
+    * Jetty 11
+    * SLF4J 2
 
 
 ## Ideas
@@ -56,15 +60,12 @@
 * Graal VM Compatibility check
 * JDK support - Oracle LTS lines?
 * Maybe service loader is not a great idea
-* I gave up code generation
-    * Hard to refactor
 * Remove all Exceptions and replace to Try monad
     * `Option` `Either` rather than exceptions?
     * Make `Try` monad
     * Should stick to standard Java?
 * Rewrite all int calculation with `Math.exact`
 * Memoizer
-* PersistentCollectors
 * WebSockets
 * Sphinx documentations
 * Lens

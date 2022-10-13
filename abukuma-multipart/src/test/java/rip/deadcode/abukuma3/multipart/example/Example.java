@@ -27,9 +27,9 @@ public class Example {
 //               .run();
     }
 
-    private static Response handle( ExecutionContext context, Request request ) {
+    private static Response handle( ExecutionContext context, Request<FileItemIterator> request ) {
         try {
-            FileItemIterator iter = request.body( FileItemIterator.class );
+            FileItemIterator iter = request.body();
             while ( iter.hasNext() ) {
                 FileItemStream s = iter.next();
                 logger.info( "name: {}, content: {}", s.getName(), is2str( s.openStream() ) );

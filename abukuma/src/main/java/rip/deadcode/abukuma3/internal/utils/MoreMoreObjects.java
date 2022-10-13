@@ -10,7 +10,10 @@ import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 public final class MoreMoreObjects {
 
     @SafeVarargs
-    public static <T> Optional<T> coalesce( @Nullable T first, Supplier<? extends T> second, Supplier<? extends T>... rest ) {
+    public static <T> Optional<T> coalesce(
+            @Nullable T first,
+            Supplier<? extends T> second,
+            Supplier<? extends T>... rest ) {
         if ( first != null ) {
             return Optional.of( first );
         }

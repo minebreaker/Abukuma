@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.netty.internal;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -35,8 +36,12 @@ import rip.deadcode.abukuma3.value.RequestHeader;
 import rip.deadcode.abukuma3.value.Response;
 
 import javax.net.ssl.KeyManagerFactory;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
+import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
@@ -64,12 +69,28 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
             }
 
             @Override
-            protected Request createRequest(
+            protected <T> Request<T> createRequest(
+                    Function<InputStream, T> is2body,
                     RequestHeader header,
                     RequestAndContent originalRequest,
                     ChannelHandlerContext originalResponse,
                     PersistentMap<String, String> pathParams ) {
-                return new NettyRequest( context, header, originalRequest, originalResponse, pathParams );
+
+                ByteBuf buf = originalRequest.content.content();
+                byte[] arr = new byte[buf.readableBytes()];
+                buf.getBytes( buf.readerIndex(), arr );
+
+                try ( InputStream is = new ByteArrayInputStream( arr ) ) {
+                    return new NettyRequest<>(
+                            is2body.apply( is ),
+                            header,
+                            originalRequest,
+                            originalResponse,
+                            pathParams
+                    );
+                } catch ( IOException e ) {
+                    throw new RuntimeException( e );
+                }
             }
 
             @Override

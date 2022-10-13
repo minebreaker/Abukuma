@@ -9,9 +9,9 @@ import java.net.URI;
 import java.util.Optional;
 
 
-public final class TestRequest implements Request {
+public final class TestRequest<T> implements Request<T> {
 
-    @Override public <T> T body( Class<T> cls ) {
+    @Override public T body() {
         return null;
     }
 
