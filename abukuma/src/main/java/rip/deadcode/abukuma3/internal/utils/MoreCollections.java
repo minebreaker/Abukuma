@@ -1,18 +1,15 @@
 package rip.deadcode.abukuma3.internal.utils;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
+import rip.deadcode.abukuma3.collection.PersistentList;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static rip.deadcode.abukuma3.internal.utils.MoreMoreObjects.also;
+import static rip.deadcode.abukuma3.collection.PersistentCollections.wrapList;
 
 
 public final class MoreCollections {
@@ -62,11 +59,11 @@ public final class MoreCollections {
         };
     }
 
-    public static <T, U, V> List<V> zipToList( Iterable<T> iter1, Iterable<U> iter2, BiFunction<T, U, V> zipper ) {
-        return also(
-                new ArrayList<>(),
-                e -> Iterables.addAll( e, zip( iter1, iter2, zipper ) )
-        );
+    public static <T, U, V> PersistentList<V> zipToList(
+            Iterable<T> iter1,
+            Iterable<U> iter2,
+            BiFunction<T, U, V> zipper ) {
+        return wrapList( zip( iter1, iter2, zipper ) );
     }
 
     public static <T, R> R reduce( Iterable<T> iterable, R identity, BiFunction<R, T, R> accumulator ) {
@@ -78,21 +75,5 @@ public final class MoreCollections {
         }
 
         return r;
-    }
-
-    @Deprecated
-    public static <T> List<T> addFirst( List<T> list, T value ) {
-        return ImmutableList.<T>builder()
-                .add( value )
-                .addAll( list )
-                .build();
-    }
-
-    @Deprecated
-    public static <T> List<T> addLast( List<T> list, T value ) {
-        return ImmutableList.<T>builder()
-                .addAll( list )
-                .add( value )
-                .build();
     }
 }

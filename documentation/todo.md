@@ -29,6 +29,7 @@
 - Better DI and lifecycle hooks
 - Rewrite `HandlerAdapter`
 - Strict header size limit to avoid DDoSes
+- Move implementations in static methods
 
 ## Do it later
 
