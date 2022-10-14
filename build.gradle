@@ -83,3 +83,35 @@ subprojects {
     }
     check.dependsOn(jacocoTestReport)
 }
+
+task format(type: Exec) {
+    group 'verification'
+    description 'Format markdown and yaml files'
+
+    //noinspection UnnecessaryQualifiedReference
+    def os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem
+    if (os.isLinux()) {
+        commandLine 'mdformat', '"./documentation"'
+    } else if (os.isWindows()) {
+        commandLine 'cmd', '/c', 'mdformat', '"./documentation"'
+    } else {
+        throw new RuntimeException("Unsupported operating system: ${os}")
+    }
+
+}
+
+task verifyFormat(type: Exec) {
+    group 'verification'
+    description 'Check formats for markdown and yaml files'
+
+    //noinspection UnnecessaryQualifiedReference
+    def os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem
+    if (os.isLinux()) {
+        commandLine 'mdformat', '--check', '"./documentation"'
+    } else if (os.isWindows()) {
+        commandLine 'cmd', '/c', 'mdformat', '--check', '"./documentation"'
+    } else {
+        throw new RuntimeException("Unsupported operating system: ${os}")
+    }
+}
+rootProject.task("check").dependsOn(format)
