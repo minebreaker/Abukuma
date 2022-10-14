@@ -9,9 +9,7 @@ import rip.deadcode.abukuma3.collection.PersistentList;
 import javax.annotation.Nullable;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 public interface RequestHeader {
@@ -50,14 +48,19 @@ public interface RequestHeader {
      */
     public PersistentList<String> urlPaths();
 
+    /**
+     * Note that header name is case insensitive.
+     * {@code getValue("X-HeaderName")} is equivalent to {@code getValue("x-headername")}.
+     */
     @Nullable
     public String getValue( String headerName );
 
-    public Set<String> getValues( String headerName );
+    public PersistentList<String> getValues( String headerName );
 
     public Optional<String> mayGet( String headerName );
 
-    public List<Cookie> cookie();
+    // TODO: set or list?
+    public PersistentList<Cookie> cookie();
 
     public Optional<Cookie> cookie( String cookieName );
 
@@ -84,12 +87,17 @@ public interface RequestHeader {
 
     /**
      * The charset of the request.
-     * The value can be, but not necessarily, the charset specified in the "Content-Type" header.
+     * The value can be, typically but not necessarily, the charset specified in the "Content-Type" header.
      * The server implementation is allowed to choose the way to detect it.
      *
      * @return The charset of the request
      */
     public Optional<Charset> charset();
+
+//     TODO: guava HostSpecifier?
+//    public Optional<String> host();
+//
+//    public String remoteAddress();
 
     @Unsafe
     public Object rawRequest();

@@ -14,9 +14,7 @@ import javax.annotation.Nullable;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
 import static rip.deadcode.abukuma3.collection.PersistentCollectors.toPersistentList;
@@ -69,8 +67,8 @@ public final class JettyRequestHeader implements RequestHeader {
         return jettyRequest.getHeader( headerName );
     }
 
-    @Override public Set<String> getValues( String headerName ) {
-        return PersistentCollections.wrapSet( Iterators.forEnumeration( jettyRequest.getHeaders( headerName ) ) );
+    @Override public PersistentList<String> getValues( String headerName ) {
+        return PersistentCollections.wrapList( Iterators.forEnumeration( jettyRequest.getHeaders( headerName ) ) );
     }
 
     @Override public Optional<String> mayGet( String headerName ) {
@@ -90,7 +88,7 @@ public final class JettyRequestHeader implements RequestHeader {
         );
     }
 
-    @Override public List<Cookie> cookie() {
+    @Override public PersistentList<Cookie> cookie() {
         if ( jettyRequest.getCookies() == null ) {
             return createList();
         }

@@ -8,9 +8,13 @@ import java.util.Optional;
 
 public interface PersistentMultimap<K, V> extends ListMultimap<K, V> {
 
+    @Override
+    public PersistentList<V> get( K key );
+
     // TODO: how about getSingle/getFirst?
     public V getValue( K key );
 
+    // TODO: mayGetValue?
     public Optional<V> mayGet( K key );
 
     public PersistentMultimap<K, V> add( K key, V value );

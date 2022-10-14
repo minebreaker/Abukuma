@@ -2,7 +2,6 @@ package rip.deadcode.abukuma3.jetty.internal.value;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.net.HttpHeaders;
 import jakarta.servlet.http.HttpServletResponse;
 import rip.deadcode.abukuma3.Unsafe;
 import rip.deadcode.abukuma3.collection.PersistentCollections;
@@ -80,14 +79,6 @@ public final class JettyRequest<T> implements Request<T> {
                                     Multimap::putAll
                             );
         return PersistentCollections.wrapMultimap( params );
-    }
-
-    @Override public Optional<String> host() {
-        return Optional.ofNullable( jettyRequest.getHeader( HttpHeaders.HOST ) );
-    }
-
-    @Override public String remoteAddress() {
-        return jettyRequest.getRemoteAddr();
     }
 
     @Unsafe

@@ -10,9 +10,7 @@ import rip.deadcode.abukuma3.value.RequestHeader;
 import javax.annotation.Nullable;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
@@ -61,7 +59,7 @@ public class NettyRequestHeader implements RequestHeader {
     }
 
     @Override
-    public Set<String> getValues( String headerName ) {
+    public PersistentList<String> getValues( String headerName ) {
         return null;
     }
 
@@ -71,7 +69,7 @@ public class NettyRequestHeader implements RequestHeader {
     }
 
     @Override
-    public List<Cookie> cookie() {
+    public PersistentList<Cookie> cookie() {
         return null;
     }
 

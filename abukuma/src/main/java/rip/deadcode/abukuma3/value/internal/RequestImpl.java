@@ -1,28 +1,59 @@
 package rip.deadcode.abukuma3.value.internal;
 
+import com.google.common.collect.Multimap;
 import rip.deadcode.abukuma3.collection.PersistentMap;
 import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
 
-import java.net.URI;
+import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.Optional;
+
+import static rip.deadcode.abukuma3.collection.PersistentCollections.wrapMap;
+import static rip.deadcode.abukuma3.collection.PersistentCollections.wrapMultimap;
 
 
 public final class RequestImpl<T> implements Request<T> {
 
     private final T body;
     private final RequestHeader header;
+    private final PersistentMap<String, String> pathParams;
+    private final PersistentMultimap<String, String> queryParams;
+    @Nullable private final Object rawRequest;
+    @Nullable private final Object rawResponse;
 
     public RequestImpl(
             T body,
-            RequestHeader header
+            RequestHeader header,
+            Map<String, String> pathParams,
+            Multimap<String, String> queryParams
     ) {
         this.body = body;
         this.header = header;
+        this.pathParams = wrapMap( pathParams );
+        this.queryParams = wrapMultimap( queryParams );
+        this.rawRequest = null;
+        this.rawResponse = null;
     }
 
-    @Override public T body( ) {
+    public RequestImpl(
+            T body,
+            RequestHeader header,
+            Map<String, String> pathParams,
+            Multimap<String, String> queryParams,
+            Object rawRequest,
+            Object rawResponse
+    ) {
+        this.body = body;
+        this.header = header;
+        this.pathParams = wrapMap( pathParams );
+        this.queryParams = wrapMultimap( queryParams );
+        this.rawRequest = rawRequest;
+        this.rawResponse = rawResponse;
+    }
+
+    @Override public T body() {
         return body;
     }
 
@@ -30,54 +61,35 @@ public final class RequestImpl<T> implements Request<T> {
         return header;
     }
 
-    @Override public String method() {
-        return header().method();
-    }
-
-    @Override public URI url() {
-        return header().url();
-    }
-
-    @Override public String urlString() {
-        return header().urlString();
-    }
-
     @Override public Optional<String> pathParam( String key ) {
-        // FIXME
-        throw new UnsupportedOperationException();
+        return pathParams.mayGet( key );
     }
 
     @Override public PersistentMap<String, String> pathParams() {
-        // FIXME
-        throw new UnsupportedOperationException();
+        return pathParams;
     }
 
     @Override public Optional<String> queryParam( String key ) {
-        // FIXME
-        throw new UnsupportedOperationException();
+        return queryParams.mayGet( key );
     }
 
     @Override public PersistentMultimap<String, String> queryParams() {
-        // FIXME
-        throw new UnsupportedOperationException();
-    }
-
-    @Override public Optional<String> host() {
-        // FIXME
-        throw new UnsupportedOperationException();
-    }
-
-    @Override public String remoteAddress() {
-        // FIXME
-        throw new UnsupportedOperationException();
+        return queryParams;
     }
 
     @Override public Object rawRequest() {
-        return header.rawRequest();
+        if ( rawRequest == null ) {
+            throw new UnsupportedOperationException();
+        }
+
+        return rawRequest;
     }
 
     @Override public Object rawResponse() {
-        // FIXME
-        throw new UnsupportedOperationException();
+        if ( rawResponse == null ) {
+            throw new UnsupportedOperationException();
+        }
+
+        return rawResponse;
     }
 }

@@ -70,14 +70,6 @@ public class NettyRequest<T> implements Request<T> {
         return null;
     }
 
-    @Override public Optional<String> host() {
-        return Optional.empty();
-    }
-
-    @Override public String remoteAddress() {
-        return null;
-    }
-
     @Override public NettyHandler.RequestAndContent rawRequest() {
         return nettyRequest;
     }

@@ -15,6 +15,8 @@
 
 ## Refactoring
 
+* Remove EC from Header
+
 * Parser doesn't need to specify its type.
 * Problem: Modules can't have configurations
     * Flexible configuration schema
@@ -36,6 +38,8 @@
 
 ## Do it later
 
+* Path param / query param should be in header object?
+    * `RequestHeader` and `RequestHeaderWithParams`?
 * Add additional header getter methods for the `Header`
 * `MessageResolver` `ResourceBundleMessageResolver` for internal messages/logs
 * Java module

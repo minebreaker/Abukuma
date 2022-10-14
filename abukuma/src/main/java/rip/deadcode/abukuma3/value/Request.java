@@ -18,12 +18,6 @@ public interface Request<T> {
 
     public RequestHeader header();
 
-    public String method();
-
-    public URI url();
-
-    public String urlString();
-
     public Optional<String> pathParam( String key );
 
     public PersistentMap<String, String> pathParams();
@@ -32,9 +26,17 @@ public interface Request<T> {
 
     public PersistentMultimap<String, String> queryParams();
 
-    public Optional<String> host();
+    public default String method() {
+        return header().method();
+    }
 
-    public String remoteAddress();
+    public default URI url() {
+        return header().url();
+    }
+
+    public default String urlString() {
+        return header().urlString();
+    }
 
     @Unsafe
     public Object rawRequest();

@@ -26,6 +26,8 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.organicdesign.fp.StaticImports.vec;
+import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
+import static rip.deadcode.abukuma3.collection.PersistentCollections.wrapList;
 
 
 public abstract class AbstractPersistentMultimap<K, V, T extends PersistentMultimapView<K, V, T>>
@@ -136,14 +138,14 @@ public abstract class AbstractPersistentMultimap<K, V, T extends PersistentMulti
     }
 
     @Override
-    public List<V> get( K key ) {
+    public PersistentList<V> get( K key ) {
         checkNotNull( key );
 
         ImList<V> value = delegate.get( key );
-        if ( delegate.containsKey( key ) ) {
-            return value;
+        if ( value != null ) {
+            return wrapList( value );
         } else {
-            return PersistentVector.empty();
+            return createList();
         }
     }
 

@@ -12,6 +12,7 @@ import java.net.URI;
 
 import static com.google.common.truth.Truth.assertThat;
 import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
+import static rip.deadcode.abukuma3.collection.PersistentCollections.createMultimap;
 import static rip.deadcode.abukuma3.handler.Handlers.createHandler;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
@@ -25,8 +26,10 @@ class StandardRouterImplTest {
         var h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         Router r = StandardRouters.path( "GET", "/foo/bar", h );
         RoutingContext ctx = new RoutingContextImpl( new RequestHeaderImpl(
-                null, "GET", null,
-                createList( "foo", "bar" )
+                "GET",
+                null,
+                createList( "foo", "bar" ),
+                createMultimap(), createList(), null, null
         ), null );
         RoutingResult result = r.route( ctx );
 
@@ -37,8 +40,10 @@ class StandardRouterImplTest {
         h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "GET", "/", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
-                null, "GET", null,
-                createList( "" )
+                "GET",
+                null,
+                createList( "" ),
+                createMultimap(), createList(), null, null
         ), null );
         result = r.route( ctx );
 
@@ -49,8 +54,10 @@ class StandardRouterImplTest {
         h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "GET", "/foo///bar/", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
-                null, "GET", null,
-                createList( "foo", "", "", "bar", "" )
+                "GET",
+                null,
+                createList( "foo", "", "", "bar", "" ),
+                createMultimap(), createList(), null, null
         ), null );
         result = r.route( ctx );
 
@@ -61,8 +68,10 @@ class StandardRouterImplTest {
         h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "OPTIONS", "*", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
-                null, "OPTIONS", uncheck( () -> new URI( "*" ) ),
-                createList( "*" )
+                "OPTIONS",
+                uncheck( () -> new URI( "*" ) ),
+                createList( "*" ),
+                createMultimap(), createList(), null, null
         ), null );
         result = r.route( ctx );
 
@@ -73,8 +82,10 @@ class StandardRouterImplTest {
         h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "GET", "/foo/bar", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
-                null, "GET", null,
-                createList( "foo" )
+                "GET",
+                null,
+                createList( "foo" ),
+                createMultimap(), createList(), null, null
         ), null );
         result = r.route( ctx );
 
@@ -85,8 +96,10 @@ class StandardRouterImplTest {
         h = createHandler( ( c, req ) -> Responses.create( "OK" ) );
         r = StandardRouters.path( "GET", "/foo/bar", h );
         ctx = new RoutingContextImpl( new RequestHeaderImpl(
-                null, "GET", null,
-                createList( "foo", "bar", "buz" )
+                "GET",
+                null,
+                createList( "foo", "bar", "buz" ),
+                createMultimap(), createList(), null, null
         ), null );
         result = r.route( ctx );
 
