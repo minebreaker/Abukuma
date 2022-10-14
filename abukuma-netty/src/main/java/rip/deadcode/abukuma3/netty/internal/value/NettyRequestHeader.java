@@ -1,7 +1,6 @@
 package rip.deadcode.abukuma3.netty.internal.value;
 
 import com.google.common.net.MediaType;
-import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.netty.internal.NettyHandler;
 import rip.deadcode.abukuma3.value.Cookie;
@@ -17,20 +16,12 @@ import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 public class NettyRequestHeader implements RequestHeader {
 
-    private final ExecutionContext context;
     private final PersistentList<String> urlPaths;
     private final NettyHandler.RequestAndContent request;
 
-    public NettyRequestHeader(
-            ExecutionContext context, PersistentList<String> urlPaths, NettyHandler.RequestAndContent request ) {
-        this.context = context;
+    public NettyRequestHeader( PersistentList<String> urlPaths, NettyHandler.RequestAndContent request ) {
         this.urlPaths = urlPaths;
         this.request = request;
-    }
-
-    @Override
-    public ExecutionContext context() {
-        return context;
     }
 
     @Override

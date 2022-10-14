@@ -2,7 +2,6 @@ package rip.deadcode.abukuma3.value;
 
 
 import com.google.common.net.MediaType;
-import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Unsafe;
 import rip.deadcode.abukuma3.collection.PersistentList;
 
@@ -13,8 +12,6 @@ import java.util.Optional;
 
 
 public interface RequestHeader {
-
-    public ExecutionContext context();
 
     public String method();
 

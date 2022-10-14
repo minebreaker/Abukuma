@@ -13,10 +13,10 @@ class StringParserTest {
 
         String param = "test";
 
-        String result1 = new StringParser().parse( String.class, str2is( param ), null );
+        String result1 = new StringParser().parse( null, String.class, str2is( param ), null );
         assertThat( result1 ).isEqualTo( param );
 
-        CharSequence result2 = new StringParser().parse( CharSequence.class, str2is( param ), null );
+        CharSequence result2 = new StringParser().parse( null, CharSequence.class, str2is( param ), null );
         assertThat( result2 ).isEqualTo( param );
     }
 }

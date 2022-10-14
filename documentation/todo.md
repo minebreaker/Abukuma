@@ -15,8 +15,6 @@
 
 ## Refactoring
 
-* Remove EC from Header
-
 * Parser doesn't need to specify its type.
 * Problem: Modules can't have configurations
     * Flexible configuration schema
@@ -32,12 +30,12 @@
     * `PersistentNullableList`
 * Better DI and lifecycle hooks
 * Rewrite `HandlerAdapter`
-* Lint and formatter for the yaml and markdown files
 * Strict header size limit to avoid DDoSes
 
 
 ## Do it later
 
+* Lint and formatter for the yaml and markdown files
 * Path param / query param should be in header object?
     * `RequestHeader` and `RequestHeaderWithParams`?
 * Add additional header getter methods for the `Header`

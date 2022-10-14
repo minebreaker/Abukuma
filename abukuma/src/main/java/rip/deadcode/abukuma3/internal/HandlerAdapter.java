@@ -101,7 +101,7 @@ public abstract class HandlerAdapter<Q, R> {
         Request<?> request = createRequest(
                 is -> {
                     try {
-                        Object body = context.parser().parse( cls, is, header );
+                        Object body = context.parser().parse( context, cls, is, header );
                         checkNotNull( body, "Could not find an appropriate parser for the type '%s'.", cls );
                         checkState(
                                 cls.isInstance( body ),

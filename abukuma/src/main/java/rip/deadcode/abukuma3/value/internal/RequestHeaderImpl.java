@@ -3,7 +3,6 @@ package rip.deadcode.abukuma3.value.internal;
 import com.google.common.collect.Multimap;
 import com.google.common.net.MediaType;
 import org.jetbrains.annotations.Nullable;
-import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.collection.PersistentList;
 import rip.deadcode.abukuma3.collection.PersistentMultimap;
 import rip.deadcode.abukuma3.value.Cookie;
@@ -45,10 +44,6 @@ public final class RequestHeaderImpl implements RequestHeader {
         this.cookies = wrapList( cookies );
         this.mediaType = mediaType;
         this.rawRequest = RawRequest;
-    }
-
-    @Override public ExecutionContext context() {
-        throw new UnsupportedOperationException();
     }
 
     @Override public String method() {

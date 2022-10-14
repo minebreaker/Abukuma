@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.parser.internal;
 
 
 import org.jetbrains.annotations.Nullable;
+import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.parser.Parser;
 import rip.deadcode.abukuma3.value.Request;
 import rip.deadcode.abukuma3.value.RequestHeader;
@@ -16,7 +17,8 @@ import java.io.InputStream;
  */
 public final class EmptyParser implements Parser<Request.Empty> {
 
-    @Nullable @Override public Request.Empty parse( Class<?> convertTo, InputStream body, RequestHeader header )
+    @Nullable @Override
+    public Request.Empty parse( ExecutionContext context, Class<?> convertTo, InputStream body, RequestHeader header )
             throws IOException {
 
         if ( convertTo.isAssignableFrom( Request.Empty.class ) ) {

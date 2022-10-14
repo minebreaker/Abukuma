@@ -65,7 +65,7 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
             @Override
             protected RequestHeader createHeader(
                     ExecutionContext context, PersistentList<String> urlPaths, RequestAndContent originalRequest ) {
-                return new NettyRequestHeader( context, urlPaths, originalRequest );
+                return new NettyRequestHeader( urlPaths, originalRequest );
             }
 
             @Override

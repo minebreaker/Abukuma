@@ -10,13 +10,14 @@ import java.io.InputStream;
 import static com.google.common.truth.Truth.assertThat;
 import static rip.deadcode.abukuma3.internal.utils.IoStreams.str2is;
 
+
 class UrlEncodedParserTest {
 
     @Test
     void test() throws IOException {
 
         InputStream is = str2is( "foo=bar&hoge=piyo" );
-        UrlEncoded result = new UrlEncodedParser().parse( UrlEncoded.class, is, null );
+        UrlEncoded result = new UrlEncodedParser().parse( null, UrlEncoded.class, is, null );
 
         assertThat( result ).isNotNull();
         assertThat( result.getValue( "foo" ) ).isEqualTo( "bar" );

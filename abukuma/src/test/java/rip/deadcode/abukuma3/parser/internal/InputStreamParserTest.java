@@ -16,7 +16,7 @@ class InputStreamParserTest {
 
         String param = "test";
 
-        InputStream is = new InputStreamParser().parse( InputStream.class, str2is( param ), null );
+        InputStream is = new InputStreamParser().parse( null, InputStream.class, str2is( param ), null );
         assertThat( is2str( is ) ).isEqualTo( param );
     }
 }

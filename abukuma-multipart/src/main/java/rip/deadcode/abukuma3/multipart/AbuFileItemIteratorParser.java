@@ -2,6 +2,7 @@ package rip.deadcode.abukuma3.multipart;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.parser.Parser;
 import rip.deadcode.abukuma3.value.RequestHeader;
 
@@ -17,7 +18,12 @@ public final class AbuFileItemIteratorParser implements Parser<FileItemIterator>
 
     private static final ServletFileUpload upload = new ServletFileUpload();
 
-    @Nullable @Override public FileItemIterator parse( Class<?> convertTo, InputStream body, RequestHeader header ) {
+    @Nullable @Override
+    public FileItemIterator parse(
+            ExecutionContext context,
+            Class<?> convertTo,
+            InputStream body,
+            RequestHeader header ) {
 
         if ( !convertTo.equals( FileItemIterator.class ) ) {
             return null;

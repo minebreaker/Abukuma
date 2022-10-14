@@ -38,7 +38,7 @@ public final class JettyHandler extends AbstractHandler {
                     ExecutionContext context,
                     PersistentList<String> urlPaths,
                     org.eclipse.jetty.server.Request originalRequest ) {
-                return new JettyRequestHeader( context, urlPaths, originalRequest );
+                return new JettyRequestHeader( urlPaths, originalRequest );
             }
 
             @Override
