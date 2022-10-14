@@ -1,0 +1,8 @@
+include:
+  - .yamlfmt.yml
+  - .github/**/*.{yml,yaml}
+  - .circleci/**/*.{yml,yaml}
+
+line_ending: lf
+formatter:
+  retain_line_breaks: true

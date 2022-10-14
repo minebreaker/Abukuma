@@ -84,9 +84,9 @@ subprojects {
     check.dependsOn(jacocoTestReport)
 }
 
-task format(type: Exec) {
+task formatMarkdown(type: Exec) {
     group 'verification'
-    description 'Format markdown and yaml files'
+    description 'Format markdown files'
 
     //noinspection UnnecessaryQualifiedReference
     def os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem
@@ -97,12 +97,33 @@ task format(type: Exec) {
     } else {
         throw new RuntimeException("Unsupported operating system: ${os}")
     }
-
 }
 
-task verifyFormat(type: Exec) {
+task formatYaml(type: Exec) {
     group 'verification'
-    description 'Check formats for markdown and yaml files'
+    description 'Check formats for yaml files'
+
+    //noinspection UnnecessaryQualifiedReference
+    def os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem
+    if (os.isLinux()) {
+        commandLine 'yamlfmt', '-conf', '.yamlfmt.yml'
+    } else if (os.isWindows()) {
+        commandLine 'cmd', '/c', 'yamlfmt', '-conf', '.yamlfmt.yml'
+    } else {
+        throw new RuntimeException("Unsupported operating system: ${os}")
+    }
+}
+
+tasks.register('format') {
+    dependsOn('formatMarkdown', 'formatYaml')
+    group 'verification'
+    description 'Format codes'
+}
+rootProject.task("check").dependsOn(format)
+
+task verifyFormatMarkdown(type: Exec) {
+    group 'verification'
+    description 'Check formats for markdown files'
 
     //noinspection UnnecessaryQualifiedReference
     def os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem
@@ -114,4 +135,24 @@ task verifyFormat(type: Exec) {
         throw new RuntimeException("Unsupported operating system: ${os}")
     }
 }
-rootProject.task("check").dependsOn(format)
+
+task verifyFormatYaml(type: Exec) {
+    group 'verification'
+    description 'Check formats for yaml files'
+
+    //noinspection UnnecessaryQualifiedReference
+    def os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem
+    if (os.isLinux()) {
+        commandLine 'yamlfmt', '-lint', '-conf', '.yamlfmt.yml'
+    } else if (os.isWindows()) {
+        commandLine 'cmd', '/c', 'yamlfmt', '-lint', '-conf', '.yamlfmt.yml'
+    } else {
+        throw new RuntimeException("Unsupported operating system: ${os}")
+    }
+}
+
+tasks.register('verifyFormat') {
+    dependsOn('verifyFormatMarkdown', 'verifyFormatYaml')
+    group 'verification'
+    description 'Check formats for codes'
+}
