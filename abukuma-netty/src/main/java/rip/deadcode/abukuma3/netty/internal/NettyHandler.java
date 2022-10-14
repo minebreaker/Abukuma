@@ -169,6 +169,7 @@ public final class NettyHandler extends ChannelInitializer<SocketChannel> {
                 checkNotNull( request );
                 HttpContent content = (HttpContent) msg;
 
+                // FIXME: handling should be async
                 adapter.handle( new RequestAndContent( request, content ), ctx );
             } else {
                 throw new IllegalStateException( "TODO not supported yet" );
