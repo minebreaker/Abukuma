@@ -17,7 +17,7 @@ import java.nio.file.Path;
 
 public final class Gson {
 
-    public static Parser<Object> parser() {
+    public static Parser parser() {
         return new GsonParser();
     }
 
