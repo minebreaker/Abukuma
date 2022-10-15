@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import static rip.deadcode.abukuma3.gson.internal.GsonUtils.checkHeader;
 
 
-public final class GsonParser implements Parser<Object> {
+public final class GsonParser implements Parser {
 
     private final boolean requireAnnotation;
     private final boolean requireHeader;

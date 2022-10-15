@@ -28,11 +28,11 @@ public interface ServerSpec {
 
     public ServerSpec router( Router router );
 
-    public PersistentList<Parser<?>> parsers();
+    public PersistentList<Parser> parsers();
 
-    public ServerSpec parser( List<Parser<?>> parsers );
+    public ServerSpec parser( List<Parser> parsers );
 
-    public ServerSpec addParser( Parser<?> parser );
+    public ServerSpec addParser( Parser parser );
 
     public PersistentList<Renderer> renderers();
 

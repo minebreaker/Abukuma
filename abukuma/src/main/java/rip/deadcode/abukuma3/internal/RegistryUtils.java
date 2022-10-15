@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 public final class RegistryUtils {
 
     @SuppressWarnings( "unchecked" )
-    public static Registry addParser( Registry registry, Parser<?> parser ) {
+    public static Registry addParser( Registry registry, Parser parser ) {
         return append( registry, Parser.class, p -> p.ifFailed( parser ) );
     }
 

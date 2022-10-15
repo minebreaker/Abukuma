@@ -12,7 +12,7 @@ public interface ExecutionContext extends Registry {
 
     public Config config();
 
-    public Parser<?> parser();
+    public Parser parser();
 
     public Renderer renderer();
 

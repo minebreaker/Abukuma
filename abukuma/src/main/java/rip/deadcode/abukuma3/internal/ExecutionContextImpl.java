@@ -32,7 +32,7 @@ public final class ExecutionContextImpl implements ExecutionContext {
     public ExecutionContextImpl(
             Registry registry,
             Config config,
-            Parser<?> parserChain,
+            Parser parserChain,
             Renderer renderer,
             Filter filterChain,
             Router router,
@@ -54,7 +54,7 @@ public final class ExecutionContextImpl implements ExecutionContext {
         return registry.get( Config.class );
     }
 
-    @Override public Parser<?> parser() {
+    @Override public Parser parser() {
         return registry.get( Parser.class );
     }
 

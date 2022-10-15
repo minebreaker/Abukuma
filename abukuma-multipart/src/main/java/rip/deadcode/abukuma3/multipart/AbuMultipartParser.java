@@ -16,7 +16,7 @@ import java.util.Map;
 import static rip.deadcode.abukuma3.internal.utils.Uncheck.uncheck;
 
 
-public final class AbuMultipartParser implements Parser<Multipart> {
+public final class AbuMultipartParser implements Parser {
 
     @Nullable @Override public Multipart parse(
             ExecutionContext context, Class<?> convertTo, InputStream body, RequestHeader header ) throws IOException {

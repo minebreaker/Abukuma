@@ -15,7 +15,7 @@ import java.io.InputStream;
  * The parser implementation for the empty body
  * which is typical for GET requests.
  */
-public final class EmptyParser implements Parser<Request.Empty> {
+public final class EmptyParser implements Parser {
 
     @Nullable @Override
     public Request.Empty parse( ExecutionContext context, Class<?> convertTo, InputStream body, RequestHeader header )

@@ -38,7 +38,7 @@ public final class ServerSpecUtils {
 
     private static final Logger logger = LoggerFactory.getLogger( ServerSpecUtils.class );
 
-    private static final PersistentList<Parser<?>> defaultParsers = createList(
+    private static final PersistentList<Parser> defaultParsers = createList(
             new EmptyParser(),
             new UrlEncodedParser(),
             new StringParser(),

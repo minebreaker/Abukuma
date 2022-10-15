@@ -10,17 +10,15 @@ import java.io.InputStream;
 
 /**
  * Parser implementations may close the {@link InputStream}, but not responsible for doing so.
- *
- * @param <T> Class to be parsed.
  */
 @FunctionalInterface
-public interface Parser<T> {
+public interface Parser {
 
     @Nullable
-    public T parse( ExecutionContext context, Class<?> convertTo, InputStream body, RequestHeader header )
+    public Object parse( ExecutionContext context, Class<?> convertTo, InputStream body, RequestHeader header )
             throws IOException;
 
-    public default Parser<?> ifFailed( Parser<?> downstream ) {
+    public default Parser ifFailed( Parser downstream ) {
         return ( ec, c, is, header ) -> {
             Object result = parse( ec, c, is, header );
             return result != null ? result : downstream.parse( ec, c, is, header );

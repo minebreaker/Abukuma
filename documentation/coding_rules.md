@@ -3,6 +3,7 @@
 ## APIs
 
 - Receive `List`, return `PersistentList`
+- Implementations should be thread safe unless marked `@Mutable`
 
 ## Namings
 

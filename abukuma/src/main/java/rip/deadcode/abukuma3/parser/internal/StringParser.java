@@ -9,7 +9,7 @@ import java.io.InputStream;
 import static rip.deadcode.abukuma3.internal.utils.IoStreams.is2str;
 
 
-public final class StringParser implements Parser<String> {
+public final class StringParser implements Parser {
 
     @Override
     public String parse( ExecutionContext context, Class<?> cls, InputStream body, RequestHeader header ) {

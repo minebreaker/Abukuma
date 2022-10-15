@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @see <a href="https://url.spec.whatwg.org/#urlencoded-parsing">https://url.spec.whatwg.org/#urlencoded-parsing</a>
  */
-public final class UrlEncodedParser implements Parser<UrlEncoded> {
+public final class UrlEncodedParser implements Parser {
 
     @Nullable @Override public UrlEncoded parse(
             ExecutionContext context, Class<?> convertTo, InputStream body, RequestHeader header ) throws IOException {

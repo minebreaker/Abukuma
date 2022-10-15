@@ -33,6 +33,7 @@
 
 # Some design caveats you should consider
 
+- `Handler` must be thread safe.
 - The classes inside the package named `internal` should not be used by the
   application. Those classes might have breaking changes in the future.
 - `Serializable` is **NOT** supported at all. You must not serialize any classes

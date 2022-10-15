@@ -30,7 +30,7 @@ public final class ServerSpecImpl implements ServerSpec {
     private Registry registry;
     private Config config;
     private Router router;
-    private PersistentList<Parser<?>> parser;
+    private PersistentList<Parser> parser;
     private PersistentList<Renderer> renderer;
     private PersistentList<Filter> filter;
     private ExceptionHandler exceptionHandler;
@@ -53,7 +53,7 @@ public final class ServerSpecImpl implements ServerSpec {
             Registry registry,
             Config config,
             Router router,
-            List<Parser<?>> parser,
+            List<Parser> parser,
             List<Renderer> renderer,
             List<Filter> filter,
             ExceptionHandler exceptionHandler,
@@ -121,12 +121,12 @@ public final class ServerSpecImpl implements ServerSpec {
     }
 
     @Override
-    public PersistentList<Parser<?>> parsers() {
+    public PersistentList<Parser> parsers() {
         return parser;
     }
 
     @Override
-    public ServerSpecImpl parser( List<Parser<?>> parsers ) {
+    public ServerSpecImpl parser( List<Parser> parsers ) {
         checkNotNull( parsers );
         ServerSpecImpl copy = copy();
         copy.parser = wrapList( parsers );
@@ -134,7 +134,7 @@ public final class ServerSpecImpl implements ServerSpec {
     }
 
     @Override
-    public ServerSpec addParser( Parser<?> parser ) {
+    public ServerSpec addParser( Parser parser ) {
         checkNotNull( parser );
         ServerSpecImpl copy = copy();
         copy.parser = copy.parser.addLast( parser );

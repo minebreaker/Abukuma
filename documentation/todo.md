@@ -13,13 +13,9 @@
 
 ## Refactoring
 
-- Parser doesn't need to specify its type.
 - Problem: Modules can't have configurations
   - Flexible configuration schema
 - Write tests
-- Replace Collections to internal PersistentCollections
-  - Replace Guava immutable collections
-  - Replace java.util collections
 - Better Renderer/Parser/Router
   - Special lists which is easy to modify
   - Monoid
