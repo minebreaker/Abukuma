@@ -24,12 +24,30 @@
 
 ## `StandardRouter`
 
-# `Config`
+# Configuration
 
-- `AbuConfig.create()`
-- `AbuPojoConfig`
-- `AbuConfig.json()` `AbuConfig.yaml()` `AbuConfig.properties()`
-- `AbuLightbendConfig.load()`
+Abukuma relies on [Typesafe Config](https://github.com/lightbend/config) library for its configurations.
+You should write `application.conf` or directly set up `com.typesafe.config.Config`to change configurations.
+
+## Example
+
+```hocon
+abukuma {
+    port: 8080
+    ssl: true
+}
+```
+
+```
+Abukuma.create();
+// If you omit the `Config` object, it will use `ConfigFactory.load()`.
+// This is perhaps the easiest way to go.
+
+Config config = yourOwnConfig();
+// Configuration is egarly validated so that it will throw an exception if you lack some configurations.
+Abukuma.create(yourOwnConfig);
+```
+
 
 # Some design caveats you should consider
 

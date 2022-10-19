@@ -13,16 +13,15 @@
 
 ## Refactoring
 
-- Problem: Modules can't have configurations
-  - Flexible configuration schema
 - Write tests
 - Better Renderer/Parser/Router
   - Special lists which is easy to modify
   - Monoid
   - Both of them
 - Need to think about collection nullability
-  - `PersistentNullableList`
+  - `PersistentNullableList`?
 - Better DI and lifecycle hooks
+  - Maybe simple registry is good enough
 - Rewrite `HandlerAdapter`
 - Strict header size limit to avoid DDoSes
 - Move implementations in static methods
@@ -108,3 +107,13 @@
     Required parameters should be configurable for the sake of performance.
     - Since 1. the project goal is usability over the performance, and 2. some
       object creation will not be *that* slow.
+
+- Problem: Modules can't have configurations
+  - Flexible configuration schema
+    
+    - I decided to just use typesafe config library
+      - Pros
+        - I'll end up reinventing the wheel anyway
+        - It's well known library
+      - Cons
+        - Additional dependencies

@@ -5,7 +5,6 @@ include (
         'abukuma-caffeine',
         'abukuma-example',
         'abukuma-gson',
-        'abukuma-hocon',
         'abukuma-jetty',
         'abukuma-multipart',
         'abukuma-netty',

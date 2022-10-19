@@ -2,8 +2,8 @@ package rip.deadcode.abukuma3;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rip.deadcode.abukuma3.internal.ConfigSpecImpl;
 import rip.deadcode.abukuma3.internal.Information;
-import rip.deadcode.abukuma3.internal.ServerSpecImpl;
 
 
 public final class Abukuma {
@@ -16,6 +16,11 @@ public final class Abukuma {
 
     public static ServerSpec create() {
         logger.info( Information.INFO_STRING );
-        return new ServerSpecImpl();
+        return new ConfigSpecImpl().useDefault();
+    }
+
+    public static ConfigSpec config() {
+        logger.info( Information.INFO_STRING );
+        return new ConfigSpecImpl();
     }
 }

@@ -14,7 +14,6 @@ import rip.deadcode.abukuma3.renderer.Renderer;
 import rip.deadcode.abukuma3.router.Router;
 import rip.deadcode.abukuma3.router.internal.EmptyRouter;
 import rip.deadcode.abukuma3.value.Config;
-import rip.deadcode.abukuma3.value.Configs;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -36,10 +35,10 @@ public final class ServerSpecImpl implements ServerSpec {
     private ExceptionHandler exceptionHandler;
     private PersistentList<Module> module;
 
-    public ServerSpecImpl() {
+    public ServerSpecImpl(Config config) {
         this(
                 new RegistryImpl(),
-                Configs.create(),
+                config,
                 new EmptyRouter(),
                 createList(),
                 createList(),
