@@ -35,7 +35,7 @@ public final class ServerSpecImpl implements ServerSpec {
     private ExceptionHandler exceptionHandler;
     private PersistentList<Module> module;
 
-    public ServerSpecImpl(Config config) {
+    public ServerSpecImpl( Config config ) {
         this(
                 new RegistryImpl(),
                 config,
@@ -69,7 +69,16 @@ public final class ServerSpecImpl implements ServerSpec {
     }
 
     private ServerSpecImpl copy() {
-        return new ServerSpecImpl( registry, config, router, parser, renderer, filter, exceptionHandler, module );
+        return new ServerSpecImpl(
+                registry,
+                config,
+                router,
+                parser,
+                renderer,
+                filter,
+                exceptionHandler,
+                module
+        );
     }
 
     @Override

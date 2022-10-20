@@ -7,7 +7,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.first;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.last;
-import static rip.deadcode.abukuma3.internal.utils.MoreCollections.reduce;
+import static rip.deadcode.abukuma3.internal.utils.MoreCollections.reduceSequentially;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.zip;
 
 
@@ -34,11 +34,11 @@ class MoreCollectionsTest {
     @Test
     void testReduce() {
         var params = createList( "foo", "bar", "buzz" );
-        int result = reduce( params, 0, ( acc, s ) -> acc + s.length() );
+        int result = reduceSequentially( params, 0, ( acc, s ) -> acc + s.length() );
 
         assertThat( result ).isEqualTo( 10 );
 
-        assertThat( reduce( PersistentCollections.<String>createList(), 0, ( acc, s ) -> acc + s.length() ) )
+        assertThat( reduceSequentially( PersistentCollections.<String>createList(), 0, ( acc, s ) -> acc + s.length() ) )
                 .isEqualTo( 0 );
     }
 }

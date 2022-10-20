@@ -1,9 +1,9 @@
 package rip.deadcode.abukuma3;
 
 
-public interface Plugin<T> {
+public interface Plugin {
 
-    public PluginConfigSpec<T> configSpec();
+    public PluginConfigSpec<?> configSpec();
 
     public Module module();
 }

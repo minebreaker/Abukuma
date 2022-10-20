@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Module;
+import rip.deadcode.abukuma3.Plugin;
+import rip.deadcode.abukuma3.Registry;
 import rip.deadcode.abukuma3.Server;
 import rip.deadcode.abukuma3.ServerFactory;
 import rip.deadcode.abukuma3.ServerSpec;
@@ -21,13 +23,15 @@ import rip.deadcode.abukuma3.renderer.internal.CharSequenceRenderer;
 import rip.deadcode.abukuma3.renderer.internal.InputStreamRenderer;
 import rip.deadcode.abukuma3.renderer.internal.PathRenderer;
 import rip.deadcode.abukuma3.utils.internal.DefaultModule;
+import rip.deadcode.abukuma3.value.Config;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
 import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
-import static rip.deadcode.abukuma3.internal.utils.MoreCollections.reduce;
+import static rip.deadcode.abukuma3.collection.PersistentCollectors.toPersistentList;
+import static rip.deadcode.abukuma3.internal.utils.MoreCollections.reduceSequentially;
 
 
 public final class ServerSpecUtils {
@@ -55,9 +59,46 @@ public final class ServerSpecUtils {
 
     public static Server build( ServerSpec spec ) {
 
+        var plugins = getPlugins();
+        var registryPluginsApplied = setupPluginConfigs( spec, plugins );
+        var executionContext = createExecutionContext( registryPluginsApplied, spec, plugins );
+
+        return createServer( executionContext );
+    }
+
+    private static PersistentList<Plugin> getPlugins() {
+        var loader = ServiceLoader.load( Plugin.class );
+        return loader.stream()
+                     .map( p -> p.get() )
+                     .collect( toPersistentList() );
+    }
+
+    private static Registry setupPluginConfigs( ServerSpec spec, List<Plugin> plugins ) {
+
+        var serverConfig = spec.config();
+        var registry = spec.registry()
+                           // Add Config object
+                           .setSingleton( Config.class, serverConfig )
+                           .setSingleton( com.typesafe.config.Config.class, serverConfig.original() );
+
+        var pluginConfigs = plugins.stream()
+                                   .map( p -> p.configSpec() )
+                                   .collect( toPersistentList() );
+        return reduceSequentially( pluginConfigs, registry, ( r, configSpec ) -> {
+            // TODO: error handling
+            var pluginTypesafeConfig = serverConfig
+                    .original()
+                    .getConfig( "abukuma" )
+                    .getConfig( configSpec.configPath() );
+            var resolved = configSpec.resolve( pluginTypesafeConfig );
+            return r.setSingleton( configSpec.configClass(), configSpec.configClass().cast( resolved ) );
+        } );
+    }
+
+    private static ExecutionContext createExecutionContext( Registry registry, ServerSpec spec, List<Plugin> plugins ) {
         //noinspection OptionalGetWithoutIsPresent  should have at least one default implementations
         ExecutionContext context = new ExecutionContextImpl(
-                spec.registry(),
+                registry,
                 spec.config(),
                 spec.parsers()
                     .concat( defaultParsers )
@@ -70,28 +111,35 @@ public final class ServerSpecUtils {
                 spec.exceptionHandler()
         );
 
-        ExecutionContext contextModuleApplied = reduce(
-                spec.modules().addLast( defaultModule ),
+        var pluginModules = plugins.stream().map( p -> p.module() ).collect( toPersistentList() );
+
+        return reduceSequentially(
+                spec.modules()
+                    .concat( pluginModules )
+                    .addLast( defaultModule ),
                 context,
                 ExecutionContext::applyModule
         );
+    }
 
+    private static Server createServer( ExecutionContext context ) {
         ServiceLoader<ServerFactory> loader = ServiceLoader.load( ServerFactory.class );
-        Optional<String> requestedFactoryName = contextModuleApplied.config().serverImplementation();
+        Optional<String> requestedFactoryName = context.config().serverImplementation();
 
         if ( requestedFactoryName.isPresent() ) {
             String factoryName = requestedFactoryName.get();
             return loader.stream()
                          .filter( factory -> factory.getClass().getCanonicalName().equals( factoryName ) )
-                         .findFirst()
+                         .findFirst() // TODO: Duplication check?
                          .map( p -> p.get().provide( context ) )
                          .orElseThrow( () -> new IllegalStateException(
                                  "Could not find server implementation named '" + factoryName +
                                  "'. Recheck your configuration." ) );
 
         } else {
+            // TODO: Should fail if multiple server is available?
             ServerFactory factory = loader.iterator().next();
-            Server server = factory.provide( contextModuleApplied );
+            Server server = factory.provide( context );
             logger.info( "Auto selected server implementation: " + server.getClass().getCanonicalName() );
             return server;
         }

@@ -14,6 +14,11 @@
 ## Refactoring
 
 - Write tests
+- Rethink caching
+- Remove `Registry` to use `ExecutionContext` from the beginning
+- APIs should not throw exceptions
+  - Remove `uncheck`
+  - `unsafeFooOperation()` for exception throwing functions
 - Better Renderer/Parser/Router
   - Special lists which is easy to modify
   - Monoid

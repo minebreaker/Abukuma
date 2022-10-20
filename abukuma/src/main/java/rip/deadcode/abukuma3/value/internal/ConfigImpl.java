@@ -14,17 +14,25 @@ public final class ConfigImpl implements Config {
     private int maxThreads;
     private int minThreads;
     private boolean ssl;
+    private com.typesafe.config.Config original;
 
-    public ConfigImpl( @Nullable String serverImplementation, int port, int maxThreads, int minThreads, boolean ssl ) {
+    public ConfigImpl(
+            @Nullable String serverImplementation,
+            int port,
+            int maxThreads,
+            int minThreads,
+            boolean ssl,
+            com.typesafe.config.Config original ) {
         this.serverImplementation = serverImplementation;
         this.port = port;
         this.maxThreads = maxThreads;
         this.minThreads = minThreads;
         this.ssl = ssl;
+        this.original = original;
     }
 
     private ConfigImpl copy() {
-        return new ConfigImpl( serverImplementation, port, maxThreads, minThreads, ssl );
+        return new ConfigImpl( serverImplementation, port, maxThreads, minThreads, ssl, original );
     }
 
     @Override
@@ -83,5 +91,9 @@ public final class ConfigImpl implements Config {
         ConfigImpl c = copy();
         c.ssl = ssl;
         return c;
+    }
+
+    @Override public com.typesafe.config.Config original() {
+        return original;
     }
 }

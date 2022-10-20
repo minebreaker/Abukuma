@@ -1,5 +1,6 @@
 package rip.deadcode.abukuma3.value;
 
+import rip.deadcode.abukuma3.Unsafe;
 import rip.deadcode.abukuma3.value.internal.ConfigImpl;
 
 import java.util.Optional;
@@ -26,4 +27,7 @@ public interface Config {
     public boolean ssl();
 
     public ConfigImpl ssl( boolean ssl );
+
+    @Unsafe
+    public com.typesafe.config.Config original();
 }

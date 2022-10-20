@@ -66,7 +66,7 @@ public final class MoreCollections {
         return wrapList( zip( iter1, iter2, zipper ) );
     }
 
-    public static <T, R> R reduce( Iterable<T> iterable, R identity, BiFunction<R, T, R> accumulator ) {
+    public static <T, R> R reduceSequentially( Iterable<T> iterable, R identity, BiFunction<R, T, R> accumulator ) {
 
         R r = checkNotNull( identity );
 
