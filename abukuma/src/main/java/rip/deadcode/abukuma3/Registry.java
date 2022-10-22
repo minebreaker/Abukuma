@@ -18,6 +18,9 @@ public interface Registry {
 
     public <T> Registry setSingleton( Class<T> cls, T instance );
 
+    @Unsafe
+    public Registry unsafeSetSingleton( Class<?> cls, Object instance );
+
     public <T> Registry set( Class<T> cls, Supplier<? extends T> supplier );
 
     public <T> Registry set( Class<T> cls, Function<Registry, ? extends T> generator );

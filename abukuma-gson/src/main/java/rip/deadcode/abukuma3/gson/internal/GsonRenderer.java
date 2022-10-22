@@ -18,11 +18,12 @@ public final class GsonRenderer implements Renderer {
 
     private final boolean requireAnnotation;
 
-    public GsonRenderer(  ) {
-        this.requireAnnotation = true;
+    public GsonRenderer( boolean requireAnnotation ) {
+        this.requireAnnotation = requireAnnotation;
     }
 
-    @Nullable @Override public RenderingResult render( ExecutionContext context, Response responseCandidate ) throws IOException {
+    @Nullable @Override public RenderingResult render( ExecutionContext context, Response responseCandidate )
+            throws IOException {
 
         Object body = responseCandidate.body();
 

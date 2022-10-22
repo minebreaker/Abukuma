@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rip.deadcode.abukuma3.ExecutionContext;
 import rip.deadcode.abukuma3.Module;
-import rip.deadcode.abukuma3.Plugin;
 import rip.deadcode.abukuma3.Registry;
 import rip.deadcode.abukuma3.Server;
 import rip.deadcode.abukuma3.ServerFactory;
@@ -59,43 +58,33 @@ public final class ServerSpecUtils {
 
     public static Server build( ServerSpec spec ) {
 
-        var plugins = getPlugins();
-        var registryPluginsApplied = setupPluginConfigs( spec, plugins );
-        var executionContext = createExecutionContext( registryPluginsApplied, spec, plugins );
+        var registryPluginsApplied = setupConfigs( spec );
+        var pluginModules = getModules();
+        var executionContext = createExecutionContext( registryPluginsApplied, spec, pluginModules );
 
         return createServer( executionContext );
     }
 
-    private static PersistentList<Plugin> getPlugins() {
-        var loader = ServiceLoader.load( Plugin.class );
+    private static PersistentList<Module> getModules() {
+        var loader = ServiceLoader.load( Module.class );
         return loader.stream()
                      .map( p -> p.get() )
                      .collect( toPersistentList() );
     }
 
-    private static Registry setupPluginConfigs( ServerSpec spec, List<Plugin> plugins ) {
+    private static Registry setupConfigs( ServerSpec spec ) {
 
         var serverConfig = spec.config();
-        var registry = spec.registry()
-                           // Add Config object
-                           .setSingleton( Config.class, serverConfig )
-                           .setSingleton( com.typesafe.config.Config.class, serverConfig.original() );
-
-        var pluginConfigs = plugins.stream()
-                                   .map( p -> p.configSpec() )
-                                   .collect( toPersistentList() );
-        return reduceSequentially( pluginConfigs, registry, ( r, configSpec ) -> {
-            // TODO: error handling
-            var pluginTypesafeConfig = serverConfig
-                    .original()
-                    .getConfig( "abukuma" )
-                    .getConfig( configSpec.configPath() );
-            var resolved = configSpec.resolve( pluginTypesafeConfig );
-            return r.setSingleton( configSpec.configClass(), configSpec.configClass().cast( resolved ) );
-        } );
+        return spec.registry()
+                   // Add Config object
+                   .setSingleton( Config.class, serverConfig )
+                   .setSingleton( com.typesafe.config.Config.class, serverConfig.original() );
     }
 
-    private static ExecutionContext createExecutionContext( Registry registry, ServerSpec spec, List<Plugin> plugins ) {
+    private static ExecutionContext createExecutionContext(
+            Registry registry,
+            ServerSpec spec,
+            List<Module> pluginModules ) {
         //noinspection OptionalGetWithoutIsPresent  should have at least one default implementations
         ExecutionContext context = new ExecutionContextImpl(
                 registry,
@@ -110,8 +99,6 @@ public final class ServerSpecUtils {
                 spec.router(),
                 spec.exceptionHandler()
         );
-
-        var pluginModules = plugins.stream().map( p -> p.module() ).collect( toPersistentList() );
 
         return reduceSequentially(
                 spec.modules()

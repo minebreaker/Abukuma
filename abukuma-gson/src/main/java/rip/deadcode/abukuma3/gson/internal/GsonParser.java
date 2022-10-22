@@ -20,9 +20,9 @@ public final class GsonParser implements Parser {
     private final boolean requireAnnotation;
     private final boolean requireHeader;
 
-    public GsonParser() {
-        this.requireAnnotation = true;
-        this.requireHeader = true;
+    public GsonParser(boolean requireJsonMimeType, boolean requireAnnotation) {
+        this.requireHeader = requireJsonMimeType;
+        this.requireAnnotation = requireAnnotation;
     }
 
     @Nullable @Override

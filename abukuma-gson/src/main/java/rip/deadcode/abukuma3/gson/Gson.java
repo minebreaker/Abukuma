@@ -8,11 +8,13 @@ import rip.deadcode.abukuma3.renderer.Renderer;
 
 public final class Gson {
 
+    // FIXME
+
     public static Parser parser() {
-        return new GsonParser();
+        return new GsonParser( true, false );
     }
 
     public static Renderer renderer() {
-        return new GsonRenderer();
+        return new GsonRenderer( false );
     }
 }

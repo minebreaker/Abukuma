@@ -51,7 +51,8 @@ public final class ConfigSpecImpl implements ConfigSpec {
                 port,
                 maxThreads,
                 minThreads,
-                ssl
+                ssl,
+                config
         );
     }
 }

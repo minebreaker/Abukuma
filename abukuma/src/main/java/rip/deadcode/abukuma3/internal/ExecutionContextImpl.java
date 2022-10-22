@@ -97,6 +97,10 @@ public final class ExecutionContextImpl implements ExecutionContext {
         return new ExecutionContextImpl( registry.setSingleton( cls, instance ) );
     }
 
+    @Override public Registry unsafeSetSingleton( Class<?> cls, Object instance ) {
+        return new ExecutionContextImpl( registry.unsafeSetSingleton( cls, instance ) );
+    }
+
     @Override
     public <T> ExecutionContext set( Class<T> cls, Supplier<? extends T> supplier ) {
         return new ExecutionContextImpl( registry.set( cls, supplier ) );

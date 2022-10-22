@@ -1,6 +1,7 @@
 dependencies {
     api(
             project(':abukuma'),
+            project(':abukuma-jetty'),
             'com.google.code.gson:gson:2.9.0'
     )
 }
