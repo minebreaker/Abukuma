@@ -3,14 +3,8 @@ package rip.deadcode.abukuma3.value;
 import rip.deadcode.abukuma3.Unsafe;
 import rip.deadcode.abukuma3.value.internal.ConfigImpl;
 
-import java.util.Optional;
-
 
 public interface Config {
-
-    public Optional<String> serverImplementation();
-
-    public ConfigImpl serverImplementation( String serverImplementation );
 
     public int port();
 

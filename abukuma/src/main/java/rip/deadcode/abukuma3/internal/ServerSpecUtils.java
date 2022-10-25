@@ -25,9 +25,9 @@ import rip.deadcode.abukuma3.utils.internal.DefaultModule;
 import rip.deadcode.abukuma3.value.Config;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.ServiceLoader;
 
+import static java.util.stream.Collectors.joining;
 import static rip.deadcode.abukuma3.collection.PersistentCollections.createList;
 import static rip.deadcode.abukuma3.collection.PersistentCollectors.toPersistentList;
 import static rip.deadcode.abukuma3.internal.utils.MoreCollections.reduceSequentially;
@@ -110,25 +110,23 @@ public final class ServerSpecUtils {
     }
 
     private static Server createServer( ExecutionContext context ) {
-        ServiceLoader<ServerFactory> loader = ServiceLoader.load( ServerFactory.class );
-        Optional<String> requestedFactoryName = context.config().serverImplementation();
 
-        if ( requestedFactoryName.isPresent() ) {
-            String factoryName = requestedFactoryName.get();
-            return loader.stream()
-                         .filter( factory -> factory.getClass().getCanonicalName().equals( factoryName ) )
-                         .findFirst() // TODO: Duplication check?
-                         .map( p -> p.get().provide( context ) )
-                         .orElseThrow( () -> new IllegalStateException(
-                                 "Could not find server implementation named '" + factoryName +
-                                 "'. Recheck your configuration." ) );
+        var loader = ServiceLoader.load( ServerFactory.class );
+        var factories = loader.stream().collect( toPersistentList() );
 
-        } else {
-            // TODO: Should fail if multiple server is available?
-            ServerFactory factory = loader.iterator().next();
-            Server server = factory.provide( context );
-            logger.info( "Auto selected server implementation: " + server.getClass().getCanonicalName() );
-            return server;
+        if ( factories.isEmpty() ) {
+            throw new RuntimeException( "No server implementation found." );
         }
+
+        if ( factories.size() != 1 ) {
+            var names = factories.stream()
+                                 .map( s -> s.getClass().getCanonicalName() )
+                                 .collect( joining( System.lineSeparator() ) );
+            throw new RuntimeException( "Multiple server implementations found. Check your dependencies.\n" + names );
+        }
+
+        Server server = factories.first().get().provide( context );
+        logger.info( "Using server implementation: " + server.getClass().getCanonicalName() );
+        return server;
     }
 }

@@ -2,14 +2,9 @@ package rip.deadcode.abukuma3.value.internal;
 
 import rip.deadcode.abukuma3.value.Config;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
 
 public final class ConfigImpl implements Config {
 
-    @Nullable
-    private String serverImplementation;
     private int port;
     private int maxThreads;
     private int minThreads;
@@ -17,13 +12,11 @@ public final class ConfigImpl implements Config {
     private com.typesafe.config.Config original;
 
     public ConfigImpl(
-            @Nullable String serverImplementation,
             int port,
             int maxThreads,
             int minThreads,
             boolean ssl,
             com.typesafe.config.Config original ) {
-        this.serverImplementation = serverImplementation;
         this.port = port;
         this.maxThreads = maxThreads;
         this.minThreads = minThreads;
@@ -32,19 +25,7 @@ public final class ConfigImpl implements Config {
     }
 
     private ConfigImpl copy() {
-        return new ConfigImpl( serverImplementation, port, maxThreads, minThreads, ssl, original );
-    }
-
-    @Override
-    public Optional<String> serverImplementation() {
-        return Optional.ofNullable( serverImplementation );
-    }
-
-    @Override
-    public ConfigImpl serverImplementation( String serverImplementation ) {
-        ConfigImpl c = copy();
-        c.serverImplementation = serverImplementation;
-        return c;
+        return new ConfigImpl( port, maxThreads, minThreads, ssl, original );
     }
 
     @Override

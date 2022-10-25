@@ -6,8 +6,6 @@ import rip.deadcode.abukuma3.ServerSpec;
 import rip.deadcode.abukuma3.value.Config;
 import rip.deadcode.abukuma3.value.internal.ConfigImpl;
 
-import javax.annotation.Nullable;
-
 
 public final class ConfigSpecImpl implements ConfigSpec {
 
@@ -34,11 +32,6 @@ public final class ConfigSpecImpl implements ConfigSpec {
 
         // TODO: friendly validations
 
-        @Nullable String serverImplementation =
-                config.hasPath( "serverImplementation" )
-                ? config.getString( "serverImplementation" )
-                : null;
-
         int port = config.getInt( "port" );
 
         int maxThreads = config.getInt( "maxThreads" );
@@ -47,7 +40,6 @@ public final class ConfigSpecImpl implements ConfigSpec {
         boolean ssl = config.getBoolean( "ssl" );
 
         return new ConfigImpl(
-                serverImplementation,
                 port,
                 maxThreads,
                 minThreads,
