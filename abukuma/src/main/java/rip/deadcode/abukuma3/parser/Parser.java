@@ -9,7 +9,13 @@ import java.io.InputStream;
 
 
 /**
+ * <p>
+ * {@link Parser} coverts the {@link InputStream} into the certain class.
+ * Parser is by nature blocking.
+ *
+ * <p>
  * Parser implementations may close the {@link InputStream}, but not responsible for doing so.
+ * If the implementation close the InputStream, it must not return null.
  */
 @FunctionalInterface
 public interface Parser {

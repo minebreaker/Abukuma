@@ -69,6 +69,11 @@ public abstract class HandlerAdapter<Q, R> {
             R originalResponse,
             PersistentMap<String, String> pathParams );
 
+    /**
+     * This method is blocking.
+     * The implementation must execute it async
+     * if the underlying server is non-blocking.
+     */
     protected abstract void submitResponse(
             ExecutionContext context,
             Response response,

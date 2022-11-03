@@ -30,6 +30,7 @@
 - Rewrite `HandlerAdapter`
 - Strict header size limit to avoid DDoSes
 - Move implementations in static methods
+- Async by default architecture?
 
 ## Do it later
 
